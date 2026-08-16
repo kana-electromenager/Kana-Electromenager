@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Categories | KANA Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="admin-sidebar">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="../index.html"
+            class="admin-logo"
+        >
+
+            <img
+                src="../images/logo/logo.png"
+                alt="KANA"
+            >
+
+            <div>
+
+                <strong>KANA</strong>
+
+                <span>ADMIN PANEL</span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="admin-nav">
+
+
+            <a
+                href="index.html"
+                class="admin-nav-link"
+            >
+
+                <span>▦</span>
+
+                Dashboard
+
+            </a>
+
+
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+
+                <span>▣</span>
+
+                Products
+
+            </a>
+
+
+
+            <a
+                href="add-products.html"
+                class="admin-nav-link"
+            >
+
+                <span>＋</span>
+
+                Add Product
+
+            </a>
+
+
+
+            <a
+                href="categories.html"
+                class="admin-nav-link active"
+            >
+
+                <span>◇</span>
+
+                Categories
+
+            </a>
+
+
+
+            <a
+                href="brands.html"
+                class="admin-nav-link"
+            >
+
+                <span>◆</span>
+
+                Brands
+
+            </a>
+
+
+
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
+
+                <span>◉</span>
+
+                Orders
+
+            </a>
+
+
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+
+                <span>◎</span>
+
+                Customers
+
+            </a>
+
+
+
+            <a
+                href="about.html"
+                class="admin-nav-link"
+            >
+
+                <span>i</span>
+
+                About
+
+            </a>
+
+
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+
+                <span>⚙</span>
+
+                Settings
+
+            </a>
+
+
+        </nav>
+
+
+
+        <!-- BACK TO STORE -->
+
+        <a
+            href="../index.html"
+            class="admin-store-link"
+        >
+
+            ← Voir le site
+
+        </a>
+
+
+    </aside>
+
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================== -->
+
+        <header class="admin-topbar">
+
+
+            <div>
+
+                <p class="admin-eyebrow">
+
+                    KANA ÉLECTROMÉNAGER
+
+                </p>
+
+
+                <h1>
+
+                    Catégories
+
+                </h1>
+
+            </div>
+
+
+
+            <div class="admin-user">
+
+                <span>
+
+                    ADMIN
+
+                </span>
+
+            </div>
+
+
+        </header>
+
+
+
+
+        <!-- =================================================
+             CATEGORY SECTION
+        ================================================== -->
+
+        <section class="admin-section">
+
+
+            <!-- =================================================
+                 SECTION HEADER
+            ================================================== -->
+
+            <div class="admin-section-heading">
+
+
+                <div>
+
+                    <p>
+
+                        CATALOGUE
+
+                    </p>
+
+
+                    <h2>
+
+                        Gestion des catégories
+
+                    </h2>
+
+                </div>
+
+
+
+                <button
+                    type="button"
+                    class="admin-submit-button"
+                    id="addCategoryButton"
+                >
+
+                    + AJOUTER UNE CATÉGORIE
+
+                </button>
+
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 CATEGORY FORM
+            ================================================== -->
+
+            <div
+                class="category-form-container"
+                id="categoryFormContainer"
+                hidden
+            >
+
+
+                <div class="category-form-header">
+
+
+                    <p>
+
+                        CATÉGORIE
+
+                    </p>
+
+
+                    <h3 id="categoryFormTitle">
+
+                        Nouvelle catégorie
+
+                    </h3>
+
+
+                </div>
+
+
+
+
+                <form
+                    id="categoryForm"
+                >
+
+
+                    <!-- CATEGORY NAME -->
+
+                    <div class="admin-form-group">
+
+
+                        <label for="categoryName">
+
+                            Nom de la catégorie
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="categoryName"
+                            name="categoryName"
+                            placeholder="Ex : Réfrigérateurs"
+                            autocomplete="off"
+                            required
+                        >
+
+
+                    </div>
+
+
+
+
+                    <!-- CATEGORY SLUG -->
+
+                    <div class="admin-form-group">
+
+
+                        <label for="categorySlug">
+
+                            Identifiant de la catégorie
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="categorySlug"
+                            name="categorySlug"
+                            placeholder="Ex : refrigerateur"
+                            autocomplete="off"
+                            required
+                        >
+
+
+                    </div>
+
+
+
+
+                    <!-- CATEGORY DESCRIPTION -->
+
+                    <div class="admin-form-group">
+
+
+                        <label for="categoryDescription">
+
+                            Description
+
+                        </label>
+
+
+                        <textarea
+                            id="categoryDescription"
+                            name="categoryDescription"
+                            rows="4"
+                            placeholder="Description de la catégorie..."
+                        ></textarea>
+
+
+                    </div>
+
+
+
+
+                    <!-- CATEGORY IMAGE -->
+
+                    <div class="admin-form-group">
+
+
+                        <label for="categoryImage">
+
+                            Image de la catégorie
+
+                        </label>
+
+
+                        <input
+                            type="file"
+                            id="categoryImage"
+                            name="categoryImage"
+                            accept="image/*"
+                        >
+
+
+                        <div
+                            class="image-preview"
+                            id="categoryImagePreview"
+                        >
+
+                            <span>
+
+                                Aucune image sélectionnée
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                    <!-- FORM BUTTONS -->
+
+                    <div class="admin-form-buttons">
+
+
+                        <button
+                            type="button"
+                            class="admin-cancel-button"
+                            id="cancelCategoryButton"
+                        >
+
+                            ANNULER
+
+                        </button>
+
+
+
+                        <button
+                            type="submit"
+                            class="admin-submit-button"
+                        >
+
+                            ENREGISTRER
+
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 CATEGORY COUNT
+            ================================================== -->
+
+            <div class="admin-products-count">
+
+
+                <span id="categoriesCount">
+
+                    0 catégories
+
+                </span>
+
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 CATEGORIES GRID
+            ================================================== -->
+
+            <div
+                class="admin-categories-grid"
+                id="categoriesContainer"
+            >
+
+
+                <!--
+
+                    Categories will be generated
+                    automatically by JavaScript.
+
+                -->
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../js/admin-categories.js"></script>
+
+
+</body>
+
+</html>

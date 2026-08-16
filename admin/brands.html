@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Brands | KANA Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="admin-sidebar">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="../index.html"
+            class="admin-logo"
+        >
+
+            <img
+                src="../images/logo/logo.png"
+                alt="KANA"
+            >
+
+            <div>
+
+                <strong>KANA</strong>
+
+                <span>ADMIN PANEL</span>
+
+            </div>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="admin-nav">
+
+
+            <a
+                href="index.html"
+                class="admin-nav-link"
+            >
+                <span>▦</span>
+                Dashboard
+            </a>
+
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+                <span>▣</span>
+                Products
+            </a>
+
+
+            <a
+                href="add-products.html"
+                class="admin-nav-link"
+            >
+                <span>＋</span>
+                Add Product
+            </a>
+
+
+            <a
+                href="categories.html"
+                class="admin-nav-link"
+            >
+                <span>◇</span>
+                Categories
+            </a>
+
+
+            <a
+                href="brands.html"
+                class="admin-nav-link active"
+            >
+                <span>◆</span>
+                Brands
+            </a>
+
+
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
+                <span>◉</span>
+                Orders
+            </a>
+
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+                <span>◎</span>
+                Customers
+            </a>
+
+
+            <a
+                href="about.html"
+                class="admin-nav-link"
+            >
+                <span>i</span>
+                About
+            </a>
+
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+                <span>⚙</span>
+                Settings
+            </a>
+
+
+        </nav>
+
+
+        <!-- BACK TO STORE -->
+
+        <a
+            href="../index.html"
+            class="admin-store-link"
+        >
+            ← Voir le site
+        </a>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <p class="admin-eyebrow">
+                    KANA ÉLECTROMÉNAGER
+                </p>
+
+                <h1>
+                    Marques
+                </h1>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <span>
+                    ADMIN
+                </span>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             BRANDS SECTION
+        ================================================== -->
+
+        <section class="admin-section">
+
+
+            <!-- SECTION HEADING -->
+
+            <div class="admin-section-heading">
+
+                <div>
+
+                    <p>
+                        CATALOGUE
+                    </p>
+
+                    <h2>
+                        Gestion des marques
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="admin-submit-button"
+                    id="addBrandButton"
+                >
+                    + AJOUTER UNE MARQUE
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BRAND FORM
+            ================================================== -->
+
+            <div
+                class="brand-form-container"
+                id="brandFormContainer"
+                hidden
+            >
+
+
+                <div class="brand-form-header">
+
+                    <div>
+
+                        <p>
+                            MARQUE
+                        </p>
+
+                        <h3 id="brandFormTitle">
+                            Nouvelle marque
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+
+                <form
+                    id="brandForm"
+                >
+
+
+                    <!-- BRAND NAME -->
+
+                    <div class="admin-form-group">
+
+                        <label for="brandName">
+                            Nom de la marque
+                        </label>
+
+                        <input
+                            type="text"
+                            id="brandName"
+                            name="brandName"
+                            placeholder="Ex : Samsung"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="admin-form-buttons">
+
+
+                        <button
+                            type="button"
+                            class="admin-cancel-button"
+                            id="cancelBrandButton"
+                        >
+                            ANNULER
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="admin-submit-button"
+                        >
+                            ENREGISTRER
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BRAND COUNT
+            ================================================== -->
+
+            <div class="admin-products-count">
+
+                <span id="brandsCount">
+                    0 marques
+                </span>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BRANDS GRID
+            ================================================== -->
+
+            <div
+                class="admin-brands-grid"
+                id="brandsContainer"
+            ></div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../js/admin-brands.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Commander | KANA</title>
+
+    <link
+        rel="stylesheet"
+        href="css/checkout.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="checkout-header">
+
+        <a
+            href="index.html"
+            class="checkout-brand"
+        >
+
+            <img
+                src="images/logo/logo.png"
+                alt="KANA"
+            >
+
+            <div>
+
+                <strong>
+                    KANA Électroménager
+                </strong>
+
+                <span>
+                    Chez Amrane
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="javascript:history.back()"
+            class="checkout-back"
+        >
+            ← RETOUR
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="checkout-page">
+
+
+        <!-- =================================================
+             TITLE
+        ================================================== -->
+
+        <div class="checkout-heading">
+
+            <p>
+                KANA ÉLECTROMÉNAGER
+            </p>
+
+            <h1>
+                Finaliser ma commande
+            </h1>
+
+            <span>
+                Remplissez vos informations de livraison.
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CHECKOUT CONTENT
+        ================================================== -->
+
+        <div class="checkout-container">
+
+
+            <!-- =================================================
+                 PRODUCT SUMMARY
+            ================================================== -->
+
+            <section class="checkout-product">
+
+                <h2>
+                    Votre produit
+                </h2>
+
+
+                <div id="checkoutProduct">
+
+                    <!-- Le produit sera chargé par checkout.js -->
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CUSTOMER INFORMATION
+            ================================================== -->
+
+            <section class="checkout-form-section">
+
+                <h2>
+                    Informations de livraison
+                </h2>
+
+
+                <form id="checkoutForm">
+
+
+                    <!-- NOM -->
+
+                    <div class="form-group">
+
+                        <label for="customerName">
+                            Nom complet
+                        </label>
+
+                        <input
+                            type="text"
+                            id="customerName"
+                            name="customerName"
+                            placeholder="Votre nom complet"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- TELEPHONE -->
+
+                    <div class="form-group">
+
+                        <label for="customerPhone">
+                            Numéro de téléphone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="customerPhone"
+                            name="customerPhone"
+                            placeholder="05 XX XX XX XX"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- WILAYA -->
+
+                    <div class="form-group">
+
+                        <label for="wilaya">
+                            Wilaya
+                        </label>
+
+                        <select
+                            id="wilaya"
+                            name="wilaya"
+                            required
+                        >
+
+                            <option
+                                value=""
+                            >
+                                Choisir une wilaya
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- COMMUNE -->
+
+                    <div class="form-group">
+
+                        <label for="commune">
+                            Commune
+                        </label>
+
+                        <select
+                            id="commune"
+                            name="commune"
+                            disabled
+                            required
+                        >
+
+                            <option
+                                value=""
+                            >
+                                Choisir d'abord une wilaya
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- ADRESSE -->
+
+                    <div class="form-group">
+
+                        <label for="address">
+                            Adresse exacte
+                        </label>
+
+                        <textarea
+                            id="address"
+                            name="address"
+                            rows="4"
+                            placeholder="Cité, rue, bâtiment, numéro de logement..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- NOTES -->
+
+                    <div class="form-group">
+
+                        <label for="notes">
+                            Note supplémentaire
+                            <span>(optionnel)</span>
+                        </label>
+
+                        <textarea
+                            id="notes"
+                            name="notes"
+                            rows="3"
+                            placeholder="Informations supplémentaires pour la livraison..."
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         ORDER TOTAL
+                    ================================================== -->
+
+                    <div
+                        id="checkoutTotal"
+                        class="checkout-total"
+                    >
+
+                        <!-- Total chargé par checkout.js -->
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         SUBMIT
+                    ================================================== -->
+
+                    <button
+                        type="submit"
+                        id="confirmOrder"
+                        class="confirm-order"
+                    >
+                        CONFIRMER LA COMMANDE
+                    </button>
+
+
+                </form>
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+   
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="checkout-footer">
+
+        <p>
+            © 2026 KANA AMRANE Électroménager
+        </p>
+
+        <p>
+            Developed by TINA
+        </p>
+
+    </footer>
+
+
+
+
+
+   
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="data/products-data.js"></script>
+
+    <script type="module" src="js/checkout.js"></script>
+
+
+</body>
+
+</html>

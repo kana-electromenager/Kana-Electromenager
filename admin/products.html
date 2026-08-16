@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Products | KANA Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="admin-sidebar">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="../index.html"
+            class="admin-logo"
+        >
+
+            <img
+                src="../images/logo/logo.png"
+                alt="KANA"
+            >
+
+            <div>
+
+                <strong>KANA</strong>
+
+                <span>ADMIN PANEL</span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="admin-nav">
+
+
+            <a
+                href="index.html"
+                class="admin-nav-link"
+            >
+                <span>▦</span>
+                Dashboard
+            </a>
+
+
+            <a
+                href="products.html"
+                class="admin-nav-link active"
+            >
+                <span>▣</span>
+                Products
+            </a>
+
+
+            <a
+                href="add-products.html"
+                class="admin-nav-link"
+            >
+                <span>＋</span>
+                Add Product
+            </a>
+
+
+            <a
+                href="categories.html"
+                class="admin-nav-link"
+            >
+                <span>◇</span>
+                Categories
+            </a>
+
+
+            <a
+                href="brands.html"
+                class="admin-nav-link"
+            >
+                <span>◆</span>
+                Brands
+            </a>
+
+
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
+                <span>◉</span>
+                Orders
+            </a>
+
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+                <span>◎</span>
+                Customers
+            </a>
+
+
+            <a
+                href="about.html"
+                class="admin-nav-link"
+            >
+                <span>i</span>
+                About
+            </a>
+
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+                <span>⚙</span>
+                Settings
+            </a>
+
+
+        </nav>
+
+
+
+        <!-- LOGOUT -->
+
+        <button
+            type="button"
+            id="logoutButton"
+            class="admin-logout"
+        >
+            ⎋ LOG OUT
+        </button>
+
+
+
+        <!-- STORE -->
+
+        <a
+            href="../index.html"
+            class="admin-store-link"
+        >
+            ← Voir le site
+        </a>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================== -->
+
+        <header class="admin-topbar">
+
+
+            <div>
+
+                <p class="admin-eyebrow">
+                    KANA ÉLECTROMÉNAGER
+                </p>
+
+                <h1>
+                    Products
+                </h1>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <span>
+                    ADMIN
+                </span>
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================================
+             PRODUCTS HEADER
+        ================================================== -->
+
+        <section class="products-page-header">
+
+
+            <div>
+
+                <p class="products-eyebrow">
+                    CATALOGUE
+                </p>
+
+                <h2>
+                    Gestion des produits
+                </h2>
+
+                <span>
+                    Gérez les produits disponibles dans votre catalogue.
+                </span>
+
+            </div>
+
+
+
+            <a
+                href="add-products.html"
+                class="products-add-button"
+            >
+                ＋ Ajouter un produit
+            </a>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             FILTERS
+        ================================================== -->
+
+        <section class="products-filters">
+
+
+            <!-- SEARCH -->
+
+            <div class="product-search">
+
+                <label for="productSearch">
+                    Rechercher
+                </label>
+
+                <input
+                    type="search"
+                    id="productSearch"
+                    placeholder="Nom, marque, catégorie..."
+                >
+
+            </div>
+
+
+
+            <!-- CATEGORY -->
+
+            <div class="product-filter">
+
+                <label for="categoryFilter">
+                    Catégorie
+                </label>
+
+                <select id="categoryFilter">
+
+                    <option value="">
+                        Toutes les catégories
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- BRAND -->
+
+            <div class="product-filter">
+
+                <label for="brandFilter">
+                    Marque
+                </label>
+
+                <select id="brandFilter">
+
+                    <option value="">
+                        Toutes les marques
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- AVAILABILITY -->
+
+            <div class="product-filter">
+
+                <label for="availabilityFilter">
+                    Disponibilité
+                </label>
+
+                <select id="availabilityFilter">
+
+                    <option value="">
+                        Toutes
+                    </option>
+
+                    <option value="Disponible">
+                        Disponible
+                    </option>
+
+                    <option value="Indisponible">
+                        Indisponible
+                    </option>
+
+                </select>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRODUCTS COUNT
+        ================================================== -->
+
+        <div class="products-results-header">
+
+            <h2>
+                Produits
+            </h2>
+
+            <span id="productsCount">
+                0 produits
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
+
+        <section
+            id="productsContainer"
+            class="admin-products-grid"
+        >
+
+            <!--
+                Les produits seront générés
+                automatiquement par admin-products.js
+            -->
+
+        </section>
+
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         DELETE MODAL
+    ====================================================== -->
+
+    <div
+        id="deleteModal"
+        class="admin-modal"
+        hidden
+    >
+
+        <div class="admin-modal-box">
+
+
+            <div class="admin-modal-icon">
+                !
+            </div>
+
+
+            <p class="admin-modal-eyebrow">
+                CONFIRMATION
+            </p>
+
+
+            <h2>
+                Supprimer le produit ?
+            </h2>
+
+
+            <p
+                id="deleteProductName"
+                class="admin-modal-message"
+            >
+                Vous êtes sur le point de supprimer ce produit.
+            </p>
+
+
+            <div class="admin-modal-actions">
+
+
+                <button
+                    type="button"
+                    id="cancelDelete"
+                    class="admin-modal-cancel"
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    type="button"
+                    id="confirmDelete"
+                    class="admin-modal-delete"
+                >
+                    Supprimer
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../data/products-data.js"></script>
+
+    <script src="../js/admin-products.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | KANA Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="admin-sidebar">
+
+
+        <!-- =================================================
+             LOGO
+        ================================================== -->
+
+        <a
+            href="../index.html"
+            class="admin-logo"
+        >
+
+            <img
+                src="../images/logo/logo.png"
+                alt="KANA"
+            >
+
+            <div>
+
+                <strong>
+                    KANA
+                </strong>
+
+                <span>
+                    ADMIN PANEL
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <nav class="admin-nav">
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="index.html"
+                class="admin-nav-link active"
+            >
+
+                <span>
+                    ▦
+                </span>
+
+                Dashboard
+
+            </a>
+
+
+
+            <!-- PRODUCTS -->
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    ▣
+                </span>
+
+                Products
+
+            </a>
+
+
+
+            <!-- ADD PRODUCT -->
+
+            <a
+                href="add-products.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    ＋
+                </span>
+
+                Add Product
+
+            </a>
+
+
+
+            <!-- CATEGORIES -->
+
+            <a
+                href="categories.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    ◇
+                </span>
+
+                Categories
+
+            </a>
+
+
+
+            <!-- BRANDS -->
+
+            <a
+                href="brands.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    ◆
+                </span>
+
+                Brands
+
+            </a>
+
+
+
+            <!-- ORDERS -->
+
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    ◉
+                </span>
+
+                Orders
+
+            </a>
+
+
+
+            <!-- CUSTOMERS -->
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    ◎
+                </span>
+
+                Customers
+
+            </a>
+
+
+
+            <!-- ABOUT -->
+
+            <a
+                href="about.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    i
+                </span>
+
+                About
+
+            </a>
+
+
+
+            <!-- SETTINGS -->
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+
+                <span>
+                    ⚙
+                </span>
+
+                Settings
+
+            </a>
+
+
+
+            <!-- LOGOUT -->
+
+            <button
+                type="button"
+                id="logoutButton"
+                class="admin-logout"
+            >
+
+                ⎋ LOG OUT
+
+            </button>
+
+
+        </nav>
+
+
+
+        <!-- =================================================
+             BACK TO STORE
+        ================================================== -->
+
+        <a
+            href="../index.html"
+            class="admin-store-link"
+        >
+
+            ← Voir le site
+
+        </a>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================== -->
+
+        <header class="admin-topbar">
+
+
+            <div>
+
+                <p class="admin-eyebrow">
+                    KANA ÉLECTROMÉNAGER
+                </p>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <span>
+                    ADMIN
+                </span>
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <section class="admin-stats">
+
+
+            <!-- =================================================
+                 PRODUCTS
+            ================================================== -->
+
+            <a
+                href="products.html"
+                class="admin-stat-card admin-stat-link"
+            >
+
+                <div class="admin-stat-icon">
+                    ▣
+                </div>
+
+                <div>
+
+                    <span>
+                        Produits
+                    </span>
+
+                    <strong id="totalProducts">
+                        0
+                    </strong>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 CATEGORIES
+            ================================================== -->
+
+            <a
+                href="categories.html"
+                class="admin-stat-card admin-stat-link"
+            >
+
+                <div class="admin-stat-icon">
+                    ◇
+                </div>
+
+                <div>
+
+                    <span>
+                        Catégories
+                    </span>
+
+                    <strong id="totalCategories">
+                        0
+                    </strong>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 BRANDS
+            ================================================== -->
+
+            <a
+                href="brands.html"
+                class="admin-stat-card admin-stat-link"
+            >
+
+                <div class="admin-stat-icon">
+                    ◆
+                </div>
+
+                <div>
+
+                    <span>
+                        Marques
+                    </span>
+
+                    <strong id="totalBrands">
+                        0
+                    </strong>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 ORDERS
+            ================================================== -->
+
+            <a
+                href="orders.html"
+                class="admin-stat-card admin-stat-link"
+            >
+
+                <div class="admin-stat-icon">
+                    ◉
+                </div>
+
+                <div>
+
+                    <span>
+                        Commandes
+                    </span>
+
+                    <strong id="totalOrders">
+                        0
+                    </strong>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 NEW ORDERS
+            ================================================== -->
+
+            <a
+                href="orders.html?status=Nouvelle"
+                class="admin-stat-card admin-stat-link"
+            >
+
+                <div class="admin-stat-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <span>
+                        Nouvelles commandes
+                    </span>
+
+                    <strong id="newOrders">
+                        0
+                    </strong>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 AVAILABLE PRODUCTS
+            ================================================== -->
+
+            <a
+                href="products.html?availability=Disponible"
+                class="admin-stat-card admin-stat-link"
+            >
+
+                <div class="admin-stat-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>
+                        Produits disponibles
+                    </span>
+
+                    <strong id="availableProducts">
+                        0
+                    </strong>
+
+                </div>
+
+            </a>
+
+
+        </section>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+     
+    <script src="../data/products-data.js"></script>
+    <script type="module" src="../js/admin.js"></script>
+     
+    <script
+      type="module"
+      src="../js/admin-auth.js"
+     ></script>
+
+</body>
+
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Ajouter un produit | KANA Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="admin-sidebar">
+
+
+        <a
+            href="../index.html"
+            class="admin-logo"
+        >
+
+            <img
+                src="../images/logo/logo.png"
+                alt="KANA"
+            >
+
+            <div>
+
+                <strong>KANA</strong>
+
+                <span>ADMIN PANEL</span>
+
+            </div>
+
+        </a>
+
+
+        <nav class="admin-nav">
+
+
+            <a
+                href="index.html"
+                class="admin-nav-link"
+            >
+                <span>▦</span>
+                Dashboard
+            </a>
+
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+                <span>▣</span>
+                Products
+            </a>
+
+
+            <a
+                href="add-products.html"
+                class="admin-nav-link active"
+            >
+                <span>＋</span>
+                Add Product
+            </a>
+
+
+            <a
+                href="categories.html"
+                class="admin-nav-link"
+            >
+                <span>◇</span>
+                Categories
+            </a>
+
+
+            <a
+                href="brands.html"
+                class="admin-nav-link"
+            >
+                <span>◆</span>
+                Brands
+            </a>
+
+
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
+                <span>◉</span>
+                Orders
+            </a>
+
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+                <span>◎</span>
+                Customers
+            </a>
+
+
+            <a
+                href="about.html"
+                class="admin-nav-link"
+            >
+                <span>i</span>
+                About
+            </a>
+
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+                <span>⚙</span>
+                Settings
+            </a>
+
+
+        </nav>
+
+
+        <button
+            type="button"
+            id="logoutButton"
+            class="admin-logout"
+        >
+            ⎋ LOG OUT
+        </button>
+
+
+        <a
+            href="../index.html"
+            class="admin-store-link"
+        >
+            ← Voir le site
+        </a>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <p class="admin-eyebrow">
+                    KANA ÉLECTROMÉNAGER
+                </p>
+
+                <h1 id="pageTitle">
+                    Ajouter un produit
+                </h1>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <span>
+                    ADMIN
+                </span>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <section class="admin-section">
+
+
+            <div class="admin-section-heading">
+
+                <div>
+
+                    <p>
+                        CATALOGUE
+                    </p>
+
+                    <h2 id="formTitle">
+                        Nouveau produit
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="admin-product-form-container">
+
+
+                <form
+                    id="addProductForm"
+                    class="admin-product-form"
+                >
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <div class="admin-form-group">
+
+                        <label for="productName">
+                            Nom du produit
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productName"
+                            name="productName"
+                            placeholder="Ex : Samsung Smart TV 55 pouces"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="admin-form-group">
+
+                        <label for="productCategory">
+                            Catégorie
+                        </label>
+
+                        <select
+                            id="productCategory"
+                            name="productCategory"
+                            required
+                        >
+
+                            <option value="">
+                                Sélectionner une catégorie
+                            </option>
+
+                            <option value="maison-entretien">
+                                Maison & Entretien
+                            </option>
+
+                            <option value="refrigerateurs-congelateurs">
+                                Réfrigérateurs - Congélateurs
+                            </option>
+
+                            <option value="televisions">
+                                Télévisions
+                            </option>
+
+                            <option value="machines-a-laver">
+                                Machines à laver
+                            </option>
+
+                            <option value="lave-vaisselle">
+                                Lave-vaisselle
+                            </option>
+
+                            <option value="cuisine">
+                                Cuisine
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- SUBCATEGORY -->
+
+                    <div class="admin-form-group">
+
+                        <label for="productType">
+                            Sous-catégorie
+                        </label>
+
+                        <select
+                            id="productType"
+                            name="productType"
+                            required
+                            disabled
+                        >
+
+                            <option value="">
+                                Sélectionner d'abord une catégorie
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- BRAND -->
+
+                    <div class="admin-form-group">
+
+                        <label for="productBrand">
+                            Marque
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productBrand"
+                            name="productBrand"
+                            placeholder="Ex : Samsung"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- PRICE + STOCK -->
+
+                    <div class="admin-form-row">
+
+
+                        <div class="admin-form-group">
+
+                            <label for="productPrice">
+                                Prix (DA)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productPrice"
+                                name="productPrice"
+                                placeholder="Ex : 85000"
+                                min="0"
+                                step="1"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="admin-form-group">
+
+                            <label for="productStock">
+                                Stock
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productStock"
+                                name="productStock"
+                                placeholder="Ex : 10"
+                                min="0"
+                                step="1"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- IMAGE -->
+
+                    <div class="admin-form-group">
+
+                        <label for="productImage">
+                            Image du produit
+                        </label>
+
+                        <input
+                            type="file"
+                            id="productImage"
+                            name="productImage"
+                            accept="image/*"
+                        >
+
+                        <div
+                            id="imagePreview"
+                            class="image-preview"
+                        >
+
+                            <span>
+                                Aucune image sélectionnée
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="admin-form-group">
+
+                        <label for="productDescription">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="productDescription"
+                            name="productDescription"
+                            rows="6"
+                            placeholder="Description du produit..."
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="admin-form-buttons">
+
+
+                        <a
+                            href="products.html"
+                            class="admin-cancel-button"
+                        >
+                            Annuler
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            id="submitProductButton"
+                            class="admin-submit-button"
+                        >
+                            AJOUTER LE PRODUIT
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../js/admin-add-products.js"></script>
+
+</body>
+
+</html>

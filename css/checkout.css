@@ -1,0 +1,1015 @@
+/* =====================================================
+   KANA ÉLECTROMÉNAGER
+   CHECKOUT PAGE
+===================================================== */
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    background: #f7f7f5;
+    color: #111111;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.checkout-header {
+
+    width: 100%;
+    min-height: 95px;
+
+    padding: 0 6%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #050505;
+    color: #ffffff;
+
+    border-bottom: 1px solid
+        rgba(212, 175, 55, 0.25);
+}
+
+
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.checkout-brand {
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.checkout-brand img {
+
+    width: 50px;
+    height: 50px;
+
+    object-fit: contain;
+}
+
+
+.checkout-brand > div {
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.checkout-brand strong {
+
+    color: #ffffff;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 17px;
+    font-weight: 500;
+
+    letter-spacing: 1.8px;
+
+    line-height: 1;
+}
+
+
+.checkout-brand span {
+
+    margin-top: 6px;
+
+    color: #d4af37;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+}
+
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.checkout-back {
+
+    color: #ffffff;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    transition: 0.3s ease;
+}
+
+
+.checkout-back:hover {
+
+    color: #d4af37;
+}
+
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.checkout-page {
+
+    width: min(1200px, 90%);
+
+    margin: 0 auto;
+
+    padding: 85px 0 100px;
+}
+
+
+
+/* =====================================================
+   HEADING
+===================================================== */
+
+.checkout-heading {
+
+    max-width: 750px;
+
+    margin: 0 auto 60px;
+
+    text-align: center;
+}
+
+
+.checkout-heading p {
+
+    margin-bottom: 15px;
+
+    color: #a38425;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+}
+
+
+.checkout-heading h1 {
+
+    margin-bottom: 18px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(42px, 5vw, 65px);
+
+    font-weight: 400;
+
+    line-height: 1;
+}
+
+
+.checkout-heading span {
+
+    color: #777777;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+
+/* =====================================================
+   CHECKOUT CONTAINER
+===================================================== */
+
+.checkout-container {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 0.9fr)
+        minmax(0, 1.1fr);
+
+    gap: 35px;
+
+    align-items: start;
+}
+
+
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+.checkout-product,
+.checkout-form-section {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e5e5;
+
+    padding: 35px;
+}
+
+
+.checkout-product h2,
+.checkout-form-section h2 {
+
+    margin-bottom: 28px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 25px;
+
+    font-weight: 400;
+}
+
+
+
+/* =====================================================
+   PRODUCT CARD
+===================================================== */
+
+.checkout-product-card {
+
+    display: flex;
+
+    gap: 20px;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid #e5e5e5;
+}
+
+
+.checkout-product-image {
+
+    width: 150px;
+    height: 150px;
+
+    flex-shrink: 0;
+
+    background: #f5f5f3;
+
+    overflow: hidden;
+}
+
+
+.checkout-product-image img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
+.checkout-product-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+
+.checkout-product-info .product-brand {
+
+    margin-bottom: 7px;
+
+    color: #a38425;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.checkout-product-info h3 {
+
+    margin-bottom: 12px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 23px;
+
+    font-weight: 400;
+
+    line-height: 1.15;
+}
+
+
+.checkout-product-info .product-price {
+
+    color: #111111;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+#checkoutForm {
+
+    width: 100%;
+}
+
+
+.form-group {
+
+    margin-bottom: 22px;
+}
+
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #222222;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+}
+
+
+.form-group label span {
+
+    color: #999999;
+
+    font-size: 8px;
+
+    font-weight: 400;
+
+    text-transform: none;
+
+    letter-spacing: 0;
+}
+
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width: 100%;
+
+    padding: 14px 15px;
+
+    border: 1px solid #dddddd;
+
+    border-radius: 0;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #111111;
+
+    font-size: 12px;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.form-group input,
+.form-group select {
+
+    min-height: 48px;
+}
+
+
+.form-group textarea {
+
+    resize: vertical;
+
+    min-height: 105px;
+
+    line-height: 1.6;
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+
+    color: #aaaaaa;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    border-color: #d4af37;
+
+    box-shadow:
+        0 0 0 1px #d4af37;
+}
+
+
+
+/* =====================================================
+   SELECT
+===================================================== */
+
+.form-group select {
+
+    cursor: pointer;
+
+    appearance: auto;
+}
+
+
+.form-group select:disabled {
+
+    background: #f3f3f1;
+
+    color: #999999;
+
+    cursor: not-allowed;
+}
+
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.checkout-total {
+
+    margin-top: 30px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #dddddd;
+}
+
+
+.checkout-total-content {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.checkout-total-label {
+
+    color: #555555;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
+.checkout-total-price {
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 28px;
+
+    font-weight: 400;
+}
+
+
+
+/* =====================================================
+   CONFIRM BUTTON
+===================================================== */
+
+.confirm-order {
+
+    width: 100%;
+
+    min-height: 54px;
+
+    margin-top: 25px;
+
+    padding: 0 25px;
+
+    border: 1px solid #d4af37;
+
+    background: #d4af37;
+
+    color: #111111;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.7px;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+.confirm-order:hover {
+
+    background: #111111;
+
+    border-color: #111111;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+.confirm-order:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+
+/* =====================================================
+   ERROR / EMPTY PRODUCT
+===================================================== */
+
+.checkout-error {
+
+    padding: 25px;
+
+    background: #f7f7f5;
+
+    border-left: 2px solid #d4af37;
+
+    color: #555555;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.checkout-footer {
+
+    width: 100%;
+
+    padding: 25px 6%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+
+    background: #050505;
+
+    color: #ffffff;
+
+    border-top: 1px solid
+        rgba(212, 175, 55, 0.20);
+
+    text-align: center;
+}
+
+
+.checkout-footer p {
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 8px;
+
+    letter-spacing: 0.7px;
+
+    opacity: 0.85;
+}
+
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .checkout-container {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .checkout-product {
+
+        order: 1;
+    }
+
+
+    .checkout-form-section {
+
+        order: 2;
+    }
+
+}
+
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .checkout-header {
+
+        min-height: 72px;
+
+        padding: 0 5%;
+    }
+
+
+    .checkout-brand {
+
+        gap: 9px;
+    }
+
+
+    .checkout-brand img {
+
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .checkout-brand strong {
+
+        font-size: 13px;
+
+        letter-spacing: 1.2px;
+    }
+
+
+    .checkout-brand span {
+
+        margin-top: 4px;
+
+        font-size: 7px;
+
+        letter-spacing: 1.7px;
+    }
+
+
+    .checkout-back {
+
+        font-size: 7px;
+
+        letter-spacing: 1px;
+    }
+
+
+
+    /* MAIN */
+
+    .checkout-page {
+
+        width: 90%;
+
+        padding: 55px 0 65px;
+    }
+
+
+    .checkout-heading {
+
+        margin-bottom: 35px;
+    }
+
+
+    .checkout-heading p {
+
+        margin-bottom: 10px;
+
+        font-size: 7px;
+
+        letter-spacing: 2.5px;
+    }
+
+
+    .checkout-heading h1 {
+
+        margin-bottom: 12px;
+
+        font-size: 38px;
+
+        line-height: 1.05;
+    }
+
+
+    .checkout-heading span {
+
+        font-size: 10px;
+
+        line-height: 1.6;
+    }
+
+
+
+    /* SECTIONS */
+
+    .checkout-product,
+    .checkout-form-section {
+
+        padding: 22px 18px;
+    }
+
+
+    .checkout-product h2,
+    .checkout-form-section h2 {
+
+        margin-bottom: 20px;
+
+        font-size: 22px;
+    }
+
+
+
+    /* PRODUCT */
+
+    .checkout-product-card {
+
+        gap: 13px;
+
+        padding-bottom: 20px;
+    }
+
+
+    .checkout-product-image {
+
+        width: 100px;
+        height: 100px;
+    }
+
+
+    .checkout-product-info .product-brand {
+
+        font-size: 7px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .checkout-product-info h3 {
+
+        margin-bottom: 8px;
+
+        font-size: 18px;
+    }
+
+
+    .checkout-product-info .product-price {
+
+        font-size: 12px;
+    }
+
+
+
+    /* FORM */
+
+    .form-group {
+
+        margin-bottom: 18px;
+    }
+
+
+    .form-group label {
+
+        margin-bottom: 7px;
+
+        font-size: 8px;
+
+        letter-spacing: 1px;
+    }
+
+
+    .form-group input,
+    .form-group select {
+
+        min-height: 45px;
+
+        padding: 12px;
+
+        font-size: 11px;
+    }
+
+
+    .form-group textarea {
+
+        min-height: 95px;
+
+        padding: 12px;
+
+        font-size: 11px;
+    }
+
+
+
+    /* TOTAL */
+
+    .checkout-total {
+
+        margin-top: 25px;
+
+        padding-top: 20px;
+    }
+
+
+    .checkout-total-label {
+
+        font-size: 8px;
+
+        letter-spacing: 1px;
+    }
+
+
+    .checkout-total-price {
+
+        font-size: 24px;
+    }
+
+
+    .confirm-order {
+
+        min-height: 50px;
+
+        margin-top: 20px;
+
+        font-size: 8px;
+
+        letter-spacing: 1.2px;
+    }
+
+
+
+    /* FOOTER */
+
+    .checkout-footer {
+
+        padding: 20px 5%;
+
+        gap: 8px;
+
+        flex-wrap: wrap;
+    }
+
+
+    .checkout-footer p {
+
+        font-size: 7px;
+    }
+
+}
+
+
+
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media (max-width: 400px) {
+
+    .checkout-heading h1 {
+
+        font-size: 33px;
+    }
+
+
+    .checkout-product-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .checkout-product-image {
+
+        width: 100%;
+
+        height: 180px;
+    }
+
+
+    .checkout-product-info h3 {
+
+        font-size: 20px;
+    }
+
+}

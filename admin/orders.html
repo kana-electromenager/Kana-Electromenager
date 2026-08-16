@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Commandes | KANA Admin</title>
+
+
+    <!-- =====================================================
+         ORDERS CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="orders.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         ADMIN HEADER
+    ====================================================== -->
+
+    <header class="admin-header">
+
+        <a
+            href="index.html"
+            class="admin-logo"
+        >
+
+            <img
+                src="../images/logo/logo.png"
+                alt="KANA Électroménager"
+            >
+
+            <div>
+
+                <strong>
+                    KANA Électroménager
+                </strong>
+
+                <span>
+                    Administration
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="../index.html"
+            class="view-site"
+        >
+            Voir le site
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="orders-page">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <section class="orders-heading">
+
+            <div>
+
+                <span class="page-kicker">
+                    KANA ADMIN
+                </span>
+
+                <h1>
+                    Commandes
+                </h1>
+
+                <p>
+                    Gérez les commandes reçues depuis votre boutique.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="refreshOrders"
+                class="refresh-button"
+            >
+                ACTUALISER
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ORDER STATISTICS
+             
+             IMPORTANT:
+             These cards are clickable.
+             
+             TOTAL       → all
+             NOUVELLES   → Nouvelle
+             CONFIRMÉES  → Confirmée
+             LIVRÉES     → Livrée
+        ================================================== -->
+
+        <section
+            class="orders-stats"
+            aria-label="Statistiques des commandes"
+        >
+
+
+            <!-- =================================================
+                 TOTAL
+            ================================================== -->
+
+            <button
+                type="button"
+                class="stat-card stat-card-filter active"
+                data-status="all"
+                id="totalCard"
+            >
+
+                <span>
+                    TOTAL
+                </span>
+
+                <strong id="totalOrders">
+                    0
+                </strong>
+
+            </button>
+
+
+
+            <!-- =================================================
+                 NOUVELLES
+            ================================================== -->
+
+            <button
+                type="button"
+                class="stat-card stat-card-filter"
+                data-status="Nouvelle"
+                id="newCard"
+            >
+
+                <span>
+                    NOUVELLES
+                </span>
+
+                <strong id="newOrders">
+                    0
+                </strong>
+
+            </button>
+
+
+
+            <!-- =================================================
+                 CONFIRMÉES
+            ================================================== -->
+
+            <button
+                type="button"
+                class="stat-card stat-card-filter"
+                data-status="Confirmée"
+                id="confirmedCard"
+            >
+
+                <span>
+                    CONFIRMÉES
+                </span>
+
+                <strong id="confirmedOrders">
+                    0
+                </strong>
+
+            </button>
+
+
+
+            <!-- =================================================
+                 LIVRÉES
+            ================================================== -->
+
+            <button
+                type="button"
+                class="stat-card stat-card-filter"
+                data-status="Livrée"
+                id="deliveredCard"
+            >
+
+                <span>
+                    LIVRÉES
+                </span>
+
+                <strong id="deliveredOrders">
+                    0
+                </strong>
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ORDERS SECTION
+        ====================================================== -->
+
+        <section class="orders-section">
+
+
+            <!-- =================================================
+                 ORDERS TOP
+            ================================================== -->
+
+            <div class="orders-top">
+
+
+                <div class="orders-title-wrapper">
+
+                    <h2>
+                        Toutes les commandes
+                    </h2>
+
+                    <p
+                        id="ordersFilterDescription"
+                        class="orders-filter-description"
+                    >
+                        Toutes les commandes reçues.
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     STATUS DROPDOWN
+                ================================================== -->
+
+                <div class="orders-filter">
+
+                    <label
+                        for="statusFilter"
+                    >
+                        Filtrer
+                    </label>
+
+
+                    <select
+                        id="statusFilter"
+                        class="status-filter"
+                    >
+
+                        <option value="all">
+                            Tous les statuts
+                        </option>
+
+                        <option value="Nouvelle">
+                            Nouvelles
+                        </option>
+
+                        <option value="Confirmée">
+                            Confirmées
+                        </option>
+
+                        <option value="Livrée">
+                            Livrées
+                        </option>
+
+                        <option value="Annulée">
+                            Annulées
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ORDERS CONTAINER
+                 
+                 orders.js will insert the Firebase orders here.
+            ================================================== -->
+
+            <div
+                id="ordersContainer"
+                class="orders-container"
+            >
+
+                <div class="orders-loading">
+
+                    <div class="loading-spinner"></div>
+
+                    <p>
+                        Chargement des commandes...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="admin-footer">
+
+        <p>
+            © 2026 KANA Électroménager
+        </p>
+
+        <p>
+            Developed by TINA
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         ORDERS JAVASCRIPT
+         
+         orders.js imports firebase.js itself.
+    ====================================================== -->
+
+    <script
+        type="module"
+        src="orders.js"
+    ></script>
+
+
+</body>
+
+</html>

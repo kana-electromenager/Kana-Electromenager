@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Catégories | KANA Électroménager</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/category.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+   <header class="header">
+
+    <a href="index.html" class="brand">
+
+        <img
+            src="images/logo/logo.png"
+            alt="KANA"
+            class="brand-logo"
+        >
+
+        <div class="brand-text">
+
+            <strong >KANA Électroménager </strong>
+
+            <span>Chez Amrane</span>
+            
+
+        </div>
+
+    </a>
+
+
+        <a
+            href="../index.html"
+            class="back-home"
+        >
+            RETOUR À L'ACCUEIL
+        </a>
+
+        <a href="cart.html" class="cart-link">
+         PANIER
+        </a>   
+
+    </header>
+
+
+
+    <!-- =================================================
+         HERO
+    ================================================= -->
+
+    <section class="category-hero">
+
+        <div class="category-hero-content">
+
+            <p id="categoryLabel">
+                KANA ÉLECTROMÉNAGER
+            </p>
+
+            <h1 id="categoryTitle">
+                Catégorie
+            </h1>
+
+            <span id="categoryDescription">
+                Découvrez notre sélection.
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         MAIN
+    ================================================= -->
+
+    <main class="category-main">
+
+        <div class="category-heading">
+
+            <p>
+                NOTRE SÉLECTION
+            </p>
+
+            <h2 id="productsTitle">
+                Produits
+            </h2>
+
+            <span id="productsCount"></span>
+
+        </div>
+
+
+        <!-- =================================================
+             SUBCATEGORIES / PRODUCTS
+        ================================================= -->
+
+        <section
+            class="products-grid"
+            id="productsContainer"
+        ></section>
+
+
+        <!-- =================================================
+             EMPTY
+        ================================================= -->
+
+        <div
+            class="empty-products"
+            id="emptyProducts"
+            hidden
+        >
+
+            <h3>
+                Aucun produit disponible
+            </h3>
+
+            <p>
+                Aucun produit n'est disponible
+                pour le moment.
+            </p>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+     FOOTER
+===================================================== -->
+<footer class="footer">
+
+    <!-- FOOTER BRAND -->
+    <div class="footer-brand">
+        <img src="images/logo/logo.png" alt="KANA">
+        <div>
+            <strong>KANA Électroménager</strong>
+            <span class="tagline">Chez Amrane</span>
+        </div>
+    </div>
+
+    <!-- STORES -->
+    <div class="footer-stores">
+        <h3>Nos magasins</h3>
+        
+        <!-- Boutique 1 -->
+        <div class="store">
+            <p>📍 Boutique 1</p>
+            <a href="https://www.google.com/maps?q=36.538361,3.955167" target="_blank" rel="noopener noreferrer" class="location-link">
+                Voir la localisation
+            </a>
+        </div>
+
+        <!-- Boutique 2 -->
+        <div class="store">
+            <p>📍 Boutique 2</p>
+            <a href="https://www.google.com/maps?q=36.537889,3.959083" target="_blank" rel="noopener noreferrer" class="location-link">
+                Voir la localisation
+            </a>
+        </div>
+    </div>
+
+    <!-- ADMIN -->
+    <a href="admin/login.html" class="footer-admin-link">
+        ADMIN
+    </a>
+
+   <div class="footer-bottom">
+    <p class="footer-copy">
+        © 2026 KANA AMRANE Électroménager
+    </p>
+
+    <p class="dev-by">
+        Developed by TINA
+    </p>
+</div>
+
+</footer>
+
+
+
+    <script src="data/products-data.js"></script>
+
+    <script src="/js/categories.js"></script>
+
+</body>
+
+</html>

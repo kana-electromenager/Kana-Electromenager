@@ -1,0 +1,1356 @@
+/* =====================================================
+   KANA ÉLECTROMÉNAGER
+   PRODUCTS PAGE
+===================================================== */
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    background: #ffffff;
+    color: #111111;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* =====================================================
+   HEADER
+   Même style que product.html
+===================================================== */
+
+.header {
+    width: 100%;
+    min-height: 85px;
+
+    padding: 18px 6%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #000000;
+}
+
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    text-decoration: none;
+}
+
+.brand-logo {
+    width: 45px;
+    height: 45px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-text strong {
+    color: #ffffff;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 21px;
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+    line-height: 1;
+}
+
+.brand-text span {
+    margin-top: 5px;
+
+    color: #d4af37;
+
+    font-size: 7px;
+    font-weight: 600;
+
+    letter-spacing: 3px;
+}
+ 
+.cart-link {
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.cart-link:hover {
+    color: #d4af37;
+}
+
+/* =====================================================
+   BACK HOME
+===================================================== */
+
+.back-home {
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    text-decoration: none;
+
+    transition:
+        color 0.3s ease;
+}
+
+.back-home:hover {
+    color: #d4af37;
+}
+
+
+/* =====================================================
+   PRODUCTS MAIN
+===================================================== */
+
+.products-main {
+    width: 100%;
+
+    padding:
+        70px 6%
+        110px;
+
+    background: #ffffff;
+}
+
+
+/* =====================================================
+   TOP SECTION
+===================================================== */
+
+.products-top {
+    width: min(1250px, 100%);
+
+    margin: 0 auto 55px;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 40px;
+}
+
+
+/* =====================================================
+   PRODUCTS HEADING
+===================================================== */
+
+.products-heading {
+    max-width: 750px;
+}
+
+.products-heading p {
+    margin-bottom: 14px;
+
+    color: #d4af37;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+}
+
+.products-heading h2 {
+    margin-bottom: 15px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(42px, 5vw, 64px);
+
+    font-weight: 400;
+
+    line-height: 0.95;
+}
+
+.products-heading span {
+    color: #777777;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   SORT
+===================================================== */
+
+.products-sort {
+    min-width: 190px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.products-sort label {
+    color: #777777;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+.products-sort select {
+    width: 190px;
+
+    min-height: 42px;
+
+    padding:
+        0 35px
+        0 13px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dcdcdc;
+
+    color: #111111;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    outline: none;
+
+    transition:
+        border-color 0.3s ease;
+}
+
+.products-sort select:hover,
+.products-sort select:focus {
+    border-color: #d4af37;
+}
+
+
+/* =====================================================
+   PRODUCTS GRID
+===================================================== */
+
+.products-grid {
+    width: min(1250px, 100%);
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+/* =====================================================
+   PRODUCT CARD
+===================================================== */
+
+.product-card {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #e6e6e6;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 18px 40px
+        rgba(0, 0, 0, 0.10);
+}
+
+
+/* =====================================================
+   PRODUCT IMAGE
+===================================================== */
+
+.product-image-container {
+    position: relative;
+
+    width: 100%;
+    height: 280px;
+
+    overflow: hidden;
+
+    background: #f7f7f5;
+}
+
+.product-image-container img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.5s ease;
+}
+
+.product-card:hover
+.product-image-container img {
+    transform: scale(1.05);
+}
+
+
+/* =====================================================
+   PRODUCT INFO
+===================================================== */
+
+.product-info {
+    padding:
+        22px 20px
+        24px;
+}
+
+
+/* CATEGORY */
+
+.product-category {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #d4af37;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* NAME */
+
+.product-name {
+    min-height: 44px;
+
+    margin-bottom: 13px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 22px;
+    font-weight: 400;
+
+    line-height: 1.1;
+}
+
+
+/* PRICE */
+
+.product-price {
+    margin-bottom: 17px;
+
+    color: #111111;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+/* FACILITY / DESCRIPTION */
+
+.product-facility {
+    display: block;
+
+    min-height: 30px;
+
+    margin-bottom: 18px;
+
+    color: #777777;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   PRODUCT BUTTON
+===================================================== */
+
+.product-button {
+    width: 100%;
+    min-height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #111111;
+
+    border: 1px solid #111111;
+
+    color: #ffffff;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.product-button:hover {
+    background: #d4af37;
+
+    border-color: #d4af37;
+
+    color: #111111;
+}
+
+
+/* =====================================================
+   EMPTY PRODUCTS
+===================================================== */
+
+.empty-products {
+    width: min(1250px, 100%);
+
+    margin: 0 auto;
+
+    padding:
+        90px 25px;
+
+    text-align: center;
+
+    background: #f7f7f5;
+
+    border:
+        1px solid
+        #e5e5e5;
+}
+
+.empty-icon {
+    margin-bottom: 20px;
+
+    color: #d4af37;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 35px;
+}
+
+.empty-products h3 {
+    margin-bottom: 12px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 32px;
+    font-weight: 400;
+}
+
+.empty-products p {
+    max-width: 500px;
+
+    margin:
+        0 auto
+        25px;
+
+    color: #777777;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   EMPTY BUTTON
+===================================================== */
+
+.empty-button {
+    min-width: 190px;
+    min-height: 42px;
+
+    padding:
+        0 20px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #111111;
+
+    color: #ffffff;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+.empty-button:hover {
+    background: #d4af37;
+
+    color: #111111;
+}
+
+
+/* =====================================================
+   FOOTER — KANA ÉLECTROMÉNAGER
+===================================================== */
+
+.footer {
+    width: 100%;
+    padding: 42px 6% 25px;
+
+    background: #050505;
+    color: #ffffff;
+
+    border-top: 1px solid rgba(212, 175, 55, 0.20);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.footer-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 13px;
+
+    margin-bottom: 32px;
+}
+
+.footer-brand img {
+    width: 52px;
+    height: 52px;
+
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.footer-brand .logo-icon {
+    font-size: 44px;
+    color: #ffffff;
+}
+
+.footer-brand > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-brand strong {
+    color: #ffffff;
+
+    font-family: "Times New Roman", Georgia, serif;
+
+    font-size: 21px;
+    font-weight: 500;
+
+    letter-spacing: 1.5px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.footer-brand span,
+.footer-brand .tagline {
+    margin-top: 5px;
+
+    color: #d4af37;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 2px;
+}
+
+
+/* =====================================================
+   NOS MAGASINS
+===================================================== */
+
+.footer-stores {
+    width: 100%;
+    max-width: 400px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-stores h3 {
+    margin: 0 0 17px;
+
+    color: #ffffff;
+
+    font-family: "Times New Roman", Georgia, serif;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   STORE
+===================================================== */
+
+.store {
+    width: 100%;
+
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.store:last-child {
+    border-bottom: none;
+}
+
+.store p {
+    margin: 0 0 6px;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    letter-spacing: 0.5px;
+}
+
+.location-link {
+    display: inline-block;
+
+    color: #d4af37;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 0.8px;
+
+    text-decoration: none;
+
+    transition: color 0.3s ease;
+}
+
+.location-link:hover {
+    color: #ffffff;
+}
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+.footer-admin-link,
+.admin-access {
+    width: 100%;
+
+    display: block;
+
+    margin: 8px 0 25px;
+
+    color: #ffffff;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    text-align: center;
+    text-decoration: none;
+
+    text-transform: uppercase;
+
+    transition: color 0.3s ease;
+}
+
+.footer-admin-link:hover,
+.admin-access:hover {
+    color: #d4af37;
+}
+
+
+/* =====================================================
+   BOTTOM — COPYRIGHT + DEVELOPER
+===================================================== */
+
+.footer-bottom {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    text-align: center;
+}
+
+.footer-copy {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 9px;
+
+    letter-spacing: 0.5px;
+}
+
+.dev-by {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 9px;
+
+    letter-spacing: 0.5px;
+
+    opacity: 0.9;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 750px) {
+
+    .footer {
+        padding: 32px 5% 22px;
+    }
+
+    .footer-brand {
+        gap: 11px;
+        margin-bottom: 28px;
+    }
+
+    .footer-brand img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .footer-brand .logo-icon {
+        font-size: 40px;
+    }
+
+    .footer-brand strong {
+        font-size: 18px;
+        letter-spacing: 1.2px;
+    }
+
+    .footer-brand span,
+    .footer-brand .tagline {
+        font-size: 8px;
+        letter-spacing: 1.7px;
+    }
+
+    .footer-stores {
+        max-width: 100%;
+    }
+
+    .footer-stores h3 {
+        font-size: 12px;
+    }
+
+    .store p {
+        font-size: 9px;
+    }
+
+    .location-link {
+        font-size: 8px;
+    }
+
+    .footer-admin-link,
+    .admin-access {
+        font-size: 8px;
+        margin-top: 6px;
+        margin-bottom: 22px;
+    }
+
+    .footer-bottom {
+        gap: 7px;
+        flex-wrap: nowrap;
+    }
+
+    .footer-copy,
+    .dev-by {
+        font-size: 7.5px;
+        white-space: nowrap;
+    }
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media (max-width: 450px) {
+
+    .footer {
+        padding: 28px 5% 20px;
+    }
+
+    .footer-brand {
+        gap: 9px;
+        margin-bottom: 25px;
+    }
+
+    .footer-brand img {
+        width: 44px;
+        height: 44px;
+    }
+
+    .footer-brand .logo-icon {
+        font-size: 37px;
+    }
+
+    .footer-brand strong {
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+
+    .footer-brand span,
+    .footer-brand .tagline {
+        font-size: 7px;
+        letter-spacing: 1.4px;
+    }
+
+    .footer-stores h3 {
+        font-size: 11px;
+    }
+
+    .store {
+        margin-bottom: 13px;
+        padding-bottom: 10px;
+    }
+
+    .store p {
+        font-size: 8px;
+    }
+
+    .location-link {
+        font-size: 7px;
+    }
+
+    .footer-admin-link,
+    .admin-access {
+        font-size: 7px;
+        letter-spacing: 1.5px;
+    }
+
+    .footer-bottom {
+        gap: 5px;
+    }
+
+    .footer-copy,
+    .dev-by {
+        font-size: 6.5px;
+    }
+}
+
+
+/* =====================================================
+   TABLET
+   751px → 1100px
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .products-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 14px;
+    }
+
+    .product-image-container {
+        height: 260px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   451px → 750px
+===================================================== */
+
+@media (max-width: 750px) {
+
+    /* HEADER */
+
+    .header {
+        min-height: 70px;
+
+        padding:
+            14px 5%;
+    }
+
+    .brand {
+        gap: 8px;
+    }
+
+    .brand-logo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .brand-text strong {
+        font-size: 18px;
+    }
+
+    .brand-text span {
+        font-size: 6px;
+
+        letter-spacing: 2px;
+    }
+
+    .back-home {
+        font-size: 8px;
+
+        letter-spacing: 1px;
+    }
+
+
+    /* MAIN */
+
+    .products-main {
+        padding:
+            50px 4%
+            70px;
+    }
+
+
+    /* TOP */
+
+    .products-top {
+        margin-bottom: 35px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 25px;
+    }
+
+
+    /* HEADING */
+
+    .products-heading p {
+        margin-bottom: 10px;
+
+        font-size: 8px;
+
+        letter-spacing: 3px;
+    }
+
+    .products-heading h2 {
+        margin-bottom: 12px;
+
+        font-size: 38px;
+    }
+
+    .products-heading span {
+        font-size: 11px;
+
+        line-height: 1.7;
+    }
+
+
+    /* SORT */
+
+    .products-sort {
+        width: 100%;
+    }
+
+    .products-sort select {
+        width: 100%;
+    }
+
+
+    /* PRODUCTS */
+
+    .products-grid {
+        width: 100%;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+    }
+
+    .product-image-container {
+        height: 195px;
+    }
+
+    .product-info {
+        padding:
+            14px 10px
+            16px;
+    }
+
+    .product-category {
+        font-size: 7px;
+
+        letter-spacing: 1.5px;
+    }
+
+    .product-name {
+        min-height: 36px;
+
+        margin-bottom: 10px;
+
+        font-size: 17px;
+    }
+
+    .product-price {
+        margin-bottom: 12px;
+
+        font-size: 14px;
+    }
+
+    .product-facility {
+        min-height: 28px;
+
+        margin-bottom: 13px;
+
+        font-size: 8px;
+    }
+
+    .product-button {
+        min-height: 40px;
+
+        font-size: 7px;
+
+        letter-spacing: 1px;
+    }
+
+
+    /* EMPTY */
+
+    .empty-products {
+        padding:
+            65px 15px;
+    }
+
+    .empty-products h3 {
+        font-size: 27px;
+    }
+
+
+    /* FOOTER */
+
+    .footer {
+        padding:
+            30px 5%;
+    }
+
+    .footer-brand {
+        flex-direction: column;
+
+        gap: 20px;
+    }
+
+    .footer-stores {
+        margin-left: 0;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONE
+   450px and below
+===================================================== */
+
+@media (max-width: 450px) {
+
+    /* HEADER */
+
+    .header {
+        min-height: 64px;
+
+        padding:
+            12px 4%;
+    }
+
+    .brand {
+        gap: 6px;
+    }
+
+    .brand-logo {
+        width: 31px;
+        height: 31px;
+    }
+
+    .brand-text strong {
+        font-size: 15px;
+
+        letter-spacing: 1.5px;
+    }
+
+    .brand-text span {
+        margin-top: 4px;
+
+        font-size: 4px;
+
+        letter-spacing: 1.5px;
+    }
+
+    .back-home {
+        font-size: 6px;
+
+        letter-spacing: 0.8px;
+    }
+
+
+    /* MAIN */
+
+    .products-main {
+        padding:
+            40px 4%
+            60px;
+    }
+
+
+    /* HEADING */
+
+    .products-heading h2 {
+        font-size: 32px;
+    }
+
+    .products-heading span {
+        font-size: 10px;
+    }
+
+
+    /* SORT */
+
+    .products-sort label {
+        font-size: 8px;
+    }
+
+    .products-sort select {
+        min-height: 38px;
+
+        font-size: 9px;
+    }
+
+
+    /* PRODUCTS */
+
+    .products-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 7px;
+    }
+
+    .product-image-container {
+        height: 175px;
+    }
+
+    .product-info {
+        padding:
+            12px 8px
+            13px;
+    }
+
+    .product-category {
+        font-size: 6px;
+    }
+
+    .product-name {
+        min-height: 32px;
+
+        font-size: 15px;
+    }
+
+    .product-price {
+        font-size: 13px;
+    }
+
+    .product-facility {
+        font-size: 7px;
+    }
+
+    .product-button {
+        min-height: 36px;
+
+        font-size: 6px;
+
+        letter-spacing: 0.8px;
+    }
+
+
+    /* EMPTY */
+
+    .empty-products {
+        padding:
+            55px 12px;
+    }
+
+    .empty-products h3 {
+        font-size: 24px;
+    }
+
+    .empty-products p {
+        font-size: 10px;
+    }
+
+
+    /* FOOTER */
+
+    .footer {
+        padding:
+            28px 5%;
+    }
+
+    .footer-brand strong {
+        font-size: 17px;
+    }
+
+    .footer-stores h3 {
+        font-size: 14px;
+    }
+
+    .store p {
+        font-size: 9px;
+    }
+
+    .location-link {
+        font-size: 8px;
+    }
+
+    .footer > p {
+        font-size: 8px;
+    }
+
+}
+
