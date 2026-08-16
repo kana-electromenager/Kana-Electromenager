@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -48,16 +49,16 @@
         </a>
 
 
+       
+
+
         <a
-            href="javascript:history.back()"
-            class="back-products"
+            href="cart.html"
+            class="cart-link"
         >
-            ← RETOUR
+            PANIER
         </a>
 
-        <a href="cart.html" class="cart-link">
-          PANIER
-        </a>
     </header>
 
 
@@ -171,6 +172,90 @@
 
 
                 <!-- =================================================
+                     INSTALLMENT PAYMENT
+                ================================================== -->
+
+                <div class="installment-box">
+
+
+                    <!-- LABEL -->
+
+                    <span class="installment-label">
+                        FACILITÉ DE PAIEMENT
+                    </span>
+
+
+
+                    <!-- OPTIONS -->
+
+                    <div class="installment-options">
+
+
+                        <button
+                            type="button"
+                            data-months="3"
+                        >
+                            3 MOIS
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-months="6"
+                        >
+                            6 MOIS
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-months="9"
+                        >
+                            9 MOIS
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-months="12"
+                        >
+                            12 MOIS
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-months="24"
+                        >
+                            24 MOIS
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         INSTALLMENT RESULT
+                    ================================================== -->
+
+                    <div class="installment-result">
+
+                        <span>
+                            Mensualité
+                        </span>
+
+                        <strong id="installmentPrice">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================================
                      SEPARATOR
                 ================================================== -->
 
@@ -179,37 +264,10 @@
 
 
                 <!-- =================================================
-                     PRODUCT INFORMATION
+                     AVAILABILITY
                 ================================================== -->
 
                 <div class="product-information">
-
-
-                    <div class="product-information-row">
-
-                        <span>
-                            Catégorie
-                        </span>
-
-                        <strong id="productCategory">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="product-information-row">
-
-                        <span>
-                            Type
-                        </span>
-
-                        <strong id="productType">
-                            —
-                        </strong>
-
-                    </div>
-
 
                     <div class="product-information-row">
 
@@ -223,7 +281,6 @@
 
                     </div>
 
-
                 </div>
 
 
@@ -231,42 +288,60 @@
                 <!-- =================================================
                      ACTIONS
                 ================================================== -->
-                 <div class="product-actions">
-                <a
-                 id="whatsappProduct"
-                 href="#"
-                 class="product-whatsapp"
-                 target="_blank"
-                 rel="noopener"
-                 > 
-                   CONTACTER SUR WHATSAPP
-                </a>
-                <button
-                    id="addToCartProduct"
-                    class="product-cart"
-                    type="button"
-                 >
-                   AJOUTER AU PANIER
-                </button>
-                 
-                 <a
-                    id="orderProduct"
-                   href="#"
-                   class="product-order"
-                 >
-                  COMMANDER
-                </a>
 
-                 </div>
+                <div class="product-actions">
+
+
+                    <!-- WHATSAPP -->
+
+                    <a
+                        id="whatsappProduct"
+                        href="#"
+                        class="product-whatsapp"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        CONTACTER SUR WHATSAPP
+                    </a>
+
+
+
+                    <!-- ADD TO CART -->
+
+                    <button
+                        id="addToCartProduct"
+                        class="product-cart"
+                        type="button"
+                    >
+                        AJOUTER AU PANIER
+                    </button>
+
+
+
+                    <!-- ORDER -->
+
+                    <a
+                        id="orderProduct"
+                        href="#"
+                        class="product-order"
+                    >
+                        COMMANDER
+                    </a>
+
+
+                </div>
+
+
             </div>
-        </section>
-    </main>
-   
 
-  
+        </section>
+
+    </main>
+
+
+
     <!-- =====================================================
          FOOTER
-         خارج الـ main تماماً
     ====================================================== -->
 
     <footer class="footer">
@@ -308,6 +383,7 @@
             <h3>
                 Nos magasins
             </h3>
+
 
 
             <!-- BOUTIQUE 1 -->
@@ -368,15 +444,21 @@
 
 
 
-        <div class="footer-bottom">
-    <p class="footer-copy">
-        © 2026 KANA AMRANE Électroménager
-    </p>
+        <!-- =================================================
+             FOOTER BOTTOM
+        ================================================== -->
 
-    <p class="dev-by">
-        Developed by TINA
-    </p>
-</div>
+        <div class="footer-bottom">
+
+            <p class="footer-copy">
+                © 2026 KANA AMRANE Électroménager
+            </p>
+
+            <p class="dev-by">
+                Developed by TINA
+            </p>
+
+        </div>
 
 
     </footer>

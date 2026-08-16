@@ -757,7 +757,7 @@ img {
 .footer-bottom {
     width: 100%;
 
-    display: flex;
+    display: flex; 
     align-items: center;
     justify-content: center;
 
@@ -787,6 +787,7 @@ img {
 
     opacity: 0.9;
 }
+
 
 
 /* =====================================================

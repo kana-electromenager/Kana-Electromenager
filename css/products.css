@@ -372,7 +372,7 @@ img {
 ===================================================== */
 
 .product-info {
-    padding: 16px 16px 18px;
+    padding: 12px 14px 14px;
 }   
 
 
@@ -398,9 +398,9 @@ img {
 /* NAME */
 
 .product-name {
-    min-height: 44px;
+    min-height: auto;
 
-    margin-bottom: 13px;
+    margin-bottom: 10px;
 
     color: #111111;
 
@@ -409,7 +409,7 @@ img {
         Georgia,
         serif;
 
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 400;
 
     line-height: 1.1;
@@ -418,8 +418,8 @@ img {
 .product-brand {
     display: block;
 
-    margin-top: 4px;
-    margin-bottom: 14px;
+    margin-top: 6px;
+    margin-bottom: 8px;
 
     color: #777777;
 
@@ -431,7 +431,9 @@ img {
     font-size: 10px;
     font-weight: 600;
 
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
+
+    text-align: left;
 
     text-transform: uppercase;
 }
@@ -440,7 +442,7 @@ img {
 
 
 .product-price {
-    margin-bottom: 15px;
+    margin-bottom: 13px;
 
     color: #111111;
 

@@ -1,4 +1,3 @@
-
 /* =====================================================
    KANA — PRODUCT PAGE
    PRODUCT.CSS
@@ -1301,4 +1300,241 @@ img {
     border-color: #d4af37;
 
     color: #111111;
+}
+
+/* =====================================================
+   FACILITÉ DE PAIEMENT
+===================================================== */
+
+.installment-box {
+    width: 100%;
+    margin-top: 24px;
+}
+
+
+/* =====================================================
+   TITRE
+===================================================== */
+
+.installment-label {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #111111;
+
+    font-family: "Times New Roman", Georgia, serif;
+
+    font-size: 14px;
+    font-weight: 400;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   BOUTONS
+===================================================== */
+
+.installment-options {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.installment-options button {
+    min-width: 58px;
+    height: 32px;
+
+    padding: 6px 12px;
+
+    border: 1px solid #111111;
+    border-radius: 20px;
+
+    background: #111111;
+
+    color: #ffffff;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: 0.8px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.2s ease;
+}
+
+
+/* HOVER */
+
+.installment-options button:hover {
+    background: #d4af37;
+    border-color: #d4af37;
+
+    color: #111111;
+
+    transform: translateY(-1px);
+}
+
+
+/* SELECTED */
+
+.installment-options button.active {
+    background: #d4af37;
+    border-color: #d4af37;
+
+    color: #111111;
+}
+
+
+/* =====================================================
+   MENSUALITÉ
+===================================================== */
+
+.installment-result {
+    width: 100%;
+
+    margin-top: 9px;
+
+    padding: 5px 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+/* LABEL */
+
+.installment-result span {
+    color: #777777;
+
+    font-family: "Times New Roman", Georgia, serif;
+
+    font-size: 9px;
+    font-weight: 400;
+
+    letter-spacing: 0.6px;
+}
+
+
+/* PRICE */
+
+.installment-result strong {
+    color: #111111;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    letter-spacing: 0.3px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .installment-box {
+        margin-top: 20px;
+    }
+
+    .installment-label {
+        margin-bottom: 10px;
+
+        font-size: 13px;
+
+        letter-spacing: 0.8px;
+    }
+
+    .installment-options {
+        gap: 6px;
+    }
+
+    .installment-options button {
+        min-width: 54px;
+        height: 30px;
+
+        padding: 5px 10px;
+
+        border-radius: 18px;
+
+        font-size: 7px;
+
+        letter-spacing: 0.6px;
+    }
+
+    .installment-result {
+        margin-top: 7px;
+
+        padding: 4px 1px;
+    }
+
+    .installment-result span {
+        font-size: 8px;
+    }
+
+    .installment-result strong {
+        font-size: 9px;
+    }
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media (max-width: 450px) {
+
+    .installment-box {
+        margin-top: 17px;
+    }
+
+    .installment-label {
+        margin-bottom: 9px;
+
+        font-size: 12px;
+    }
+
+    .installment-options {
+        gap: 5px;
+    }
+
+    .installment-options button {
+        min-width: 51px;
+        height: 28px;
+
+        padding: 4px 9px;
+
+        border-radius: 16px;
+
+        font-size: 7px;
+    }
+
+    .installment-result {
+        margin-top: 6px;
+
+        padding: 3px 0;
+    }
+
+    .installment-result span {
+        font-size: 7px;
+    }
+
+    .installment-result strong {
+        font-size: 8px;
+    }
 }

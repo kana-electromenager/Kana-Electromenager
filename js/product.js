@@ -34,36 +34,34 @@ const productDescription =
 const productPrice =
     document.getElementById("productPrice");
 
-const productCategory =
-    document.getElementById("productCategory");
-
-const productType =
-    document.getElementById("productType");
-
 const productAvailability =
     document.getElementById("productAvailability");
 
 const breadcrumbProduct =
     document.getElementById("breadcrumbProduct");
 
-const productExtraDescription =
-    document.getElementById(
-        "productExtraDescription"
-    );
-
 const whatsappProduct =
-    document.getElementById(
-        "whatsappProduct"
-    );
+    document.getElementById("whatsappProduct");
 
 const orderProduct =
-    document.getElementById(
-        "orderProduct"
-    );
+    document.getElementById("orderProduct");
 
 const addToCartProduct =
+    document.getElementById("addToCartProduct");
+
+
+/* =====================================================
+   INSTALLMENT ELEMENTS
+===================================================== */
+
+const installmentButtons =
+    document.querySelectorAll(
+        ".installment-options button"
+    );
+
+const installmentPrice =
     document.getElementById(
-        "addToCartProduct"
+        "installmentPrice"
     );
 
 
@@ -80,15 +78,14 @@ function getAllProducts() {
        DEFAULT PRODUCTS
     --------------------------------------------- */
 
-    if (typeof productsData !== "undefined") {
+    if (
+        typeof productsData !== "undefined" &&
+        Array.isArray(productsData)
+    ) {
 
-        if (Array.isArray(productsData)) {
-
-            allProducts = [
-                ...productsData
-            ];
-
-        }
+        allProducts = [
+            ...productsData
+        ];
 
     }
 
@@ -197,7 +194,146 @@ function formatPrice(price) {
 
 
 /* =====================================================
-   6. DISPLAY PRODUCT
+   6. INSTALLMENT PAYMENT
+===================================================== */
+
+function setupInstallments(product) {
+
+    if (
+        !installmentButtons.length ||
+        !installmentPrice
+    ) {
+
+        return;
+
+    }
+
+
+    const price =
+        Number(product.price);
+
+
+    /* ---------------------------------------------
+       INVALID PRICE
+    --------------------------------------------- */
+
+    if (
+        Number.isNaN(price) ||
+        price <= 0
+    ) {
+
+        installmentButtons.forEach(
+            button => {
+
+                button.disabled = true;
+
+            }
+        );
+
+
+        installmentPrice.textContent =
+            "—";
+
+
+        return;
+
+    }
+
+
+    /* ---------------------------------------------
+       RESET
+    --------------------------------------------- */
+
+    installmentPrice.textContent =
+        "—";
+
+
+    installmentButtons.forEach(
+        button => {
+
+            button.disabled = false;
+
+            button.classList.remove(
+                "active"
+            );
+
+
+            /* -----------------------------------------
+               CLICK
+            ----------------------------------------- */
+
+            button.addEventListener(
+                "click",
+                function () {
+
+
+                    const months =
+                        Number(
+                            button.dataset.months
+                        );
+
+
+                    if (
+                        Number.isNaN(months) ||
+                        months <= 0
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    /* ---------------------------------
+                       CALCULATE MONTHLY PRICE
+                    --------------------------------- */
+
+                    const monthlyPrice =
+                        price / months;
+
+
+                    /* ---------------------------------
+                       DISPLAY RESULT
+                    --------------------------------- */
+
+                    installmentPrice.textContent =
+                        `${monthlyPrice.toLocaleString(
+                            "fr-FR",
+                            {
+                                maximumFractionDigits: 0
+                            }
+                        )} DA / mois`;
+
+
+                    /* ---------------------------------
+                       ACTIVE BUTTON
+                    --------------------------------- */
+
+                    installmentButtons.forEach(
+                        btn => {
+
+                            btn.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   7. DISPLAY PRODUCT
 ===================================================== */
 
 function displayProduct(product) {
@@ -279,30 +415,6 @@ function displayProduct(product) {
 
 
     /* ---------------------------------------------
-       CATEGORY
-    --------------------------------------------- */
-
-    if (productCategory) {
-
-        productCategory.textContent =
-            product.category || "—";
-
-    }
-
-
-    /* ---------------------------------------------
-       TYPE
-    --------------------------------------------- */
-
-    if (productType) {
-
-        productType.textContent =
-            product.type || "—";
-
-    }
-
-
-    /* ---------------------------------------------
        AVAILABILITY
     --------------------------------------------- */
 
@@ -336,32 +448,10 @@ function displayProduct(product) {
 
 
     /* ---------------------------------------------
-       EXTRA DESCRIPTION
+       INSTALLMENTS
     --------------------------------------------- */
 
-    if (productExtraDescription) {
-
-        const description =
-            product.description ||
-            "Les informations détaillées de ce produit seront disponibles prochainement.";
-
-
-        productExtraDescription.innerHTML = "";
-
-
-        const paragraph =
-            document.createElement("p");
-
-
-        paragraph.textContent =
-            description;
-
-
-        productExtraDescription.appendChild(
-            paragraph
-        );
-
-    }
+    setupInstallments(product);
 
 
     /* ---------------------------------------------
@@ -388,7 +478,7 @@ function displayProduct(product) {
 
 
 /* =====================================================
-   7. ADD TO CART
+   8. ADD TO CART
 ===================================================== */
 
 function setupAddToCart(product) {
@@ -417,7 +507,7 @@ function setupAddToCart(product) {
 
 
 /* =====================================================
-   8. ADD PRODUCT TO CART
+   9. ADD PRODUCT TO CART
 ===================================================== */
 
 function addProductToCart(product) {
@@ -432,7 +522,9 @@ function addProductToCart(product) {
     try {
 
         const savedCart =
-            localStorage.getItem("kanaCart");
+            localStorage.getItem(
+                "kanaCart"
+            );
 
 
         if (savedCart) {
@@ -474,27 +566,42 @@ function addProductToCart(product) {
     if (existingProduct) {
 
         existingProduct.quantity =
-            Number(existingProduct.quantity || 1) + 1;
+            Number(
+                existingProduct.quantity || 1
+            ) + 1;
 
     } else {
 
         cart.push({
 
-            id: product.id,
+            id:
+                product.id,
 
-            name: product.name || "Produit",
+            name:
+                product.name ||
+                "Produit",
 
-            price: product.price ?? 0,
+            price:
+                product.price ?? 0,
 
-            image: product.image || "",
+            image:
+                product.image ||
+                "",
 
-            brand: product.brand || "KANA",
+            brand:
+                product.brand ||
+                "KANA",
 
-            category: product.category || "",
+            category:
+                product.category ||
+                "",
 
-            type: product.type || "",
+            type:
+                product.type ||
+                "",
 
-            quantity: 1
+            quantity:
+                1
 
         });
 
@@ -512,6 +619,7 @@ function addProductToCart(product) {
             JSON.stringify(cart)
         );
 
+
         showAddedToCart();
 
     } catch (error) {
@@ -527,7 +635,7 @@ function addProductToCart(product) {
 
 
 /* =====================================================
-   9. SHOW ADDED MESSAGE
+   10. SHOW ADDED MESSAGE
 ===================================================== */
 
 function showAddedToCart() {
@@ -566,7 +674,7 @@ function showAddedToCart() {
 
 
 /* =====================================================
-   10. WHATSAPP
+   11. WHATSAPP
 ===================================================== */
 
 function setupWhatsApp(product) {
@@ -599,7 +707,7 @@ function setupWhatsApp(product) {
 
 
 /* =====================================================
-   11. ORDER PRODUCT
+   12. ORDER PRODUCT
 ===================================================== */
 
 function setupOrder(product) {
@@ -624,7 +732,7 @@ function setupOrder(product) {
 
 
 /* =====================================================
-   12. PRODUCT NOT FOUND
+   13. PRODUCT NOT FOUND
 ===================================================== */
 
 function showProductNotFound() {
@@ -669,22 +777,6 @@ function showProductNotFound() {
     }
 
 
-    if (productCategory) {
-
-        productCategory.textContent =
-            "—";
-
-    }
-
-
-    if (productType) {
-
-        productType.textContent =
-            "—";
-
-    }
-
-
     if (productAvailability) {
 
         productAvailability.textContent =
@@ -701,19 +793,38 @@ function showProductNotFound() {
     }
 
 
-    if (productExtraDescription) {
+    /* ---------------------------------------------
+       DISABLE INSTALLMENTS
+    --------------------------------------------- */
 
-        productExtraDescription.innerHTML = `
+    if (installmentButtons.length) {
 
-            <p>
-                Aucun produit correspondant
-                à cette référence n'a été trouvé.
-            </p>
+        installmentButtons.forEach(
+            button => {
 
-        `;
+                button.disabled = true;
+
+                button.classList.remove(
+                    "active"
+                );
+
+            }
+        );
 
     }
 
+
+    if (installmentPrice) {
+
+        installmentPrice.textContent =
+            "—";
+
+    }
+
+
+    /* ---------------------------------------------
+       HIDE ACTIONS
+    --------------------------------------------- */
 
     if (whatsappProduct) {
 
@@ -742,7 +853,7 @@ function showProductNotFound() {
 
 
 /* =====================================================
-   13. INITIALIZE
+   14. INITIALIZE
 ===================================================== */
 
 function initProductPage() {

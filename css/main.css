@@ -1031,12 +1031,15 @@ button {
 }
 
 /* =====================================================
-   FOOTER — KANA ÉLECTROMÉNAGER
+   FOOTER
 ===================================================== */
 
 .footer {
     width: 100%;
+
     padding: 42px 6% 25px;
+
+    margin-top: 0;
 
     background: #050505;
     color: #ffffff;
@@ -1065,11 +1068,12 @@ button {
     margin-bottom: 32px;
 }
 
-.footer-brand img {
+.footer-brand > img {
     width: 52px;
     height: 52px;
 
     object-fit: contain;
+
     flex-shrink: 0;
 }
 
@@ -1093,6 +1097,7 @@ button {
     font-weight: 500;
 
     letter-spacing: 1.5px;
+
     line-height: 1;
     white-space: nowrap;
 }
@@ -1153,7 +1158,6 @@ button {
 
     display: flex;
     flex-direction: column;
-
     align-items: flex-start;
 
     border-bottom: 1px solid rgba(212, 175, 55, 0.18);
@@ -1170,8 +1174,6 @@ button {
 
     font-size: 10px;
     font-weight: 600;
-
-    letter-spacing: 0.5px;
 }
 
 .location-link {
@@ -1228,13 +1230,13 @@ button {
 
 
 /* =====================================================
-   BOTTOM — COPYRIGHT + DEVELOPER
+   COPYRIGHT + DEVELOPED BY
 ===================================================== */
 
 .footer-bottom {
     width: 100%;
 
-    display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
 
@@ -1264,7 +1266,6 @@ button {
 
     opacity: 0.9;
 }
-
 
 /* =====================================================
    MOBILE
