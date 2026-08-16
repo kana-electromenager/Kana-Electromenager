@@ -799,50 +799,35 @@ function createProductCard(product) {
 
             <div class="product-info">
 
-                ${
-                    product.brand
-                        ? `
-                            <span class="product-brand">
-                                ${escapeHTML(
-                                    product.brand
-                                )}
+               <h3 class="product-name">
+                  ${escapeHTML(
+                      product.name ||
+                       "Produit"
+                    )}
+                 </h3>
+
+               ${
+                  product.brand
+                      ? `
+                          <span class="product-brand">
+                             ${escapeHTML(
+                              product.brand
+                             )}
                             </span>
                         `
-                        : ""
+                         : ""
                 }
 
-
-                <h3 class="product-name">
-                    ${escapeHTML(
-                        product.name ||
-                        "Produit"
-                    )}
-                </h3>
-
-
-                ${
-                    product.description
-                        ? `
-                            <p class="product-description">
-                                ${escapeHTML(
-                                    product.description
-                                )}
-                            </p>
-                        `
-                        : ""
-                }
-
-
-                ${formatPrice(
-                    product.price
+              ${formatPrice(
+                 product.price
                 )}
 
-
                 <div class="product-button">
-                    VOIR LE PRODUIT
+                   VOIR LE PRODUIT
                 </div>
-
+   
             </div>
+            
 
         </a>
 
