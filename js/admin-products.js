@@ -1,7 +1,16 @@
 /* =====================================================
    KANA ADMIN
    PRODUCTS MANAGEMENT
+   FIRESTORE + DATA URL IMAGES
 ===================================================== */
+
+import {
+    db,
+    collection,
+    getDocs,
+    doc,
+    deleteDoc
+} from "../js/firebase.js";
 
 
 /* =====================================================
@@ -9,37 +18,59 @@
 ===================================================== */
 
 const productsContainer =
-    document.getElementById("productsContainer");
+    document.getElementById(
+        "productsContainer"
+    );
 
 const productSearch =
-    document.getElementById("productSearch");
+    document.getElementById(
+        "productSearch"
+    );
 
 const categoryFilter =
-    document.getElementById("categoryFilter");
+    document.getElementById(
+        "categoryFilter"
+    );
 
 const brandFilter =
-    document.getElementById("brandFilter");
+    document.getElementById(
+        "brandFilter"
+    );
 
 const availabilityFilter =
-    document.getElementById("availabilityFilter");
+    document.getElementById(
+        "availabilityFilter"
+    );
 
 const productsCount =
-    document.getElementById("productsCount");
+    document.getElementById(
+        "productsCount"
+    );
 
 const deleteModal =
-    document.getElementById("deleteModal");
+    document.getElementById(
+        "deleteModal"
+    );
 
 const deleteProductName =
-    document.getElementById("deleteProductName");
+    document.getElementById(
+        "deleteProductName"
+    );
 
 const cancelDelete =
-    document.getElementById("cancelDelete");
+    document.getElementById(
+        "cancelDelete"
+    );
 
 const confirmDelete =
-    document.getElementById("confirmDelete");
+    document.getElementById(
+        "confirmDelete"
+    );
 
 const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+        "logoutButton"
+    );
 
 
 /* =====================================================
@@ -48,8 +79,6 @@ const logoutButton =
 
 let products = [];
 
-let originalProducts = [];
-
 let productToDelete = null;
 
 
@@ -57,251 +86,47 @@ let productToDelete = null;
    LOAD PRODUCTS
 ===================================================== */
 
-function loadProducts() {
-
-    /*
-        ORIGINAL PRODUCTS
-        from products-data.js
-    */
-
-    originalProducts =
-        typeof productsData !== "undefined" &&
-        Array.isArray(productsData)
-            ? [...productsData]
-            : [];
-
-
-    /*
-        ADMIN PRODUCTS
-        from localStorage
-    */
-
-    let adminProducts = [];
-
+async function loadProducts() {
 
     try {
 
-        const savedProducts =
-            localStorage.getItem(
-                "kanaProducts"
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "products"
+                )
             );
 
 
-        if (savedProducts) {
+        products =
+            snapshot.docs.map(
+                productDocument => ({
 
-            const parsed =
-                JSON.parse(
-                    savedProducts
-                );
+                    id:
+                        productDocument.id,
+
+                    ...productDocument.data()
+
+                })
+            );
 
 
-            if (
-                Array.isArray(parsed)
-            ) {
+        console.log(
+            "KANA Admin — produits:",
+            products
+        );
 
-                adminProducts =
-                    parsed;
-
-            }
-
-        }
 
     } catch (error) {
 
         console.error(
-            "Erreur lors du chargement des produits Admin.",
+            "Erreur lors du chargement:",
             error
         );
 
-    }
 
-
-    /*
-        IMPORTANT:
-        products-data.js + localStorage
-    */
-
-    products = [
-
-        ...originalProducts,
-
-        ...adminProducts
-
-    ];
-
-}
-
-
-/* =====================================================
-   INITIALIZATION
-===================================================== */
-
-function initializeProductsPage() {
-
-    loadProducts();
-
-    populateFilters();
-
-    renderProducts();
-
-    setupEvents();
-
-}
-
-
-/* =====================================================
-   DOM READY
-===================================================== */
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeProductsPage
-    );
-
-} else {
-
-    initializeProductsPage();
-
-}
-
-
-/* =====================================================
-   FILTER OPTIONS
-===================================================== */
-
-function populateFilters() {
-
-    if (categoryFilter) {
-
-        /*
-            Keep first option
-        */
-
-        categoryFilter.innerHTML = `
-
-            <option value="">
-                Toutes les catégories
-            </option>
-
-        `;
-
-
-        const categories = [
-
-            ...new Set(
-
-                products
-
-                    .map(
-                        product =>
-                            product.category
-                    )
-
-                    .filter(Boolean)
-
-            )
-
-        ].sort(
-            (a, b) =>
-                String(a).localeCompare(
-                    String(b),
-                    "fr"
-                )
-        );
-
-
-        categories.forEach(
-            category => {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-
-                option.value =
-                    category;
-
-
-                option.textContent =
-                    getCategoryDisplayName(
-                        category
-                    );
-
-
-                categoryFilter.appendChild(
-                    option
-                );
-
-            }
-        );
-
-    }
-
-
-    if (brandFilter) {
-
-        brandFilter.innerHTML = `
-
-            <option value="">
-                Toutes les marques
-            </option>
-
-        `;
-
-
-        const brands = [
-
-            ...new Set(
-
-                products
-
-                    .map(
-                        product =>
-                            product.brand
-                    )
-
-                    .filter(Boolean)
-
-            )
-
-        ].sort(
-            (a, b) =>
-                String(a).localeCompare(
-                    String(b),
-                    "fr"
-                )
-        );
-
-
-        brands.forEach(
-            brand => {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-
-                option.value =
-                    brand;
-
-
-                option.textContent =
-                    brand;
-
-
-                brandFilter.appendChild(
-                    option
-                );
-
-            }
-        );
+        products = [];
 
     }
 
@@ -312,9 +137,7 @@ function populateFilters() {
    CATEGORY DISPLAY
 ===================================================== */
 
-function getCategoryDisplayName(
-    category
-) {
+function getCategoryDisplayName(category) {
 
     const names = {
 
@@ -365,8 +188,9 @@ function getCategoryDisplayName(
 
     return (
         names[
-            String(category)
-                .toLowerCase()
+            String(
+                category
+            ).toLowerCase()
         ] ||
         category
     );
@@ -378,9 +202,7 @@ function getCategoryDisplayName(
    TYPE DISPLAY
 ===================================================== */
 
-function getTypeDisplayName(
-    type
-) {
+function getTypeDisplayName(type) {
 
     const names = {
 
@@ -467,11 +289,142 @@ function getTypeDisplayName(
 
     return (
         names[
-            String(type)
-                .toLowerCase()
+            String(
+                type
+            ).toLowerCase()
         ] ||
         type
     );
+
+}
+
+
+/* =====================================================
+   FILTER OPTIONS
+===================================================== */
+
+function populateFilters() {
+
+    /* CATEGORY */
+
+    if (categoryFilter) {
+
+        categoryFilter.innerHTML = `
+            <option value="">
+                Toutes les catégories
+            </option>
+        `;
+
+
+        const categories = [
+
+            ...new Set(
+
+                products
+                    .map(
+                        product =>
+                            product.category
+                    )
+                    .filter(Boolean)
+
+            )
+
+        ].sort(
+            (a, b) =>
+                String(a).localeCompare(
+                    String(b),
+                    "fr"
+                )
+        );
+
+
+        categories.forEach(
+            category => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    category;
+
+
+                option.textContent =
+                    getCategoryDisplayName(
+                        category
+                    );
+
+
+                categoryFilter.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+
+
+    /* BRAND */
+
+    if (brandFilter) {
+
+        brandFilter.innerHTML = `
+            <option value="">
+                Toutes les marques
+            </option>
+        `;
+
+
+        const brands = [
+
+            ...new Set(
+
+                products
+                    .map(
+                        product =>
+                            product.brand
+                    )
+                    .filter(Boolean)
+
+            )
+
+        ].sort(
+            (a, b) =>
+                String(a).localeCompare(
+                    String(b),
+                    "fr"
+                )
+        );
+
+
+        brands.forEach(
+            brand => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    brand;
+
+
+                option.textContent =
+                    brand;
+
+
+                brandFilter.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
 
 }
 
@@ -511,7 +464,6 @@ function getFilteredProducts() {
     return products.filter(
         product => {
 
-
             const searchableText = [
 
                 product.name,
@@ -525,11 +477,8 @@ function getFilteredProducts() {
                 product.description
 
             ]
-
                 .filter(Boolean)
-
                 .join(" ")
-
                 .toLowerCase();
 
 
@@ -565,15 +514,10 @@ function getFilteredProducts() {
 
 
             return (
-
                 matchesSearch &&
-
                 matchesCategory &&
-
                 matchesBrand &&
-
                 matchesAvailability
-
             );
 
         }
@@ -609,8 +553,7 @@ function renderProducts() {
 
 
     if (
-        filteredProducts.length ===
-        0
+        filteredProducts.length === 0
     ) {
 
         renderEmptyState();
@@ -623,14 +566,10 @@ function renderProducts() {
     filteredProducts.forEach(
         product => {
 
-            const card =
+            productsContainer.appendChild(
                 createProductCard(
                     product
-                );
-
-
-            productsContainer.appendChild(
-                card
+                )
             );
 
         }
@@ -643,9 +582,7 @@ function renderProducts() {
    PRODUCT CARD
 ===================================================== */
 
-function createProductCard(
-    product
-) {
+function createProductCard(product) {
 
     const card =
         document.createElement(
@@ -664,7 +601,9 @@ function createProductCard(
             : "unavailable";
 
 
-    /* IMAGE */
+    /* =================================================
+       IMAGE
+    ================================================= */
 
     let imageHTML = `
 
@@ -677,57 +616,17 @@ function createProductCard(
 
     if (product.image) {
 
-        let imageSource =
-            String(product.image);
-
-
-        /*
-            Base64 image
-        */
-
-        if (
-            !imageSource.startsWith(
-                "data:image/"
-            )
-        ) {
-
-            /*
-                Project image path
-            */
-
-            if (
-                imageSource.startsWith(
-                    "../"
-                )
-            ) {
-
-                imageSource =
-                    imageSource;
-
-            } else {
-
-                imageSource =
-                    `../${imageSource}`;
-
-            }
-
-        }
-
-
         imageHTML = `
 
             <img
                 src="${escapeHTML(
-                    imageSource
+                    product.image
                 )}"
                 alt="${escapeHTML(
                     product.name ||
                     "Produit"
                 )}"
                 loading="lazy"
-                onerror="
-                    this.style.display='none';
-                "
             >
 
         `;
@@ -735,7 +634,9 @@ function createProductCard(
     }
 
 
-    /* CARD */
+    /* =================================================
+       CARD
+    ================================================= */
 
     card.innerHTML = `
 
@@ -747,7 +648,6 @@ function createProductCard(
 
 
         <div class="admin-product-info">
-
 
             <p class="admin-product-category">
 
@@ -772,7 +672,6 @@ function createProductCard(
 
 
             <div class="admin-product-meta">
-
 
                 ${
                     product.brand
@@ -801,12 +700,10 @@ function createProductCard(
                         : ""
                 }
 
-
             </div>
 
 
             <div class="admin-product-bottom">
-
 
                 <strong>
 
@@ -828,12 +725,10 @@ function createProductCard(
 
                 </span>
 
-
             </div>
 
 
             <div class="admin-product-actions">
-
 
                 <button
                     type="button"
@@ -850,14 +745,16 @@ function createProductCard(
                     Supprimer
                 </button>
 
-
             </div>
-
 
         </div>
 
     `;
 
+
+    /* =================================================
+       EDIT
+    ================================================= */
 
     const editButton =
         card.querySelector(
@@ -865,17 +762,11 @@ function createProductCard(
         );
 
 
-    const deleteButton =
-        card.querySelector(
-            ".product-delete-button"
-        );
-
-
     if (editButton) {
 
         editButton.addEventListener(
             "click",
-            function () {
+            () => {
 
                 editProduct(
                     product.id
@@ -887,11 +778,21 @@ function createProductCard(
     }
 
 
+    /* =================================================
+       DELETE
+    ================================================= */
+
+    const deleteButton =
+        card.querySelector(
+            ".product-delete-button"
+        );
+
+
     if (deleteButton) {
 
         deleteButton.addEventListener(
             "click",
-            function () {
+            () => {
 
                 openDeleteModal(
                     product
@@ -912,68 +813,7 @@ function createProductCard(
    EDIT PRODUCT
 ===================================================== */
 
-function editProduct(
-    id
-) {
-
-    /*
-        Only products saved by Admin
-        can be edited.
-    */
-
-    let adminProducts = [];
-
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                "kanaProducts"
-            );
-
-
-        if (saved) {
-
-            const parsed =
-                JSON.parse(saved);
-
-
-            if (
-                Array.isArray(parsed)
-            ) {
-
-                adminProducts =
-                    parsed;
-
-            }
-
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-
-    const exists =
-        adminProducts.some(
-            product =>
-                String(product.id) ===
-                String(id)
-        );
-
-
-    if (!exists) {
-
-        alert(
-            "Ce produit fait partie du catalogue original et ne peut pas être modifié depuis l'Admin."
-        );
-
-        return;
-
-    }
-
+function editProduct(id) {
 
     window.location.href =
         `add-products.html?edit=${encodeURIComponent(
@@ -987,9 +827,7 @@ function editProduct(
    DELETE MODAL
 ===================================================== */
 
-function openDeleteModal(
-    product
-) {
+function openDeleteModal(product) {
 
     if (!deleteModal) {
 
@@ -1008,7 +846,7 @@ function openDeleteModal(
             `Vous êtes sur le point de supprimer « ${
                 product.name ||
                 "ce produit"
-            } ».`;
+            } »`;
 
     }
 
@@ -1025,7 +863,7 @@ function openDeleteModal(
 
 
 /* =====================================================
-   CLOSE MODAL
+   CLOSE DELETE MODAL
 ===================================================== */
 
 function closeDeleteModal() {
@@ -1053,7 +891,7 @@ function closeDeleteModal() {
    DELETE PRODUCT
 ===================================================== */
 
-function deleteProduct() {
+async function deleteProduct() {
 
     if (!productToDelete) {
 
@@ -1066,124 +904,69 @@ function deleteProduct() {
         productToDelete.id;
 
 
-    let adminProducts = [];
-
-
     try {
 
-        const saved =
-            localStorage.getItem(
-                "kanaProducts"
-            );
+        if (confirmDelete) {
 
+            confirmDelete.disabled =
+                true;
 
-        if (saved) {
-
-            const parsed =
-                JSON.parse(saved);
-
-
-            if (
-                Array.isArray(parsed)
-            ) {
-
-                adminProducts =
-                    parsed;
-
-            }
+            confirmDelete.textContent =
+                "SUPPRESSION...";
 
         }
 
-    } catch (error) {
 
-        console.error(
-            "Erreur lors du chargement.",
-            error
-        );
-
-        return;
-
-    }
-
-
-    const exists =
-        adminProducts.some(
-            product =>
-                String(product.id) ===
-                String(productId)
-        );
-
-
-    if (!exists) {
-
-        alert(
-            "Ce produit original ne peut pas être supprimé depuis l'Admin."
-        );
-
-        closeDeleteModal();
-
-        return;
-
-    }
-
-
-    adminProducts =
-        adminProducts.filter(
-            product =>
-                String(product.id) !==
-                String(productId)
-        );
-
-
-    localStorage.setItem(
-        "kanaProducts",
-        JSON.stringify(
-            adminProducts
-        )
-    );
-
-
-    closeDeleteModal();
-
-
-    /*
-        Reload everything
-    */
-
-    loadProducts();
-
-    populateFilters();
-
-    renderProducts();
-
-}
-
-
-/* =====================================================
-   SAVE PRODUCTS
-===================================================== */
-
-function saveProducts() {
-
-    /*
-        This function is kept for compatibility.
-        Admin products are stored separately.
-    */
-
-    try {
-
-        localStorage.setItem(
-            "kanaProducts",
-            JSON.stringify(
-                products
+        await deleteDoc(
+            doc(
+                db,
+                "products",
+                productId
             )
         );
 
+
+        console.log(
+            "Produit supprimé:",
+            productId
+        );
+
+
+        closeDeleteModal();
+
+
+        await loadProducts();
+
+        populateFilters();
+
+        renderProducts();
+
+
     } catch (error) {
 
         console.error(
+            "Erreur suppression:",
             error
         );
+
+
+        alert(
+            "Impossible de supprimer le produit : " +
+            error.message
+        );
+
+
+    } finally {
+
+        if (confirmDelete) {
+
+            confirmDelete.disabled =
+                false;
+
+            confirmDelete.textContent =
+                "Supprimer";
+
+        }
 
     }
 
@@ -1194,9 +977,7 @@ function saveProducts() {
    COUNT
 ===================================================== */
 
-function updateProductsCount(
-    count
-) {
+function updateProductsCount(count) {
 
     if (!productsCount) {
 
@@ -1230,22 +1011,18 @@ function renderEmptyState() {
 
         <div class="admin-products-empty">
 
-
             <div class="admin-products-empty-icon">
                 ▣
             </div>
-
 
             <h3>
                 Aucun produit trouvé
             </h3>
 
-
             <p>
                 Aucun produit ne correspond
                 à votre recherche ou vos filtres.
             </p>
-
 
             <button
                 type="button"
@@ -1253,7 +1030,6 @@ function renderEmptyState() {
             >
                 Réinitialiser les filtres
             </button>
-
 
         </div>
 
@@ -1327,7 +1103,6 @@ function resetFilters() {
 
 function setupEvents() {
 
-
     if (productSearch) {
 
         productSearch.addEventListener(
@@ -1392,7 +1167,7 @@ function setupEvents() {
 
         deleteModal.addEventListener(
             "click",
-            function (event) {
+            event => {
 
                 if (
                     event.target ===
@@ -1413,7 +1188,7 @@ function setupEvents() {
 
         logoutButton.addEventListener(
             "click",
-            function () {
+            () => {
 
                 sessionStorage.removeItem(
                     "kanaAdminLoggedIn"
@@ -1435,38 +1210,14 @@ function setupEvents() {
    ESCAPE HTML
 ===================================================== */
 
-function escapeHTML(
-    value
-) {
+function escapeHTML(value) {
 
-    return String(
-        value ?? ""
-    )
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
 
@@ -1475,9 +1226,7 @@ function escapeHTML(
    FORMAT PRICE
 ===================================================== */
 
-function formatPrice(
-    price
-) {
+function formatPrice(price) {
 
     if (
         price === undefined ||
@@ -1494,9 +1243,7 @@ function formatPrice(
         Number(price);
 
 
-    if (
-        Number.isNaN(number)
-    ) {
+    if (Number.isNaN(number)) {
 
         return "Prix non défini";
 
@@ -1509,5 +1256,55 @@ function formatPrice(
         ).format(number)
         + " DA"
     );
+
+}
+
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+
+async function initializeProductsPage() {
+
+    if (productsContainer) {
+
+        productsContainer.innerHTML = `
+
+            <p class="products-loading">
+
+                Chargement des produits...
+
+            </p>
+
+        `;
+
+    }
+
+
+    await loadProducts();
+
+
+    populateFilters();
+
+    renderProducts();
+
+    setupEvents();
+
+}
+
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeProductsPage
+    );
+
+} else {
+
+    initializeProductsPage();
 
 }

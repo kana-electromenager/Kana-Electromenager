@@ -1,11 +1,6 @@
 /* =====================================================
    KANA ADMIN — ADD / EDIT PRODUCT
-   FIRESTORE VERSION
-===================================================== */
-
-
-/* =====================================================
-   FIREBASE
+   FIRESTORE + IMAGE DATA URL
 ===================================================== */
 
 import {
@@ -68,16 +63,14 @@ const submitProductButton =
 ===================================================== */
 
 const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
+    new URLSearchParams(window.location.search);
 
 const editProductId =
     urlParams.get("edit");
 
 
 /* =====================================================
-   CATEGORIES + SUBCATEGORIES
+   SUBCATEGORIES
 ===================================================== */
 
 const subcategories = {
@@ -95,7 +88,6 @@ const subcategories = {
         }
 
     ],
-
 
     "cuisine": [
 
@@ -136,7 +128,6 @@ const subcategories = {
 
     ],
 
-
     "maison-entretien": [
 
         {
@@ -169,10 +160,6 @@ const subcategories = {
 };
 
 
-/* =====================================================
-   CATEGORIES WITHOUT SUBCATEGORIES
-===================================================== */
-
 const categoriesWithoutSubcategories = [
 
     "televisions",
@@ -185,42 +172,20 @@ const categoriesWithoutSubcategories = [
 
 
 /* =====================================================
-   NORMALIZE
+   NORMALIZE TEXT
 ===================================================== */
 
 function normalizeText(value) {
 
     return String(value || "")
-
         .toLowerCase()
-
         .trim()
-
         .normalize("NFD")
-
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
-
-        .replace(
-            /œ/g,
-            "oe"
-        )
-
-        .replace(
-            /æ/g,
-            "ae"
-        )
-
-        .replace(
-            /[^a-z0-9]+/g,
-            "-"
-        )
-
-        .replace(
-            /^-+|-+$/g,
-            "");
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/œ/g, "oe")
+        .replace(/æ/g, "ae")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
 
 }
 
@@ -385,7 +350,7 @@ const typeAliases = {
 
 
 /* =====================================================
-   GET CATEGORY KEY
+   CATEGORY KEY
 ===================================================== */
 
 function getCategoryKey(value) {
@@ -402,7 +367,7 @@ function getCategoryKey(value) {
 
 
 /* =====================================================
-   GET TYPE KEY
+   TYPE KEY
 ===================================================== */
 
 function getTypeKey(value) {
@@ -422,163 +387,112 @@ function getTypeKey(value) {
    UPDATE SUBCATEGORIES
 ===================================================== */
 
-function updateSubcategories(
-    selectedType = ""
-) {
+function updateSubcategories(selectedType = "") {
 
     if (
         !productType ||
         !productCategory
     ) {
-
         return;
-
     }
 
 
     const category =
-        getCategoryKey(
-            productCategory.value
-        );
+        getCategoryKey(productCategory.value);
 
 
     productType.innerHTML = "";
 
 
-    /* ---------------------------------------------
-       NO SUBCATEGORY
-    --------------------------------------------- */
-
     if (
-        categoriesWithoutSubcategories
-            .includes(category)
+        categoriesWithoutSubcategories.includes(
+            category
+        )
     ) {
 
-        productType.disabled =
-            true;
+        productType.disabled = true;
 
         productType.innerHTML = `
-
             <option value="">
                 Aucune sous-catégorie
             </option>
-
         `;
 
         productType.value = "";
 
         return;
-
     }
 
-
-    /* ---------------------------------------------
-       NO CATEGORY
-    --------------------------------------------- */
 
     if (!category) {
 
-        productType.disabled =
-            true;
+        productType.disabled = true;
 
         productType.innerHTML = `
-
             <option value="">
                 Sélectionner d'abord une catégorie
             </option>
-
         `;
 
         return;
-
     }
 
-
-    /* ---------------------------------------------
-       GET OPTIONS
-    --------------------------------------------- */
 
     const options =
         subcategories[category] || [];
 
 
-    if (options.length === 0) {
+    if (!options.length) {
 
-        productType.disabled =
-            true;
+        productType.disabled = true;
 
         productType.innerHTML = `
-
             <option value="">
                 Aucune sous-catégorie
             </option>
-
         `;
 
         productType.value = "";
 
         return;
-
     }
 
 
-    /* ---------------------------------------------
-       DISPLAY OPTIONS
-    --------------------------------------------- */
-
-    productType.disabled =
-        false;
+    productType.disabled = false;
 
     productType.innerHTML = `
-
         <option value="">
             Sélectionner une sous-catégorie
         </option>
-
     `;
 
 
-    options.forEach(
-        item => {
+    options.forEach(item => {
 
-            const option =
-                document.createElement(
-                    "option"
-                );
+        const option =
+            document.createElement("option");
 
-            option.value =
-                item.value;
+        option.value =
+            item.value;
 
-            option.textContent =
-                item.label;
+        option.textContent =
+            item.label;
 
-            productType.appendChild(
-                option
-            );
+        productType.appendChild(option);
 
-        }
-    );
+    });
 
-
-    /* ---------------------------------------------
-       EDIT VALUE
-    --------------------------------------------- */
 
     if (selectedType) {
 
         const normalizedType =
-            getTypeKey(
-                selectedType
-            );
-
+            getTypeKey(selectedType);
 
         const exists =
             options.some(
                 item =>
-                    item.value ===
-                    normalizedType
+                    item.value === normalizedType
             );
-
 
         if (exists) {
 
@@ -600,12 +514,177 @@ if (productCategory) {
 
     productCategory.addEventListener(
         "change",
-        function () {
+        () => {
 
             updateSubcategories();
 
         }
     );
+
+}
+
+
+/* =====================================================
+   IMAGE → COMPRESSED DATA URL
+===================================================== */
+
+function compressImage(file) {
+
+    return new Promise((resolve, reject) => {
+
+        if (!file) {
+
+            reject(
+                new Error("Aucune image.")
+            );
+
+            return;
+        }
+
+
+        if (!file.type.startsWith("image/")) {
+
+            reject(
+                new Error(
+                    "Le fichier sélectionné n'est pas une image."
+                )
+            );
+
+            return;
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = event => {
+
+            const img =
+                new Image();
+
+
+            img.onload = () => {
+
+                /*
+                 * Image volontairement réduite.
+                 * Cela permet de limiter la taille
+                 * du document Firestore.
+                 */
+
+                const maxSize = 800;
+
+                let width =
+                    img.width;
+
+                let height =
+                    img.height;
+
+
+                if (
+                    width > maxSize ||
+                    height > maxSize
+                ) {
+
+                    if (width > height) {
+
+                        height =
+                            Math.round(
+                                height *
+                                maxSize /
+                                width
+                            );
+
+                        width =
+                            maxSize;
+
+                    } else {
+
+                        width =
+                            Math.round(
+                                width *
+                                maxSize /
+                                height
+                            );
+
+                        height =
+                            maxSize;
+
+                    }
+
+                }
+
+
+                const canvas =
+                    document.createElement("canvas");
+
+                canvas.width =
+                    width;
+
+                canvas.height =
+                    height;
+
+
+                const context =
+                    canvas.getContext("2d");
+
+
+                context.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+
+                /*
+                 * JPEG compressé.
+                 */
+
+                const dataURL =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.70
+                    );
+
+
+                resolve(dataURL);
+
+            };
+
+
+            img.onerror = () => {
+
+                reject(
+                    new Error(
+                        "Impossible de lire l'image."
+                    )
+                );
+
+            };
+
+
+            img.src =
+                event.target.result;
+
+        };
+
+
+        reader.onerror = () => {
+
+            reject(
+                new Error(
+                    "Impossible de lire le fichier."
+                )
+            );
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    });
 
 }
 
@@ -621,7 +700,7 @@ if (
 
     productImage.addEventListener(
         "change",
-        function () {
+        async function () {
 
             const file =
                 this.files[0];
@@ -629,24 +708,12 @@ if (
 
             if (!file) {
 
-                imagePreview.innerHTML = `
-
-                    <span>
-                        Aucune image sélectionnée
-                    </span>
-
-                `;
-
                 return;
 
             }
 
 
-            if (
-                !file.type.startsWith(
-                    "image/"
-                )
-            ) {
+            if (!file.type.startsWith("image/")) {
 
                 alert(
                     "Veuillez sélectionner une image."
@@ -659,28 +726,28 @@ if (
             }
 
 
-            const reader =
-                new FileReader();
+            try {
+
+                const imageURL =
+                    await compressImage(file);
 
 
-            reader.onload =
-                function (event) {
+                imagePreview.innerHTML = `
+                    <img
+                        src="${imageURL}"
+                        alt="Aperçu"
+                    >
+                `;
 
-                    imagePreview.innerHTML = `
+            } catch (error) {
 
-                        <img
-                            src="${event.target.result}"
-                            alt="Aperçu"
-                        >
+                console.error(error);
 
-                    `;
+                alert(
+                    error.message
+                );
 
-                };
-
-
-            reader.readAsDataURL(
-                file
-            );
+            }
 
         }
     );
@@ -689,43 +756,27 @@ if (
 
 
 /* =====================================================
-   GET FIRESTORE PRODUCTS
+   GET PRODUCTS
 ===================================================== */
 
 async function getFirestoreProducts() {
 
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "products"
-                )
-            );
-
-
-        return snapshot.docs.map(
-            document => ({
-
-                id:
-                    document.id,
-
-                ...document.data()
-
-            })
+    const snapshot =
+        await getDocs(
+            collection(db, "products")
         );
 
-    } catch (error) {
 
-        console.error(
-            "Erreur Firestore:",
-            error
-        );
+    return snapshot.docs.map(
+        productDocument => ({
 
-        throw error;
+            id:
+                productDocument.id,
 
-    }
+            ...productDocument.data()
+
+        })
+    );
 
 }
 
@@ -771,10 +822,6 @@ async function loadProductForEdit() {
         }
 
 
-        /* -----------------------------------------
-           PAGE TITLES
-        ----------------------------------------- */
-
         if (pageTitle) {
 
             pageTitle.textContent =
@@ -798,10 +845,6 @@ async function loadProductForEdit() {
 
         }
 
-
-        /* -----------------------------------------
-           FIELDS
-        ----------------------------------------- */
 
         if (productName) {
 
@@ -858,9 +901,9 @@ async function loadProductForEdit() {
         }
 
 
-        /* -----------------------------------------
-           EXISTING IMAGE
-        ----------------------------------------- */
+        /*
+         * Afficher l'image déjà enregistrée.
+         */
 
         if (
             product.image &&
@@ -868,12 +911,10 @@ async function loadProductForEdit() {
         ) {
 
             imagePreview.innerHTML = `
-
                 <img
                     src="${product.image}"
                     alt="Image actuelle"
                 >
-
             `;
 
         }
@@ -907,19 +948,13 @@ if (addProductForm) {
             event.preventDefault();
 
 
-            /* -----------------------------------------
-               VALUES
-            ----------------------------------------- */
-
             const name =
-                productName?.value.trim() ||
-                "";
+                productName?.value.trim() || "";
 
 
             const category =
                 getCategoryKey(
-                    productCategory?.value ||
-                    ""
+                    productCategory?.value || ""
                 );
 
 
@@ -940,21 +975,18 @@ if (addProductForm) {
 
 
             const brand =
-                productBrand?.value.trim() ||
-                "";
+                productBrand?.value.trim() || "";
 
 
             const price =
                 Number(
-                    productPrice?.value ||
-                    0
+                    productPrice?.value || 0
                 );
 
 
             const stock =
                 Number(
-                    productStock?.value ||
-                    0
+                    productStock?.value || 0
                 );
 
 
@@ -968,9 +1000,9 @@ if (addProductForm) {
                 null;
 
 
-            /* -----------------------------------------
+            /* =================================================
                VALIDATION
-            ----------------------------------------- */
+            ================================================= */
 
             if (
                 !name ||
@@ -988,15 +1020,13 @@ if (addProductForm) {
 
 
             const requiresType =
-                !categoriesWithoutSubcategories
-                    .includes(category) &&
-
+                !categoriesWithoutSubcategories.includes(
+                    category
+                ) &&
                 Array.isArray(
                     subcategories[category]
                 ) &&
-
-                subcategories[category]
-                    .length > 0;
+                subcategories[category].length > 0;
 
 
             if (
@@ -1041,10 +1071,6 @@ if (addProductForm) {
             }
 
 
-            /* -----------------------------------------
-               BUTTON
-            ----------------------------------------- */
-
             if (submitProductButton) {
 
                 submitProductButton.disabled =
@@ -1060,56 +1086,36 @@ if (addProductForm) {
 
             try {
 
-                /* =====================================
+                /* =================================================
                    IMAGE
-
-                   IMPORTANT:
-                   We are NOT using Firebase Storage.
-
-                   For now:
-                   - New product without hosted image
-                     → image = ""
-
-                   - Existing product
-                     → keep existing image
-
-                   The image hosting solution will
-                   be connected separately.
-                ===================================== */
+                ================================================= */
 
                 let imageURL = "";
 
 
-                /* -------------------------------------
-                   EDIT
-                ------------------------------------- */
+                /* =================================================
+                   EDIT EXISTING PRODUCT
+                ================================================= */
 
                 if (editProductId) {
 
-                    const productRef =
-                        doc(
-                            db,
-                            "products",
-                            editProductId
-                        );
-
-
-                    /*
-                       Keep current image if
-                       no new image is selected.
-                    */
-
-                    const existingProducts =
+                    const products =
                         await getFirestoreProducts();
 
 
                     const existingProduct =
-                        existingProducts.find(
+                        products.find(
                             item =>
                                 String(item.id) ===
                                 String(editProductId)
                         );
 
+
+                    /*
+                     * IMPORTANT :
+                     * Si aucune nouvelle image n'est choisie,
+                     * on conserve l'ancienne image.
+                     */
 
                     if (
                         existingProduct &&
@@ -1123,10 +1129,26 @@ if (addProductForm) {
 
 
                     /*
-                       NOTE:
-                       The selected new image is
-                       currently only previewed.
-                    */
+                     * Si une nouvelle image est choisie,
+                     * elle remplace l'ancienne.
+                     */
+
+                    if (imageFile) {
+
+                        imageURL =
+                            await compressImage(
+                                imageFile
+                            );
+
+                    }
+
+
+                    const productRef =
+                        doc(
+                            db,
+                            "products",
+                            editProductId
+                        );
 
 
                     await updateDoc(
@@ -1175,9 +1197,19 @@ if (addProductForm) {
                 }
 
 
-                /* -------------------------------------
+                /* =================================================
                    ADD NEW PRODUCT
-                ------------------------------------- */
+                ================================================= */
+
+                if (imageFile) {
+
+                    imageURL =
+                        await compressImage(
+                            imageFile
+                        );
+
+                }
+
 
                 await addDoc(
                     collection(
@@ -1204,6 +1236,11 @@ if (addProductForm) {
                                 : "Indisponible",
 
                         description,
+
+                        /*
+                         * L'image est stockée directement
+                         * dans Firestore sous forme Data URL.
+                         */
 
                         image:
                             imageURL,
@@ -1241,9 +1278,7 @@ if (addProductForm) {
                 );
 
 
-                if (
-                    submitProductButton
-                ) {
+                if (submitProductButton) {
 
                     submitProductButton.disabled =
                         false;

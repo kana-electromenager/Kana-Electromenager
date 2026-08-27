@@ -1,14 +1,14 @@
+/* =====================================================
+   KANA ÉLECTROMÉNAGER
+   PRODUCTS PAGE
+   FIRESTORE VERSION
+===================================================== */
+
 import {
     db,
     collection,
     getDocs
 } from "./firebase.js";
-
-
-/* =====================================================
-   KANA ÉLECTROMÉNAGER
-   PRODUCTS PAGE
-===================================================== */
 
 
 /* =====================================================
@@ -445,7 +445,7 @@ function getTypeDisplayName(type) {
 
 
 /* =====================================================
-   GET CATEGORY INFO
+   CATEGORY INFO
 ===================================================== */
 
 function getCategoryInfo() {
@@ -482,12 +482,14 @@ function updatePageInformation() {
     const category =
         getCategoryInfo();
 
+
     if (productsCategoryLabel) {
 
         productsCategoryLabel.textContent =
             category.label;
 
     }
+
 
     if (productsCategoryTitle) {
 
@@ -496,12 +498,14 @@ function updatePageInformation() {
 
     }
 
+
     if (productsCategoryDescription) {
 
         productsCategoryDescription.textContent =
             category.description;
 
     }
+
 
     if (productsTitle) {
 
@@ -512,6 +516,7 @@ function updatePageInformation() {
 
     }
 
+
     document.title =
         `${category.title} | KANA`;
 
@@ -519,23 +524,21 @@ function updatePageInformation() {
 
 
 /* =====================================================
-   GET PRODUCTS FROM FIREBASE
+   GET PRODUCTS FROM FIRESTORE
 ===================================================== */
 
 async function getAllProducts() {
 
     try {
 
-        const productsRef =
-            collection(
-                db,
-                "products"
-            );
-
         const snapshot =
             await getDocs(
-                productsRef
+                collection(
+                    db,
+                    "products"
+                )
             );
+
 
         const products =
             snapshot.docs.map(
@@ -549,19 +552,22 @@ async function getAllProducts() {
                 })
             );
 
+
         console.log(
-            "KANA products from Firebase:",
+            "KANA — produits Firestore:",
             products
         );
+
 
         return products;
 
     } catch (error) {
 
         console.error(
-            "Erreur Firebase - chargement des produits:",
+            "Erreur Firebase:",
             error
         );
+
 
         return [];
 
@@ -574,17 +580,13 @@ async function getAllProducts() {
    FILTER PRODUCTS
 ===================================================== */
 
-function filterProducts(
-    products
-) {
+function filterProducts(products) {
 
     let filtered =
         [...products];
 
 
-    /* ---------------------------------------------
-       CATEGORY
-    --------------------------------------------- */
+    /* CATEGORY */
 
     if (
         currentCategory &&
@@ -596,6 +598,7 @@ function filterProducts(
                 currentCategory
             );
 
+
         filtered =
             filtered.filter(
                 product => {
@@ -604,6 +607,7 @@ function filterProducts(
                         getCategoryKey(
                             product.category
                         );
+
 
                     return (
                         productCategory ===
@@ -616,9 +620,7 @@ function filterProducts(
     }
 
 
-    /* ---------------------------------------------
-       TYPE
-    --------------------------------------------- */
+    /* TYPE */
 
     if (
         currentType &&
@@ -630,6 +632,7 @@ function filterProducts(
                 currentType
             );
 
+
         filtered =
             filtered.filter(
                 product => {
@@ -638,6 +641,7 @@ function filterProducts(
                         getTypeKey(
                             product.type
                         );
+
 
                     return (
                         productType ===
@@ -693,8 +697,10 @@ function formatPrice(price) {
 
     }
 
+
     const number =
         Number(price);
+
 
     if (Number.isNaN(number)) {
 
@@ -707,6 +713,7 @@ function formatPrice(price) {
         `;
 
     }
+
 
     return `
         <div class="product-price">
@@ -729,28 +736,50 @@ function formatPrice(price) {
    PRODUCT CARD
 ===================================================== */
 
-function createProductCard(
-    product
-) {
+function createProductCard(product) {
 
     const card =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
+
 
     card.className =
         "product-card";
 
+
     const image =
         product.image || "";
 
-    card.innerHTML = `
 
-        <a
-            href="product.html?id=${encodeURIComponent(
-                product.id
-            )}"
-        >
+    /*
+     * IMPORTANT :
+     * product.image contient maintenant
+     * directement le Data URL Firestore.
+     *
+     * Donc :
+     *
+     * src="data:image/jpeg;base64,..."
+     *
+     * fonctionne sur PC, téléphone,
+     * tablette, etc.
+     */
+
+
+    let imageHTML = `
+
+        <div class="product-image-container no-image">
+
+            <span>
+                Pas d'image
+            </span>
+
+        </div>
+
+    `;
+
+
+    if (image) {
+
+        imageHTML = `
 
             <div class="product-image-container">
 
@@ -765,14 +794,32 @@ function createProductCard(
 
             </div>
 
+        `;
+
+    }
+
+
+    card.innerHTML = `
+
+        <a
+            href="product.html?id=${encodeURIComponent(
+                product.id
+            )}"
+        >
+
+            ${imageHTML}
+
             <div class="product-info">
 
                 <h3 class="product-name">
+
                     ${escapeHTML(
                         product.name ||
                         "Produit"
                     )}
+
                 </h3>
+
 
                 ${
                     product.brand
@@ -786,12 +833,16 @@ function createProductCard(
                         : ""
                 }
 
+
                 ${formatPrice(
                     product.price
                 )}
 
+
                 <div class="product-button">
+
                     VOIR LE PRODUIT
+
                 </div>
 
             </div>
@@ -799,6 +850,7 @@ function createProductCard(
         </a>
 
     `;
+
 
     return card;
 
@@ -809,9 +861,7 @@ function createProductCard(
    DISPLAY PRODUCTS
 ===================================================== */
 
-function displayProducts(
-    products
-) {
+function displayProducts(products) {
 
     if (!productsContainer) {
 
@@ -823,18 +873,16 @@ function displayProducts(
 
     }
 
+
     productsContainer.innerHTML =
         "";
 
-
-    /* ---------------------------------------------
-       EMPTY
-    --------------------------------------------- */
 
     if (!products.length) {
 
         productsContainer.style.display =
             "none";
+
 
         if (emptyProducts) {
 
@@ -843,6 +891,7 @@ function displayProducts(
 
         }
 
+
         if (productsCount) {
 
             productsCount.textContent =
@@ -850,17 +899,15 @@ function displayProducts(
 
         }
 
+
         return;
 
     }
 
 
-    /* ---------------------------------------------
-       SHOW
-    --------------------------------------------- */
-
     productsContainer.style.display =
         "";
+
 
     if (emptyProducts) {
 
@@ -869,15 +916,14 @@ function displayProducts(
 
     }
 
-    products.forEach(
-        product => {
 
-            productsContainer.appendChild(
-                createProductCard(product)
-            );
+    products.forEach(product => {
 
-        }
-    );
+        productsContainer.appendChild(
+            createProductCard(product)
+        );
+
+    });
 
 
     if (productsCount) {
@@ -911,10 +957,7 @@ function sortProductsList(
         [...products];
 
 
-    if (
-        sortType ===
-        "price-asc"
-    ) {
+    if (sortType === "price-asc") {
 
         sorted.sort(
             (a, b) =>
@@ -925,10 +968,7 @@ function sortProductsList(
     }
 
 
-    if (
-        sortType ===
-        "price-desc"
-    ) {
+    if (sortType === "price-desc") {
 
         sorted.sort(
             (a, b) =>
@@ -939,10 +979,7 @@ function sortProductsList(
     }
 
 
-    if (
-        sortType ===
-        "name"
-    ) {
+    if (sortType === "name") {
 
         sorted.sort(
             (a, b) =>
@@ -962,12 +999,13 @@ function sortProductsList(
 
 
 /* =====================================================
-   PAGE INITIALIZATION
+   INIT
 ===================================================== */
 
 async function initProductsPage() {
 
     updatePageInformation();
+
 
     if (productsContainer) {
 
@@ -991,7 +1029,7 @@ async function initProductsPage() {
 
 
     console.log(
-        "KANA filtered products:",
+        "KANA — produits filtrés:",
         filteredProducts
     );
 
@@ -1000,10 +1038,6 @@ async function initProductsPage() {
         filteredProducts
     );
 
-
-    /* ---------------------------------------------
-       SORT
-    --------------------------------------------- */
 
     if (sortProducts) {
 
@@ -1016,6 +1050,7 @@ async function initProductsPage() {
                         filteredProducts,
                         this.value
                     );
+
 
                 displayProducts(
                     sorted

@@ -1,13 +1,13 @@
 /* =====================================================
    KANA ÉLECTROMÉNAGER
    PRODUCT DETAILS PAGE
-   FIREBASE VERSION
+   FIRESTORE VERSION
 ===================================================== */
 
 import {
     db,
-    doc,
-    getDoc
+    collection,
+    getDocs
 } from "./firebase.js";
 
 
@@ -16,7 +16,9 @@ import {
 ===================================================== */
 
 const urlParams =
-    new URLSearchParams(window.location.search);
+    new URLSearchParams(
+        window.location.search
+    );
 
 const productId =
     urlParams.get("id");
@@ -27,34 +29,54 @@ const productId =
 ===================================================== */
 
 const productImage =
-    document.getElementById("productImage");
+    document.getElementById(
+        "productImage"
+    );
 
 const productBrand =
-    document.getElementById("productBrand");
+    document.getElementById(
+        "productBrand"
+    );
 
 const productName =
-    document.getElementById("productName");
+    document.getElementById(
+        "productName"
+    );
 
 const productDescription =
-    document.getElementById("productDescription");
+    document.getElementById(
+        "productDescription"
+    );
 
 const productPrice =
-    document.getElementById("productPrice");
+    document.getElementById(
+        "productPrice"
+    );
 
 const productAvailability =
-    document.getElementById("productAvailability");
+    document.getElementById(
+        "productAvailability"
+    );
 
 const breadcrumbProduct =
-    document.getElementById("breadcrumbProduct");
+    document.getElementById(
+        "breadcrumbProduct"
+    );
 
 const whatsappProduct =
-    document.getElementById("whatsappProduct");
+    document.getElementById(
+        "whatsappProduct"
+    );
 
 const orderProduct =
-    document.getElementById("orderProduct");
+    document.getElementById(
+        "orderProduct"
+    );
 
 const addToCartProduct =
-    document.getElementById("addToCartProduct");
+    document.getElementById(
+        "addToCartProduct"
+    );
 
 
 /* =====================================================
@@ -73,7 +95,59 @@ const installmentPrice =
 
 
 /* =====================================================
-   4. GET PRODUCT FROM FIREBASE
+   4. GET PRODUCTS FROM FIRESTORE
+===================================================== */
+
+async function getAllProducts() {
+
+    try {
+
+        const productsRef =
+            collection(
+                db,
+                "products"
+            );
+
+        const snapshot =
+            await getDocs(
+                productsRef
+            );
+
+        const products =
+            snapshot.docs.map(
+                productDocument => ({
+
+                    id:
+                        productDocument.id,
+
+                    ...productDocument.data()
+
+                })
+            );
+
+        console.log(
+            "KANA product details - Firestore products:",
+            products
+        );
+
+        return products;
+
+    } catch (error) {
+
+        console.error(
+            "Erreur Firebase - chargement des produits:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   5. FIND PRODUCT
 ===================================================== */
 
 async function getProduct() {
@@ -88,68 +162,37 @@ async function getProduct() {
 
     }
 
-    try {
 
-        const productRef =
-            doc(
-                db,
-                "products",
-                productId
-            );
+    const allProducts =
+        await getAllProducts();
 
 
-        const productSnapshot =
-            await getDoc(
-                productRef
-            );
-
-
-        if (!productSnapshot.exists()) {
-
-            console.error(
-                "Produit introuvable dans Firebase:",
-                productId
-            );
-
-            return null;
-
-        }
-
-
-        const product = {
-
-            id:
-                productSnapshot.id,
-
-            ...productSnapshot.data()
-
-        };
-
-
-        console.log(
-            "KANA product from Firebase:",
-            product
+    const product =
+        allProducts.find(
+            product =>
+                String(product.id) ===
+                String(productId)
         );
 
 
-        return product;
+    console.log(
+        "KANA product ID:",
+        productId
+    );
 
-    } catch (error) {
+    console.log(
+        "KANA selected product:",
+        product
+    );
 
-        console.error(
-            "Erreur Firebase - chargement du produit:",
-            error
-        );
 
-        return null;
-
-    }
+    return product || null;
 
 }
 
 
 /* =====================================================
-   5. FORMAT PRICE
+   6. FORMAT PRICE
 ===================================================== */
 
 function formatPrice(price) {
@@ -176,18 +219,22 @@ function formatPrice(price) {
     }
 
 
-    return `${number.toLocaleString(
-        "fr-FR"
-    )} DA`;
+    return (
+        `${number.toLocaleString(
+            "fr-FR"
+        )} DA`
+    );
 
 }
 
 
 /* =====================================================
-   6. INSTALLMENTS
+   7. INSTALLMENT PAYMENT
 ===================================================== */
 
-function setupInstallments(product) {
+function setupInstallments(
+    product
+) {
 
     if (
         !installmentButtons.length ||
@@ -211,7 +258,8 @@ function setupInstallments(product) {
         installmentButtons.forEach(
             button => {
 
-                button.disabled = true;
+                button.disabled =
+                    true;
 
             }
         );
@@ -232,7 +280,12 @@ function setupInstallments(product) {
     installmentButtons.forEach(
         button => {
 
-            button.disabled = false;
+            button.disabled =
+                false;
+
+            button.classList.remove(
+                "active"
+            );
 
 
             button.addEventListener(
@@ -246,7 +299,9 @@ function setupInstallments(product) {
 
 
                     if (
-                        Number.isNaN(months) ||
+                        Number.isNaN(
+                            months
+                        ) ||
                         months <= 0
                     ) {
 
@@ -293,10 +348,12 @@ function setupInstallments(product) {
 
 
 /* =====================================================
-   7. DISPLAY PRODUCT
+   8. DISPLAY PRODUCT
 ===================================================== */
 
-function displayProduct(product) {
+function displayProduct(
+    product
+) {
 
     if (!product) {
 
@@ -326,6 +383,14 @@ function displayProduct(product) {
                 "block";
 
         } else {
+
+            productImage.removeAttribute(
+                "src"
+            );
+
+            productImage.alt =
+                product.name ||
+                "Produit";
 
             productImage.style.display =
                 "none";
@@ -396,7 +461,11 @@ function displayProduct(product) {
 
         productAvailability.textContent =
             product.availability ||
-            "Disponible";
+            (
+                Number(product.stock) > 0
+                    ? "Disponible"
+                    : "Indisponible"
+            );
 
     }
 
@@ -415,7 +484,7 @@ function displayProduct(product) {
 
 
     /* =================================================
-       PAGE TITLE
+       TITLE
     ================================================= */
 
     document.title =
@@ -461,10 +530,12 @@ function displayProduct(product) {
 
 
 /* =====================================================
-   8. ADD TO CART
+   9. ADD TO CART
 ===================================================== */
 
-function setupAddToCart(product) {
+function setupAddToCart(
+    product
+) {
 
     if (!addToCartProduct) {
 
@@ -473,25 +544,25 @@ function setupAddToCart(product) {
     }
 
 
-    addToCartProduct.addEventListener(
-        "click",
+    addToCartProduct.onclick =
         function () {
 
             addProductToCart(
                 product
             );
 
-        }
-    );
+        };
 
 }
 
 
 /* =====================================================
-   9. ADD PRODUCT TO CART
+   10. ADD PRODUCT TO CART
 ===================================================== */
 
-function addProductToCart(product) {
+function addProductToCart(
+    product
+) {
 
     let cart = [];
 
@@ -512,7 +583,11 @@ function addProductToCart(product) {
                 );
 
 
-            if (Array.isArray(parsedCart)) {
+            if (
+                Array.isArray(
+                    parsedCart
+                )
+            ) {
 
                 cart =
                     parsedCart;
@@ -543,7 +618,8 @@ function addProductToCart(product) {
 
         existingProduct.quantity =
             Number(
-                existingProduct.quantity || 1
+                existingProduct.quantity ||
+                1
             ) + 1;
 
     } else {
@@ -588,7 +664,9 @@ function addProductToCart(product) {
 
         localStorage.setItem(
             "kanaCart",
-            JSON.stringify(cart)
+            JSON.stringify(
+                cart
+            )
         );
 
 
@@ -607,7 +685,7 @@ function addProductToCart(product) {
 
 
 /* =====================================================
-   10. ADDED TO CART MESSAGE
+   11. SHOW ADDED MESSAGE
 ===================================================== */
 
 function showAddedToCart() {
@@ -646,10 +724,12 @@ function showAddedToCart() {
 
 
 /* =====================================================
-   11. WHATSAPP
+   12. WHATSAPP
 ===================================================== */
 
-function setupWhatsApp(product) {
+function setupWhatsApp(
+    product
+) {
 
     if (!whatsappProduct) {
 
@@ -663,7 +743,9 @@ function setupWhatsApp(product) {
 
 
     const message =
-        `Bonjour, je suis intéressé(e) par le produit : ${product.name || ""}`;
+        `Bonjour, je suis intéressé(e) par le produit : ${
+            product.name || ""
+        }`;
 
 
     const whatsappURL =
@@ -679,10 +761,12 @@ function setupWhatsApp(product) {
 
 
 /* =====================================================
-   12. ORDER
+   13. ORDER
 ===================================================== */
 
-function setupOrder(product) {
+function setupOrder(
+    product
+) {
 
     if (!orderProduct) {
 
@@ -700,7 +784,7 @@ function setupOrder(product) {
 
 
 /* =====================================================
-   13. PRODUCT NOT FOUND
+   14. PRODUCT NOT FOUND
 ===================================================== */
 
 function showProductNotFound() {
@@ -810,15 +894,27 @@ function showProductNotFound() {
 
 
 /* =====================================================
-   14. INITIALIZE
+   15. INITIALIZE
 ===================================================== */
 
 async function initProductPage() {
 
     console.log(
-        "KANA product ID:",
+        "KANA Product page initialized."
+    );
+
+    console.log(
+        "Product ID:",
         productId
     );
+
+
+    if (productImage) {
+
+        productImage.style.display =
+            "block";
+
+    }
 
 
     const product =
@@ -831,10 +927,6 @@ async function initProductPage() {
 
 }
 
-
-/* =====================================================
-   15. START
-===================================================== */
 
 if (
     document.readyState ===
