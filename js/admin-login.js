@@ -1,8 +1,3 @@
-/* =====================================================
-   KANA ADMIN LOGIN
-   FIREBASE AUTHENTICATION
-===================================================== */
-
 import { auth } from "./firebase.js";
 
 import {
@@ -58,7 +53,7 @@ loginForm.addEventListener(
         } catch (error) {
 
             console.error(
-                "Firebase Login Error:",
+                "Login Error:",
                 error
             );
 

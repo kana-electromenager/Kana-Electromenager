@@ -1,37 +1,79 @@
 /* =====================================================
    KANA ADMIN — ADD / EDIT PRODUCT
+   FIRESTORE VERSION
 ===================================================== */
+
+
+/* =====================================================
+   FIREBASE
+===================================================== */
+
+import {
+    db,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    updateDoc,
+    serverTimestamp
+} from "../js/firebase.js";
 
 
 /* =====================================================
    ELEMENTS
 ===================================================== */
 
-const addProductForm = document.getElementById("addProductForm");
+const addProductForm =
+    document.getElementById("addProductForm");
 
-const productName = document.getElementById("productName");
-const productCategory = document.getElementById("productCategory");
-const productType = document.getElementById("productType");
-const productBrand = document.getElementById("productBrand");
-const productPrice = document.getElementById("productPrice");
-const productStock = document.getElementById("productStock");
-const productImage = document.getElementById("productImage");
-const productDescription = document.getElementById("productDescription");
+const productName =
+    document.getElementById("productName");
 
-const imagePreview = document.getElementById("imagePreview");
+const productCategory =
+    document.getElementById("productCategory");
 
-const pageTitle = document.getElementById("pageTitle");
-const formTitle = document.getElementById("formTitle");
-const submitProductButton = document.getElementById("submitProductButton");
+const productType =
+    document.getElementById("productType");
+
+const productBrand =
+    document.getElementById("productBrand");
+
+const productPrice =
+    document.getElementById("productPrice");
+
+const productStock =
+    document.getElementById("productStock");
+
+const productImage =
+    document.getElementById("productImage");
+
+const productDescription =
+    document.getElementById("productDescription");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+const pageTitle =
+    document.getElementById("pageTitle");
+
+const formTitle =
+    document.getElementById("formTitle");
+
+const submitProductButton =
+    document.getElementById("submitProductButton");
 
 
 /* =====================================================
    EDIT MODE
 ===================================================== */
 
-const urlParams = new URLSearchParams(window.location.search);
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
 
-const editProductId = urlParams.get("edit");
+const editProductId =
+    urlParams.get("edit");
 
 
 /* =====================================================
@@ -41,68 +83,87 @@ const editProductId = urlParams.get("edit");
 const subcategories = {
 
     "refrigerateurs-congelateurs": [
+
         {
             value: "refrigerateurs",
             label: "Réfrigérateurs"
         },
+
         {
             value: "congelateurs",
             label: "Congélateurs"
         }
+
     ],
 
+
     "cuisine": [
+
         {
             value: "machines-a-cafe",
             label: "Machines à café"
         },
+
         {
             value: "blender-hachoir-mixeur-batteur",
             label: "Hachoir - Mixeur - Batteur - Blender"
         },
+
         {
             value: "micro-ondes",
             label: "Micro-ondes"
         },
+
         {
             value: "fours",
             label: "Fours"
         },
+
         {
             value: "cuisinieres",
             label: "Cuisinières"
         },
+
         {
             value: "air-fryer",
             label: "Air Fryer"
         },
+
         {
             value: "petran",
             label: "Petran"
         }
+
     ],
 
+
     "maison-entretien": [
+
         {
             value: "climatisation",
             label: "Climatisation"
         },
+
         {
             value: "ventilateurs",
             label: "Ventilateurs"
         },
+
         {
             value: "aspirateurs",
             label: "Aspirateurs"
         },
+
         {
             value: "chauffe-eau",
             label: "Chauffe-eau"
         },
+
         {
             value: "chauffages",
             label: "Chauffages"
         }
+
     ]
 
 };
@@ -113,9 +174,13 @@ const subcategories = {
 ===================================================== */
 
 const categoriesWithoutSubcategories = [
+
     "televisions",
+
     "machines-a-laver",
+
     "lave-vaisselle"
+
 ];
 
 
@@ -126,14 +191,36 @@ const categoriesWithoutSubcategories = [
 function normalizeText(value) {
 
     return String(value || "")
+
         .toLowerCase()
+
         .trim()
+
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/œ/g, "oe")
-        .replace(/æ/g, "ae")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+
+        .replace(
+            /œ/g,
+            "oe"
+        )
+
+        .replace(
+            /æ/g,
+            "ae"
+        )
+
+        .replace(
+            /[^a-z0-9]+/g,
+            "-"
+        )
+
+        .replace(
+            /^-+|-+$/g,
+            "");
 
 }
 
@@ -303,9 +390,13 @@ const typeAliases = {
 
 function getCategoryKey(value) {
 
-    const normalized = normalizeText(value);
+    const normalized =
+        normalizeText(value);
 
-    return categoryAliases[normalized] || normalized;
+    return (
+        categoryAliases[normalized] ||
+        normalized
+    );
 
 }
 
@@ -316,128 +407,184 @@ function getCategoryKey(value) {
 
 function getTypeKey(value) {
 
-    const normalized = normalizeText(value);
+    const normalized =
+        normalizeText(value);
 
-    return typeAliases[normalized] || normalized;
+    return (
+        typeAliases[normalized] ||
+        normalized
+    );
 
 }
 
 
 /* =====================================================
-   UPDATE SUBCATEGORY
+   UPDATE SUBCATEGORIES
 ===================================================== */
 
-function updateSubcategories(selectedType = "") {
+function updateSubcategories(
+    selectedType = ""
+) {
 
-    if (!productType || !productCategory) {
+    if (
+        !productType ||
+        !productCategory
+    ) {
+
         return;
+
     }
 
-    const category = getCategoryKey(productCategory.value);
+
+    const category =
+        getCategoryKey(
+            productCategory.value
+        );
+
 
     productType.innerHTML = "";
 
-    /*
-       TV / MACHINE À LAVER / LAVE-VAISSELLE
-       DO NOT require a subcategory.
-    */
 
-    if (categoriesWithoutSubcategories.includes(category)) {
+    /* ---------------------------------------------
+       NO SUBCATEGORY
+    --------------------------------------------- */
 
-        productType.disabled = true;
+    if (
+        categoriesWithoutSubcategories
+            .includes(category)
+    ) {
+
+        productType.disabled =
+            true;
 
         productType.innerHTML = `
+
             <option value="">
                 Aucune sous-catégorie
             </option>
+
         `;
 
         productType.value = "";
 
         return;
+
     }
 
 
-    /*
-       No category selected
-    */
+    /* ---------------------------------------------
+       NO CATEGORY
+    --------------------------------------------- */
 
     if (!category) {
 
-        productType.disabled = true;
+        productType.disabled =
+            true;
 
         productType.innerHTML = `
+
             <option value="">
                 Sélectionner d'abord une catégorie
             </option>
+
         `;
 
         return;
+
     }
 
 
-    /*
-       Get subcategories
-    */
+    /* ---------------------------------------------
+       GET OPTIONS
+    --------------------------------------------- */
 
-    const options = subcategories[category] || [];
+    const options =
+        subcategories[category] || [];
 
-
-    /*
-       Category without subcategories
-    */
 
     if (options.length === 0) {
 
-        productType.disabled = true;
+        productType.disabled =
+            true;
 
         productType.innerHTML = `
+
             <option value="">
                 Aucune sous-catégorie
             </option>
+
         `;
 
         productType.value = "";
 
         return;
+
     }
 
 
-    /*
-       Category with subcategories
-    */
+    /* ---------------------------------------------
+       DISPLAY OPTIONS
+    --------------------------------------------- */
 
-    productType.disabled = false;
+    productType.disabled =
+        false;
 
     productType.innerHTML = `
+
         <option value="">
             Sélectionner une sous-catégorie
         </option>
+
     `;
 
 
-    options.forEach(item => {
+    options.forEach(
+        item => {
 
-        const option = document.createElement("option");
+            const option =
+                document.createElement(
+                    "option"
+                );
 
-        option.value = item.value;
-        option.textContent = item.label;
+            option.value =
+                item.value;
 
-        productType.appendChild(option);
+            option.textContent =
+                item.label;
 
-    });
+            productType.appendChild(
+                option
+            );
 
+        }
+    );
+
+
+    /* ---------------------------------------------
+       EDIT VALUE
+    --------------------------------------------- */
 
     if (selectedType) {
 
-        const normalizedType = getTypeKey(selectedType);
+        const normalizedType =
+            getTypeKey(
+                selectedType
+            );
 
-        const exists = options.some(
-            item => item.value === normalizedType
-        );
+
+        const exists =
+            options.some(
+                item =>
+                    item.value ===
+                    normalizedType
+            );
+
 
         if (exists) {
-            productType.value = normalizedType;
+
+            productType.value =
+                normalizedType;
+
         }
 
     }
@@ -451,11 +598,14 @@ function updateSubcategories(selectedType = "") {
 
 if (productCategory) {
 
-    productCategory.addEventListener("change", () => {
+    productCategory.addEventListener(
+        "change",
+        function () {
 
-        updateSubcategories();
+            updateSubcategories();
 
-    });
+        }
+    );
 
 }
 
@@ -464,99 +614,118 @@ if (productCategory) {
    IMAGE PREVIEW
 ===================================================== */
 
-if (productImage && imagePreview) {
+if (
+    productImage &&
+    imagePreview
+) {
 
-    productImage.addEventListener("change", function () {
+    productImage.addEventListener(
+        "change",
+        function () {
 
-        const file = this.files[0];
+            const file =
+                this.files[0];
 
-        if (!file) {
 
-            imagePreview.innerHTML = `
-                <span>
-                    Aucune image sélectionnée
-                </span>
-            `;
+            if (!file) {
 
-            return;
+                imagePreview.innerHTML = `
+
+                    <span>
+                        Aucune image sélectionnée
+                    </span>
+
+                `;
+
+                return;
+
+            }
+
+
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "Veuillez sélectionner une image."
+                );
+
+                this.value = "";
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (event) {
+
+                    imagePreview.innerHTML = `
+
+                        <img
+                            src="${event.target.result}"
+                            alt="Aperçu"
+                        >
+
+                    `;
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
         }
-
-
-        if (!file.type.startsWith("image/")) {
-
-            alert("Veuillez sélectionner une image.");
-
-            this.value = "";
-
-            return;
-        }
-
-
-        const reader = new FileReader();
-
-        reader.onload = function (event) {
-
-            imagePreview.innerHTML = `
-                <img
-                    src="${event.target.result}"
-                    alt="Aperçu"
-                >
-            `;
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
+    );
 
 }
 
 
 /* =====================================================
-   GET SAVED PRODUCTS
+   GET FIRESTORE PRODUCTS
 ===================================================== */
 
-function getSavedProducts() {
+async function getFirestoreProducts() {
 
     try {
 
-        const saved =
-            localStorage.getItem("kanaProducts");
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "products"
+                )
+            );
 
-        if (!saved) {
-            return [];
-        }
 
-        const products = JSON.parse(saved);
+        return snapshot.docs.map(
+            document => ({
 
-        return Array.isArray(products)
-            ? products
-            : [];
+                id:
+                    document.id,
+
+                ...document.data()
+
+            })
+        );
 
     } catch (error) {
 
         console.error(
-            "Erreur kanaProducts:",
+            "Erreur Firestore:",
             error
         );
 
-        return [];
+        throw error;
 
     }
-
-}
-
-
-/* =====================================================
-   SAVE PRODUCTS
-===================================================== */
-
-function saveProducts(products) {
-
-    localStorage.setItem(
-        "kanaProducts",
-        JSON.stringify(products)
-    );
 
 }
 
@@ -565,94 +734,160 @@ function saveProducts(products) {
    LOAD PRODUCT FOR EDIT
 ===================================================== */
 
-function loadProductForEdit() {
+async function loadProductForEdit() {
 
     if (!editProductId) {
-        return;
-    }
-
-
-    const products = getSavedProducts();
-
-    const product = products.find(
-        item =>
-            String(item.id) ===
-            String(editProductId)
-    );
-
-
-    if (!product) {
-
-        alert("Produit introuvable.");
-
-        window.location.href = "products.html";
 
         return;
-    }
-
-
-    if (pageTitle) {
-        pageTitle.textContent = "Modifier un produit";
-    }
-
-    if (formTitle) {
-        formTitle.textContent = "Modification du produit";
-    }
-
-    if (submitProductButton) {
-        submitProductButton.textContent =
-            "ENREGISTRER LES MODIFICATIONS";
-    }
-
-
-    if (productName) {
-        productName.value = product.name || "";
-    }
-
-
-    if (productCategory) {
-
-        productCategory.value =
-            getCategoryKey(product.category);
 
     }
 
 
-    updateSubcategories(product.type || "");
+    try {
+
+        const products =
+            await getFirestoreProducts();
 
 
-    if (productBrand) {
-        productBrand.value = product.brand || "";
-    }
+        const product =
+            products.find(
+                item =>
+                    String(item.id) ===
+                    String(editProductId)
+            );
 
 
-    if (productPrice) {
-        productPrice.value = product.price ?? "";
-    }
+        if (!product) {
+
+            alert(
+                "Produit introuvable."
+            );
+
+            window.location.href =
+                "products.html";
+
+            return;
+
+        }
 
 
-    if (productStock) {
-        productStock.value = product.stock ?? "";
-    }
+        /* -----------------------------------------
+           PAGE TITLES
+        ----------------------------------------- */
+
+        if (pageTitle) {
+
+            pageTitle.textContent =
+                "Modifier un produit";
+
+        }
 
 
-    if (productDescription) {
-        productDescription.value =
-            product.description || "";
-    }
+        if (formTitle) {
+
+            formTitle.textContent =
+                "Modification du produit";
+
+        }
 
 
-    if (
-        product.image &&
-        imagePreview
-    ) {
+        if (submitProductButton) {
 
-        imagePreview.innerHTML = `
-            <img
-                src="${product.image}"
-                alt="Image actuelle"
-            >
-        `;
+            submitProductButton.textContent =
+                "ENREGISTRER LES MODIFICATIONS";
+
+        }
+
+
+        /* -----------------------------------------
+           FIELDS
+        ----------------------------------------- */
+
+        if (productName) {
+
+            productName.value =
+                product.name || "";
+
+        }
+
+
+        if (productCategory) {
+
+            productCategory.value =
+                getCategoryKey(
+                    product.category
+                );
+
+        }
+
+
+        updateSubcategories(
+            product.type || ""
+        );
+
+
+        if (productBrand) {
+
+            productBrand.value =
+                product.brand || "";
+
+        }
+
+
+        if (productPrice) {
+
+            productPrice.value =
+                product.price ?? "";
+
+        }
+
+
+        if (productStock) {
+
+            productStock.value =
+                product.stock ?? "";
+
+        }
+
+
+        if (productDescription) {
+
+            productDescription.value =
+                product.description || "";
+
+        }
+
+
+        /* -----------------------------------------
+           EXISTING IMAGE
+        ----------------------------------------- */
+
+        if (
+            product.image &&
+            imagePreview
+        ) {
+
+            imagePreview.innerHTML = `
+
+                <img
+                    src="${product.image}"
+                    alt="Image actuelle"
+                >
+
+            `;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Erreur lors du chargement du produit:",
+            error
+        );
+
+        alert(
+            "Impossible de charger le produit."
+        );
 
     }
 
@@ -667,28 +902,29 @@ if (addProductForm) {
 
     addProductForm.addEventListener(
         "submit",
-        function (event) {
+        async function (event) {
 
             event.preventDefault();
 
 
+            /* -----------------------------------------
+               VALUES
+            ----------------------------------------- */
+
             const name =
-                productName?.value.trim() || "";
+                productName?.value.trim() ||
+                "";
+
 
             const category =
                 getCategoryKey(
-                    productCategory?.value || ""
+                    productCategory?.value ||
+                    ""
                 );
 
-            /*
-               IMPORTANT:
-               type can be EMPTY for:
-               TV
-               Machine à laver
-               Lave-vaisselle
-            */
 
             let type = "";
+
 
             if (
                 productType &&
@@ -704,65 +940,76 @@ if (addProductForm) {
 
 
             const brand =
-                productBrand?.value.trim() || "";
+                productBrand?.value.trim() ||
+                "";
 
 
             const price =
                 Number(
-                    productPrice?.value || 0
+                    productPrice?.value ||
+                    0
                 );
 
 
             const stock =
                 Number(
-                    productStock?.value || 0
+                    productStock?.value ||
+                    0
                 );
 
 
             const description =
-                productDescription?.value.trim() || "";
+                productDescription?.value.trim() ||
+                "";
 
 
             const imageFile =
-                productImage?.files?.[0] || null;
+                productImage?.files?.[0] ||
+                null;
 
 
-            /* =========================================
+            /* -----------------------------------------
                VALIDATION
-            ========================================= */
+            ----------------------------------------- */
 
-            if (!name || !category || !brand) {
+            if (
+                !name ||
+                !category ||
+                !brand
+            ) {
 
                 alert(
                     "Veuillez remplir les champs obligatoires."
                 );
 
                 return;
+
             }
 
 
-            /*
-               Only categories WITH subcategories
-               require type.
-            */
-
             const requiresType =
-                !categoriesWithoutSubcategories.includes(
-                    category
-                ) &&
+                !categoriesWithoutSubcategories
+                    .includes(category) &&
+
                 Array.isArray(
                     subcategories[category]
                 ) &&
-                subcategories[category].length > 0;
+
+                subcategories[category]
+                    .length > 0;
 
 
-            if (requiresType && !type) {
+            if (
+                requiresType &&
+                !type
+            ) {
 
                 alert(
                     "Veuillez sélectionner une sous-catégorie."
                 );
 
                 return;
+
             }
 
 
@@ -771,9 +1018,12 @@ if (addProductForm) {
                 price < 0
             ) {
 
-                alert("Prix invalide.");
+                alert(
+                    "Prix invalide."
+                );
 
                 return;
+
             }
 
 
@@ -782,187 +1032,189 @@ if (addProductForm) {
                 stock < 0
             ) {
 
-                alert("Stock invalide.");
+                alert(
+                    "Stock invalide."
+                );
 
                 return;
+
             }
 
 
-            /* =========================================
-               GET PRODUCTS
-            ========================================= */
+            /* -----------------------------------------
+               BUTTON
+            ----------------------------------------- */
 
-            const products =
-                getSavedProducts();
+            if (submitProductButton) {
+
+                submitProductButton.disabled =
+                    true;
+
+                submitProductButton.textContent =
+                    editProductId
+                        ? "ENREGISTREMENT..."
+                        : "AJOUT EN COURS...";
+
+            }
 
 
-            /* =========================================
-               EDIT
-            ========================================= */
+            try {
 
-            if (editProductId) {
+                /* =====================================
+                   IMAGE
 
-                const index =
-                    products.findIndex(
-                        item =>
-                            String(item.id) ===
-                            String(editProductId)
+                   IMPORTANT:
+                   We are NOT using Firebase Storage.
+
+                   For now:
+                   - New product without hosted image
+                     → image = ""
+
+                   - Existing product
+                     → keep existing image
+
+                   The image hosting solution will
+                   be connected separately.
+                ===================================== */
+
+                let imageURL = "";
+
+
+                /* -------------------------------------
+                   EDIT
+                ------------------------------------- */
+
+                if (editProductId) {
+
+                    const productRef =
+                        doc(
+                            db,
+                            "products",
+                            editProductId
+                        );
+
+
+                    /*
+                       Keep current image if
+                       no new image is selected.
+                    */
+
+                    const existingProducts =
+                        await getFirestoreProducts();
+
+
+                    const existingProduct =
+                        existingProducts.find(
+                            item =>
+                                String(item.id) ===
+                                String(editProductId)
+                        );
+
+
+                    if (
+                        existingProduct &&
+                        existingProduct.image
+                    ) {
+
+                        imageURL =
+                            existingProduct.image;
+
+                    }
+
+
+                    /*
+                       NOTE:
+                       The selected new image is
+                       currently only previewed.
+                    */
+
+
+                    await updateDoc(
+                        productRef,
+                        {
+
+                            name,
+
+                            category,
+
+                            type,
+
+                            brand,
+
+                            price,
+
+                            stock,
+
+                            availability:
+                                stock > 0
+                                    ? "Disponible"
+                                    : "Indisponible",
+
+                            description,
+
+                            image:
+                                imageURL,
+
+                            updatedAt:
+                                serverTimestamp()
+
+                        }
                     );
 
 
-                if (index === -1) {
+                    alert(
+                        "Produit modifié avec succès !"
+                    );
 
-                    alert("Produit introuvable.");
+
+                    window.location.href =
+                        "products.html";
 
                     return;
+
                 }
 
 
-                const updatedProduct = {
+                /* -------------------------------------
+                   ADD NEW PRODUCT
+                ------------------------------------- */
 
-                    ...products[index],
+                await addDoc(
+                    collection(
+                        db,
+                        "products"
+                    ),
+                    {
 
-                    name,
+                        name,
 
-                    category,
+                        category,
 
-                    type,
+                        type,
 
-                    brand,
+                        brand,
 
-                    price,
+                        price,
 
-                    stock,
+                        stock,
 
-                    availability:
-                        stock > 0
-                            ? "Disponible"
-                            : "Indisponible",
+                        availability:
+                            stock > 0
+                                ? "Disponible"
+                                : "Indisponible",
 
-                    description
+                        description,
 
-                };
+                        image:
+                            imageURL,
 
+                        createdAt:
+                            serverTimestamp(),
 
-                /*
-                   New image
-                */
+                        updatedAt:
+                            serverTimestamp()
 
-                if (imageFile) {
-
-                    const reader =
-                        new FileReader();
-
-
-                    reader.onload = function (event) {
-
-                        updatedProduct.image =
-                            event.target.result;
-
-                        products[index] =
-                            updatedProduct;
-
-                        saveProducts(products);
-
-                        alert(
-                            "Produit modifié avec succès !"
-                        );
-
-                        window.location.href =
-                            "products.html";
-
-                    };
-
-
-                    reader.readAsDataURL(imageFile);
-
-                    return;
-                }
-
-
-                /*
-                   Keep old image
-                */
-
-                products[index] =
-                    updatedProduct;
-
-                saveProducts(products);
-
-                alert(
-                    "Produit modifié avec succès !"
-                );
-
-                window.location.href =
-                    "products.html";
-
-                return;
-            }
-
-
-            /* =========================================
-               ADD
-            ========================================= */
-
-            if (!imageFile) {
-
-                alert(
-                    "Veuillez sélectionner une image."
-                );
-
-                return;
-            }
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload = function (event) {
-
-                const newProduct = {
-
-                    id:
-                        Date.now().toString(),
-
-                    name,
-
-                    category,
-
-                    type,
-
-                    brand,
-
-                    price,
-
-                    stock,
-
-                    availability:
-                        stock > 0
-                            ? "Disponible"
-                            : "Indisponible",
-
-                    description,
-
-                    image:
-                        event.target.result
-
-                };
-
-
-                products.push(newProduct);
-
-                saveProducts(products);
-
-
-                console.log(
-                    "Produit sauvegardé:",
-                    newProduct
-                );
-
-                console.log(
-                    "Tous les produits:",
-                    products
+                    }
                 );
 
 
@@ -974,19 +1226,36 @@ if (addProductForm) {
                 window.location.href =
                     "products.html";
 
-            };
 
+            } catch (error) {
 
-            reader.onerror = function () {
-
-                alert(
-                    "Impossible de lire l'image."
+                console.error(
+                    "Erreur lors de l'enregistrement:",
+                    error
                 );
 
-            };
+
+                alert(
+                    "Erreur Firebase : " +
+                    error.message
+                );
 
 
-            reader.readAsDataURL(imageFile);
+                if (
+                    submitProductButton
+                ) {
+
+                    submitProductButton.disabled =
+                        false;
+
+                    submitProductButton.textContent =
+                        editProductId
+                            ? "ENREGISTRER LES MODIFICATIONS"
+                            : "AJOUTER LE PRODUIT";
+
+                }
+
+            }
 
         }
     );
@@ -1002,14 +1271,20 @@ function initializeForm() {
 
     updateSubcategories();
 
+
     if (editProductId) {
+
         loadProductForEdit();
+
     }
 
 }
 
 
-if (document.readyState === "loading") {
+if (
+    document.readyState ===
+    "loading"
+) {
 
     document.addEventListener(
         "DOMContentLoaded",

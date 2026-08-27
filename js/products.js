@@ -1,3 +1,10 @@
+import {
+    db,
+    collection,
+    getDocs
+} from "./firebase.js";
+
+
 /* =====================================================
    KANA ÉLECTROMÉNAGER
    PRODUCTS PAGE
@@ -448,7 +455,6 @@ function getCategoryInfo() {
             currentCategory
         );
 
-
     return (
         categoryInfo[key] || {
 
@@ -476,14 +482,12 @@ function updatePageInformation() {
     const category =
         getCategoryInfo();
 
-
     if (productsCategoryLabel) {
 
         productsCategoryLabel.textContent =
             category.label;
 
     }
-
 
     if (productsCategoryTitle) {
 
@@ -492,14 +496,12 @@ function updatePageInformation() {
 
     }
 
-
     if (productsCategoryDescription) {
 
         productsCategoryDescription.textContent =
             category.description;
 
     }
-
 
     if (productsTitle) {
 
@@ -510,7 +512,6 @@ function updatePageInformation() {
 
     }
 
-
     document.title =
         `${category.title} | KANA`;
 
@@ -518,91 +519,67 @@ function updatePageInformation() {
 
 
 /* =====================================================
-   LOAD PRODUCTS
+   GET PRODUCTS FROM FIREBASE
 ===================================================== */
 
-function getAllProducts() {
-
-    let products = [];
-
-
-    /* ---------------------------------------------
-       DEFAULT PRODUCTS
-    --------------------------------------------- */
-
-    if (
-        typeof productsData !== "undefined" &&
-        Array.isArray(productsData)
-    ) {
-
-        products = [
-            ...productsData
-        ];
-
-    }
-
-
-    /* ---------------------------------------------
-       ADMIN PRODUCTS
-    --------------------------------------------- */
+async function getAllProducts() {
 
     try {
 
-        const saved =
-            localStorage.getItem(
-                "kanaProducts"
+        const productsRef =
+            collection(
+                db,
+                "products"
             );
 
+        const snapshot =
+            await getDocs(
+                productsRef
+            );
 
-        if (saved) {
+        const products =
+            snapshot.docs.map(
+                productDocument => ({
 
-            const adminProducts =
-                JSON.parse(saved);
+                    id:
+                        productDocument.id,
 
+                    ...productDocument.data()
 
-            if (
-                Array.isArray(
-                    adminProducts
-                )
-            ) {
+                })
+            );
 
-                /*
-                   Admin products are added
-                   to the public catalogue.
-                */
+        console.log(
+            "KANA products from Firebase:",
+            products
+        );
 
-                products = [
-                    ...products,
-                    ...adminProducts
-                ];
-
-            }
-
-        }
+        return products;
 
     } catch (error) {
 
         console.error(
-            "Erreur lors du chargement des produits Admin:",
+            "Erreur Firebase - chargement des produits:",
             error
         );
 
+        return [];
+
     }
-
-
-    return products;
 
 }
 
 
 /* =====================================================
-   FILTER
+   FILTER PRODUCTS
 ===================================================== */
 
-function getFilteredProducts() {
+function filterProducts(
+    products
+) {
 
-    let products =
-        getAllProducts();
+    let filtered =
+        [...products];
 
 
     /* ---------------------------------------------
@@ -619,16 +596,14 @@ function getFilteredProducts() {
                 currentCategory
             );
 
-
-        products =
-            products.filter(
+        filtered =
+            filtered.filter(
                 product => {
 
                     const productCategory =
                         getCategoryKey(
                             product.category
                         );
-
 
                     return (
                         productCategory ===
@@ -642,7 +617,7 @@ function getFilteredProducts() {
 
 
     /* ---------------------------------------------
-       SUBCATEGORY
+       TYPE
     --------------------------------------------- */
 
     if (
@@ -655,16 +630,14 @@ function getFilteredProducts() {
                 currentType
             );
 
-
-        products =
-            products.filter(
+        filtered =
+            filtered.filter(
                 product => {
 
                     const productType =
                         getTypeKey(
                             product.type
                         );
-
 
                     return (
                         productType ===
@@ -677,7 +650,7 @@ function getFilteredProducts() {
     }
 
 
-    return products;
+    return filtered;
 
 }
 
@@ -720,10 +693,8 @@ function formatPrice(price) {
 
     }
 
-
     const number =
         Number(price);
-
 
     if (Number.isNaN(number)) {
 
@@ -736,7 +707,6 @@ function formatPrice(price) {
         `;
 
     }
-
 
     return `
         <div class="product-price">
@@ -759,21 +729,20 @@ function formatPrice(price) {
    PRODUCT CARD
 ===================================================== */
 
-function createProductCard(product) {
+function createProductCard(
+    product
+) {
 
     const card =
         document.createElement(
             "article"
         );
 
-
     card.className =
         "product-card";
 
-
     const image =
         product.image || "";
-
 
     card.innerHTML = `
 
@@ -796,43 +765,40 @@ function createProductCard(product) {
 
             </div>
 
-
             <div class="product-info">
 
-               <h3 class="product-name">
-                  ${escapeHTML(
-                      product.name ||
-                       "Produit"
+                <h3 class="product-name">
+                    ${escapeHTML(
+                        product.name ||
+                        "Produit"
                     )}
-                 </h3>
+                </h3>
 
-               ${
-                  product.brand
-                      ? `
-                          <span class="product-brand">
-                             ${escapeHTML(
-                              product.brand
-                             )}
+                ${
+                    product.brand
+                        ? `
+                            <span class="product-brand">
+                                ${escapeHTML(
+                                    product.brand
+                                )}
                             </span>
                         `
-                         : ""
+                        : ""
                 }
 
-              ${formatPrice(
-                 product.price
+                ${formatPrice(
+                    product.price
                 )}
 
                 <div class="product-button">
-                   VOIR LE PRODUIT
+                    VOIR LE PRODUIT
                 </div>
-   
+
             </div>
-            
 
         </a>
 
     `;
-
 
     return card;
 
@@ -840,11 +806,11 @@ function createProductCard(product) {
 
 
 /* =====================================================
-   DISPLAY
+   DISPLAY PRODUCTS
 ===================================================== */
 
 function displayProducts(
-    products = getFilteredProducts()
+    products
 ) {
 
     if (!productsContainer) {
@@ -856,7 +822,6 @@ function displayProducts(
         return;
 
     }
-
 
     productsContainer.innerHTML =
         "";
@@ -871,7 +836,6 @@ function displayProducts(
         productsContainer.style.display =
             "none";
 
-
         if (emptyProducts) {
 
             emptyProducts.hidden =
@@ -879,14 +843,12 @@ function displayProducts(
 
         }
 
-
         if (productsCount) {
 
             productsCount.textContent =
                 "Aucun produit disponible.";
 
         }
-
 
         return;
 
@@ -900,14 +862,12 @@ function displayProducts(
     productsContainer.style.display =
         "";
 
-
     if (emptyProducts) {
 
         emptyProducts.hidden =
             true;
 
     }
-
 
     products.forEach(
         product => {
@@ -951,7 +911,10 @@ function sortProductsList(
         [...products];
 
 
-    if (sortType === "price-asc") {
+    if (
+        sortType ===
+        "price-asc"
+    ) {
 
         sorted.sort(
             (a, b) =>
@@ -962,7 +925,10 @@ function sortProductsList(
     }
 
 
-    if (sortType === "price-desc") {
+    if (
+        sortType ===
+        "price-desc"
+    ) {
 
         sorted.sort(
             (a, b) =>
@@ -973,7 +939,10 @@ function sortProductsList(
     }
 
 
-    if (sortType === "name") {
+    if (
+        sortType ===
+        "name"
+    ) {
 
         sorted.sort(
             (a, b) =>
@@ -993,55 +962,69 @@ function sortProductsList(
 
 
 /* =====================================================
-   SORT EVENT
+   PAGE INITIALIZATION
 ===================================================== */
 
-if (sortProducts) {
+async function initProductsPage() {
 
-    sortProducts.addEventListener(
-        "change",
-        function () {
+    updatePageInformation();
 
-            const products =
-                getFilteredProducts();
+    if (productsContainer) {
 
+        productsContainer.innerHTML = `
+            <p class="products-loading">
+                Chargement des produits...
+            </p>
+        `;
 
-            const sorted =
-                sortProductsList(
-                    products,
-                    this.value
-                );
+    }
 
 
-            displayProducts(sorted);
-
-        }
-    );
-
-}
+    const allProducts =
+        await getAllProducts();
 
 
-/* =====================================================
-   INITIALIZE
-===================================================== */
-
-function initProductsPage() {
-
-    console.log(
-        "KANA products:",
-        getAllProducts()
-    );
+    const filteredProducts =
+        filterProducts(
+            allProducts
+        );
 
 
     console.log(
         "KANA filtered products:",
-        getFilteredProducts()
+        filteredProducts
     );
 
 
-    updatePageInformation();
+    displayProducts(
+        filteredProducts
+    );
 
-    displayProducts();
+
+    /* ---------------------------------------------
+       SORT
+    --------------------------------------------- */
+
+    if (sortProducts) {
+
+        sortProducts.addEventListener(
+            "change",
+            function () {
+
+                const sorted =
+                    sortProductsList(
+                        filteredProducts,
+                        this.value
+                    );
+
+                displayProducts(
+                    sorted
+                );
+
+            }
+        );
+
+    }
 
 }
 
