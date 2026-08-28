@@ -1,20 +1,7 @@
 /* =====================================================
    KANA ÉLECTROMÉNAGER
    ADMIN DASHBOARD
-===================================================== */
-
-/*
-   IMPORTANT :
-   Ce fichier est un MODULE.
-   Dans index.html :
-
-   <script src="../data/products-data.js"></script>
-   <script type="module" src="../js/admin.js"></script>
-*/
-
-
-/* =====================================================
-   1. FIREBASE
+   FIRESTORE VERSION
 ===================================================== */
 
 import {
@@ -25,21 +12,7 @@ import {
 
 
 /* =====================================================
-   2. PRODUCTS DATA
-===================================================== */
-
-const products =
-    Array.isArray(window.productsData)
-        ? window.productsData
-        : (
-            typeof productsData !== "undefined"
-                ? productsData
-                : []
-        );
-
-
-/* =====================================================
-   3. DASHBOARD ELEMENTS
+   1. DASHBOARD ELEMENTS
 ===================================================== */
 
 const totalProducts =
@@ -63,16 +36,104 @@ const availableProducts =
 const recentOrders =
     document.getElementById("recentOrders");
 
+const logoutButton =
+    document.getElementById("logoutButton");
+
 
 /* =====================================================
-   4. PRODUCT STATISTICS
+   2. DATA
+===================================================== */
+
+let products = [];
+
+let orders = [];
+
+
+/* =====================================================
+   3. NORMALIZE TEXT
+===================================================== */
+
+function normalizeText(value) {
+
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+}
+
+
+/* =====================================================
+   4. LOAD PRODUCTS FROM FIRESTORE
+===================================================== */
+
+async function loadProducts() {
+
+    try {
+
+        const productsRef =
+            collection(
+                db,
+                "products"
+            );
+
+        const snapshot =
+            await getDocs(
+                productsRef
+            );
+
+
+        products =
+            snapshot.docs.map(
+                productDocument => ({
+
+                    id:
+                        productDocument.id,
+
+                    ...productDocument.data()
+
+                })
+            );
+
+
+        console.log(
+            "KANA Dashboard - produits Firestore:",
+            products
+        );
+
+
+        return products;
+
+
+    } catch (error) {
+
+        console.error(
+            "Erreur Firebase - produits:",
+            error
+        );
+
+
+        products = [];
+
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   5. PRODUCT STATISTICS
 ===================================================== */
 
 function updateProductStats() {
 
-    /* -------------------------------------------------
+
+    /* =================================================
        TOTAL PRODUCTS
-    ------------------------------------------------- */
+    ================================================= */
 
     if (totalProducts) {
 
@@ -82,21 +143,27 @@ function updateProductStats() {
     }
 
 
-    /* -------------------------------------------------
+    /* =================================================
        AVAILABLE PRODUCTS
-    ------------------------------------------------- */
+    ================================================= */
 
     const available =
-        products.filter(product => {
+        products.filter(
+            product => {
 
-            return (
-                String(
-                    product.availability || ""
-                ).trim().toLowerCase()
-                === "disponible"
-            );
+                const availability =
+                    normalizeText(
+                        product.availability
+                    );
 
-        });
+
+                return (
+                    availability ===
+                    "disponible"
+                );
+
+            }
+        );
 
 
     if (availableProducts) {
@@ -107,20 +174,37 @@ function updateProductStats() {
     }
 
 
-    /* -------------------------------------------------
+    /* =================================================
        CATEGORIES
-    ------------------------------------------------- */
+    ================================================= */
 
     const categories =
-        new Set(
+        new Set();
 
-            products
-                .map(product =>
+
+    products.forEach(
+        product => {
+
+            if (
+                product.category !==
+                undefined &&
+                product.category !==
+                null &&
+                String(
                     product.category
-                )
-                .filter(Boolean)
+                ).trim() !== ""
+            ) {
 
-        );
+                categories.add(
+                    normalizeText(
+                        product.category
+                    )
+                );
+
+            }
+
+        }
+    );
 
 
     if (totalCategories) {
@@ -131,20 +215,37 @@ function updateProductStats() {
     }
 
 
-    /* -------------------------------------------------
+    /* =================================================
        BRANDS
-    ------------------------------------------------- */
+    ================================================= */
 
     const brands =
-        new Set(
+        new Set();
 
-            products
-                .map(product =>
+
+    products.forEach(
+        product => {
+
+            if (
+                product.brand !==
+                undefined &&
+                product.brand !==
+                null &&
+                String(
                     product.brand
-                )
-                .filter(Boolean)
+                ).trim() !== ""
+            ) {
 
-        );
+                brands.add(
+                    normalizeText(
+                        product.brand
+                    )
+                );
+
+            }
+
+        }
+    );
 
 
     if (totalBrands) {
@@ -154,37 +255,65 @@ function updateProductStats() {
 
     }
 
+
+    console.log(
+        "KANA Dashboard - statistiques produits:",
+        {
+            totalProducts:
+                products.length,
+
+            categories:
+                categories.size,
+
+            brands:
+                brands.size,
+
+            available:
+                available.length
+        }
+    );
+
 }
 
 
 /* =====================================================
-   5. GET ORDER STATUS
+   6. GET ORDER STATUS
 ===================================================== */
 
 function getOrderStatus(order) {
 
-    const status =
-        order?.status;
+    /*
+       On cherche plusieurs noms possibles
+       pour rester compatible avec les anciennes
+       commandes.
+    */
+
+    const rawStatus =
+        order?.status ??
+        order?.orderStatus ??
+        order?.order_status ??
+        "";
 
 
-    if (!status) {
+    if (
+        !rawStatus ||
+        String(rawStatus).trim() === ""
+    ) {
 
         return "Nouvelle";
 
     }
 
 
-    /*
-       On accepte plusieurs écritures
-       possibles pour éviter les problèmes
-       avec les anciennes commandes.
-    */
-
     const normalized =
-        String(status)
-            .trim()
-            .toLowerCase();
+        normalizeText(
+            rawStatus
+        );
 
+
+    /* -------------------------------------------------
+       NOUVELLE
+    ------------------------------------------------- */
 
     if (
         normalized === "nouvelle" ||
@@ -196,8 +325,11 @@ function getOrderStatus(order) {
     }
 
 
+    /* -------------------------------------------------
+       CONFIRMEE
+    ------------------------------------------------- */
+
     if (
-        normalized === "confirmée" ||
         normalized === "confirmee" ||
         normalized === "confirmed"
     ) {
@@ -207,8 +339,11 @@ function getOrderStatus(order) {
     }
 
 
+    /* -------------------------------------------------
+       LIVREE
+    ------------------------------------------------- */
+
     if (
-        normalized === "livrée" ||
         normalized === "livree" ||
         normalized === "delivered"
     ) {
@@ -218,8 +353,11 @@ function getOrderStatus(order) {
     }
 
 
+    /* -------------------------------------------------
+       ANNULEE
+    ------------------------------------------------- */
+
     if (
-        normalized === "annulée" ||
         normalized === "annulee" ||
         normalized === "cancelled"
     ) {
@@ -229,16 +367,20 @@ function getOrderStatus(order) {
     }
 
 
-    return status;
+    return String(
+        rawStatus
+    );
 
 }
 
 
 /* =====================================================
-   6. DATE HELPER
+   7. ORDER DATE
 ===================================================== */
 
-function getOrderDate(createdAt) {
+function getOrderDate(
+    createdAt
+) {
 
     if (!createdAt) {
 
@@ -249,12 +391,13 @@ function getOrderDate(createdAt) {
 
     try {
 
-        /*
+        /* ---------------------------------------------
            Firebase Timestamp
-        */
+        --------------------------------------------- */
 
         if (
-            typeof createdAt.toDate === "function"
+            typeof createdAt.toDate ===
+            "function"
         ) {
 
             return createdAt
@@ -264,27 +407,32 @@ function getOrderDate(createdAt) {
         }
 
 
-        /*
-           Firestore timestamp object
-        */
+        /* ---------------------------------------------
+           Firestore Timestamp object
+        --------------------------------------------- */
 
         if (
-            createdAt.seconds !== undefined
+            createdAt.seconds !==
+            undefined
         ) {
 
             return (
-                Number(createdAt.seconds) * 1000
+                Number(
+                    createdAt.seconds
+                ) * 1000
             );
 
         }
 
 
-        /*
-           JS Date / string
-        */
+        /* ---------------------------------------------
+           Date / String
+        --------------------------------------------- */
 
         const date =
-            new Date(createdAt);
+            new Date(
+                createdAt
+            );
 
 
         if (
@@ -300,7 +448,7 @@ function getOrderDate(createdAt) {
     } catch (error) {
 
         console.error(
-            "Erreur date commande :",
+            "Erreur date commande:",
             error
         );
 
@@ -313,10 +461,12 @@ function getOrderDate(createdAt) {
 
 
 /* =====================================================
-   7. FORMAT PRICE
+   8. FORMAT PRICE
 ===================================================== */
 
-function formatPrice(value) {
+function formatPrice(
+    value
+) {
 
     const price =
         Number(value);
@@ -332,7 +482,9 @@ function formatPrice(value) {
 
 
     return (
-        price.toLocaleString("fr-FR")
+        price.toLocaleString(
+            "fr-FR"
+        )
         + " DA"
     );
 
@@ -340,13 +492,17 @@ function formatPrice(value) {
 
 
 /* =====================================================
-   8. FORMAT DATE
+   9. FORMAT DATE
 ===================================================== */
 
-function formatDate(createdAt) {
+function formatDate(
+    createdAt
+) {
 
     const timestamp =
-        getOrderDate(createdAt);
+        getOrderDate(
+            createdAt
+        );
 
 
     if (!timestamp) {
@@ -356,60 +512,65 @@ function formatDate(createdAt) {
     }
 
 
-    return new Date(timestamp)
-        .toLocaleString(
-            "fr-FR",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
+    return new Date(
+        timestamp
+    ).toLocaleString(
+        "fr-FR",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
 
 }
 
 
 /* =====================================================
-   9. LOAD ORDERS FROM FIRESTORE
+   10. LOAD ORDERS FROM FIRESTORE
 ===================================================== */
 
 async function loadOrders() {
 
     try {
 
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "orders"
-                )
+        const ordersRef =
+            collection(
+                db,
+                "orders"
             );
 
 
-        const orders = [];
+        const snapshot =
+            await getDocs(
+                ordersRef
+            );
 
 
-        snapshot.forEach(
-            documentSnapshot => {
-
-                orders.push({
+        orders =
+            snapshot.docs.map(
+                orderDocument => ({
 
                     firestoreId:
-                        documentSnapshot.id,
+                        orderDocument.id,
 
-                    ...documentSnapshot.data()
+                    ...orderDocument.data()
 
-                });
+                })
+            );
 
-            }
+
+        console.log(
+            "KANA Dashboard - commandes Firestore:",
+            orders
         );
 
 
-        /*
-           Plus récente → plus ancienne
-        */
+        /* ---------------------------------------------
+           SORT
+        --------------------------------------------- */
 
         orders.sort(
             (a, b) => {
@@ -428,9 +589,9 @@ async function loadOrders() {
         );
 
 
-        /* -------------------------------------------------
-           TOTAL ORDERS
-        ------------------------------------------------- */
+        /* =================================================
+           TOTAL COMMANDES
+        ================================================= */
 
         if (totalOrders) {
 
@@ -440,15 +601,21 @@ async function loadOrders() {
         }
 
 
-        /* -------------------------------------------------
-           NEW ORDERS
-        ------------------------------------------------- */
+        /* =================================================
+           NOUVELLES COMMANDES
+        ================================================= */
 
         const newOrdersCount =
             orders.filter(
-                order =>
-                    getOrderStatus(order)
-                    === "Nouvelle"
+                order => {
+
+                    return (
+                        getOrderStatus(
+                            order
+                        ) === "Nouvelle"
+                    );
+
+                }
             ).length;
 
 
@@ -460,28 +627,39 @@ async function loadOrders() {
         }
 
 
-        /* -------------------------------------------------
+        /* =================================================
            RECENT ORDERS
-        ------------------------------------------------- */
+        ================================================= */
 
         renderRecentOrders(
             orders
         );
 
 
-        /*
-           Retourner les commandes au cas où
-           on en aurait besoin plus tard.
-        */
+        console.log(
+            "KANA Dashboard - statistiques commandes:",
+            {
+                total:
+                    orders.length,
+
+                nouvelles:
+                    newOrdersCount
+            }
+        );
+
 
         return orders;
+
 
     } catch (error) {
 
         console.error(
-            "Erreur lors du chargement des commandes :",
+            "Erreur Firebase - commandes:",
             error
         );
+
+
+        orders = [];
 
 
         if (totalOrders) {
@@ -529,17 +707,12 @@ async function loadOrders() {
 
 
 /* =====================================================
-   10. RENDER RECENT ORDERS
+   11. RENDER RECENT ORDERS
 ===================================================== */
 
 function renderRecentOrders(
-    orders
+    ordersList
 ) {
-
-    /*
-       Si la section n'existe pas dans index.html,
-       on ne fait rien.
-    */
 
     if (!recentOrders) {
 
@@ -548,11 +721,14 @@ function renderRecentOrders(
     }
 
 
-    /*
-       Aucune commande
-    */
+    /* =================================================
+       NO ORDERS
+    ================================================= */
 
-    if (!orders.length) {
+    if (
+        !ordersList ||
+        ordersList.length === 0
+    ) {
 
         recentOrders.innerHTML = `
 
@@ -575,41 +751,66 @@ function renderRecentOrders(
     }
 
 
-    /*
-       Afficher les 5 dernières
-    */
+    /* =================================================
+       LAST 5 ORDERS
+    ================================================= */
 
     const latestOrders =
-        orders.slice(0, 5);
+        ordersList.slice(
+            0,
+            5
+        );
 
 
-    recentOrders.innerHTML = "";
+    recentOrders.innerHTML =
+        "";
 
 
     latestOrders.forEach(
         order => {
 
+
+            /* -----------------------------------------
+               CUSTOMER
+            ----------------------------------------- */
+
             const customer =
-                order.customer || {};
+                order.customer ||
+                {};
 
 
             const customerName =
                 customer.name ||
                 order.customerName ||
+                order.name ||
                 "Client";
 
+
+            /* -----------------------------------------
+               PRODUCT
+            ----------------------------------------- */
 
             const productName =
                 order.productName ||
                 order.product?.name ||
+                order.product ||
                 "Produit";
 
 
+            /* -----------------------------------------
+               PRICE
+            ----------------------------------------- */
+
             const price =
-                order.price ||
-                order.total ||
+                order.price ??
+                order.total ??
+                order.totalPrice ??
                 0;
 
+
+            /* -----------------------------------------
+               STATUS
+            ----------------------------------------- */
 
             const status =
                 getOrderStatus(
@@ -617,8 +818,14 @@ function renderRecentOrders(
                 );
 
 
+            /* -----------------------------------------
+               ELEMENT
+            ----------------------------------------- */
+
             const orderElement =
-                document.createElement("a");
+                document.createElement(
+                    "a"
+                );
 
 
             orderElement.href =
@@ -676,8 +883,9 @@ function renderRecentOrders(
 
 }
 
+
 /* =====================================================
-   MAKE DASHBOARD CARDS CLICKABLE
+   12. MAKE DASHBOARD CARDS CLICKABLE
 ===================================================== */
 
 function setupStatCards() {
@@ -687,25 +895,30 @@ function setupStatCards() {
         "products.html"
     );
 
+
     makeCardClickable(
         totalCategories,
         "categories.html"
     );
+
 
     makeCardClickable(
         totalBrands,
         "brands.html"
     );
 
+
     makeCardClickable(
         totalOrders,
         "orders.html"
     );
 
+
     makeCardClickable(
         newOrders,
         "orders.html?status=Nouvelle"
     );
+
 
     makeCardClickable(
         availableProducts,
@@ -716,7 +929,7 @@ function setupStatCards() {
 
 
 /* =====================================================
-   MAKE CARD CLICKABLE
+   13. MAKE CARD CLICKABLE
 ===================================================== */
 
 function makeCardClickable(
@@ -725,7 +938,9 @@ function makeCardClickable(
 ) {
 
     if (!statElement) {
+
         return;
+
     }
 
 
@@ -736,18 +951,24 @@ function makeCardClickable(
 
 
     if (!card) {
+
         return;
+
     }
 
 
     if (
-        card.dataset.clickable === "true"
+        card.dataset.clickable ===
+        "true"
     ) {
+
         return;
+
     }
 
 
-    card.dataset.clickable = "true";
+    card.dataset.clickable =
+        "true";
 
 
     card.setAttribute(
@@ -762,7 +983,8 @@ function makeCardClickable(
     );
 
 
-    card.style.cursor = "pointer";
+    card.style.cursor =
+        "pointer";
 
 
     card.addEventListener(
@@ -787,6 +1009,7 @@ function makeCardClickable(
 
                 event.preventDefault();
 
+
                 window.location.href =
                     destination;
 
@@ -798,42 +1021,13 @@ function makeCardClickable(
 }
 
 
-
-/* =====================================================
-   13. LOGOUT
-===================================================== */
-
-const logoutButton =
-    document.getElementById(
-        "logoutButton"
-    );
-
-
-if (logoutButton) {
-
-    logoutButton.addEventListener(
-        "click",
-        function () {
-
-            /*
-               Pour le moment :
-               retour à la page de connexion.
-            */
-
-            window.location.href =
-                "login.html";
-
-        }
-    );
-
-}
-
-
 /* =====================================================
    14. ESCAPE HTML
 ===================================================== */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
     if (
         value === undefined ||
@@ -876,37 +1070,143 @@ function escapeHTML(value) {
 
 
 /* =====================================================
-   15. INITIALIZE DASHBOARD
+   15. LOGOUT
 ===================================================== */
 
-function initializeDashboard() {
+if (logoutButton) {
 
-    /*
-       Produits / catégories / marques /
-       produits disponibles
-    */
+    logoutButton.addEventListener(
+        "click",
+        function () {
 
-    updateProductStats();
-
-
-    /*
-       Cartes cliquables
-    */
-
-    setupStatCards();
+            sessionStorage.removeItem(
+                "kanaAdminLoggedIn"
+            );
 
 
-    /*
-       Commandes Firestore
-    */
+            window.location.href =
+                "login.html";
 
-    loadOrders();
+        }
+    );
 
 }
 
 
 /* =====================================================
-   16. START
+   16. INITIALIZE DASHBOARD
 ===================================================== */
 
-initializeDashboard();
+async function initializeDashboard() {
+
+    console.log(
+        "KANA Dashboard - démarrage..."
+    );
+
+
+    /* ---------------------------------------------
+       Initial loading state
+    --------------------------------------------- */
+
+    if (totalProducts) {
+
+        totalProducts.textContent =
+            "…";
+
+    }
+
+
+    if (totalCategories) {
+
+        totalCategories.textContent =
+            "…";
+
+    }
+
+
+    if (totalBrands) {
+
+        totalBrands.textContent =
+            "…";
+
+    }
+
+
+    if (availableProducts) {
+
+        availableProducts.textContent =
+            "…";
+
+    }
+
+
+    if (totalOrders) {
+
+        totalOrders.textContent =
+            "…";
+
+    }
+
+
+    if (newOrders) {
+
+        newOrders.textContent =
+            "…";
+
+    }
+
+
+    /* ---------------------------------------------
+       Load products
+    --------------------------------------------- */
+
+    await loadProducts();
+
+
+    /* ---------------------------------------------
+       Calculate product statistics
+    --------------------------------------------- */
+
+    updateProductStats();
+
+
+    /* ---------------------------------------------
+       Make cards clickable
+    --------------------------------------------- */
+
+    setupStatCards();
+
+
+    /* ---------------------------------------------
+       Load orders
+    --------------------------------------------- */
+
+    await loadOrders();
+
+
+    console.log(
+        "KANA Dashboard - terminé."
+    );
+
+}
+
+
+/* =====================================================
+   17. START
+===================================================== */
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeDashboard
+    );
+
+} else {
+
+    initializeDashboard();
+
+}

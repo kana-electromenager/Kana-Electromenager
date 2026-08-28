@@ -8,9 +8,10 @@ import {
     db,
     collection,
     addDoc,
-    serverTimestamp
+    serverTimestamp,
+    doc,
+    getDoc
 } from "./firebase.js";
-
 
 /* =====================================================
    1. GET PRODUCT ID
@@ -847,77 +848,54 @@ const wilayas = {
 };
 
 
-/* =====================================================
-   4. GET ALL PRODUCTS
-===================================================== */
-
-function getAllProducts() {
-
-    let allProducts = [];
-
-    if (
-        typeof productsData !== "undefined" &&
-        Array.isArray(productsData)
-    ) {
-        allProducts = [
-            ...productsData
-        ];
-    }
-
-    try {
-
-        const savedProducts =
-            localStorage.getItem("kanaProducts");
-
-        if (savedProducts) {
-
-            const adminProducts =
-                JSON.parse(savedProducts);
-
-            if (Array.isArray(adminProducts)) {
-
-                allProducts = [
-                    ...allProducts,
-                    ...adminProducts
-                ];
-
-            }
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Erreur produits Admin :",
-            error
-        );
-
-    }
-
-    return allProducts;
-}
-
 
 /* =====================================================
-   5. GET PRODUCT
+   4. GET PRODUCT FROM FIRESTORE
 ===================================================== */
 
-function getProduct() {
+async function getProduct() {
 
     if (!productId) {
         return null;
     }
 
-    const allProducts =
-        getAllProducts();
+    try {
 
-    return allProducts.find(
-        product =>
-            String(product.id) ===
-            String(productId)
-    );
+        const productRef =
+            doc(
+                db,
+                "products",
+                productId
+            );
+
+        const snapshot =
+            await getDoc(productRef);
+
+        if (!snapshot.exists()) {
+
+            console.error(
+                "Produit introuvable dans Firestore :",
+                productId
+            );
+
+            return null;
+        }
+
+        return {
+            id: snapshot.id,
+            ...snapshot.data()
+        };
+
+    } catch (error) {
+
+        console.error(
+            "Erreur lors de la récupération du produit Firestore :",
+            error
+        );
+
+        return null;
+    }
 }
-
 
 /* =====================================================
    6. FORMAT PRICE
@@ -1406,10 +1384,8 @@ if (checkoutForm) {
 
             event.preventDefault();
 
-
             const product =
-                getProduct();
-
+                await getProduct();
 
             if (!product) {
 
@@ -1418,46 +1394,33 @@ if (checkoutForm) {
                 );
 
                 return;
-
             }
 
-
-            await createOrder(
-                product
-            );
+            await createOrder(product);
 
         }
     );
 
 }
 
-
 /* =====================================================
    14. INITIALIZE
 ===================================================== */
 
-function initCheckout() {
+async function initCheckout() {
 
     console.log(
         "KANA Checkout initialisation..."
     );
 
-
     const product =
-        getProduct();
-
+        await getProduct();
 
     displayCheckoutProduct(
         product
     );
 
-
     loadWilayas();
-
-
-    /*
-       Commune starts disabled.
-    */
 
     if (communeSelect) {
 
@@ -1465,12 +1428,10 @@ function initCheckout() {
 
     }
 
-
     console.log(
         "Checkout prêt."
     );
 
 }
-
 
 initCheckout();

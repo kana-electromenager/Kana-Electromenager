@@ -1,945 +1,171 @@
-/* =====================================================
-   KANA ÉLECTROMÉNAGER
-   PRODUCT DETAILS PAGE
-   FIRESTORE VERSION
-===================================================== */
+/* KANA product detail — reads the Firestore document named in ?id=. */
+import { db, doc, getDoc } from "./firebase.js";
 
-import {
-    db,
-    collection,
-    getDocs
-} from "./firebase.js";
+const productId = new URLSearchParams(window.location.search).get("id");
+const image = document.getElementById("productImage");
+const brand = document.getElementById("productBrand");
+const name = document.getElementById("productName");
+const description = document.getElementById("productDescription");
+const price = document.getElementById("productPrice");
+const availability = document.getElementById("productAvailability");
+const breadcrumb = document.getElementById("breadcrumbProduct");
+const whatsapp = document.getElementById("whatsappProduct");
+const order = document.getElementById("orderProduct");
+const addToCart = document.getElementById("addToCartProduct");
+const installmentButtons = document.querySelectorAll(".installment-options button");
+const installmentPrice = document.getElementById("installmentPrice");
 
-
-/* =====================================================
-   1. GET PRODUCT ID
-===================================================== */
-
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const productId =
-    urlParams.get("id");
-
-
-/* =====================================================
-   2. PAGE ELEMENTS
-===================================================== */
-
-const productImage =
-    document.getElementById(
-        "productImage"
-    );
-
-const productBrand =
-    document.getElementById(
-        "productBrand"
-    );
-
-const productName =
-    document.getElementById(
-        "productName"
-    );
-
-const productDescription =
-    document.getElementById(
-        "productDescription"
-    );
-
-const productPrice =
-    document.getElementById(
-        "productPrice"
-    );
-
-const productAvailability =
-    document.getElementById(
-        "productAvailability"
-    );
-
-const breadcrumbProduct =
-    document.getElementById(
-        "breadcrumbProduct"
-    );
-
-const whatsappProduct =
-    document.getElementById(
-        "whatsappProduct"
-    );
-
-const orderProduct =
-    document.getElementById(
-        "orderProduct"
-    );
-
-const addToCartProduct =
-    document.getElementById(
-        "addToCartProduct"
-    );
-
-
-/* =====================================================
-   3. INSTALLMENT ELEMENTS
-===================================================== */
-
-const installmentButtons =
-    document.querySelectorAll(
-        ".installment-options button"
-    );
-
-const installmentPrice =
-    document.getElementById(
-        "installmentPrice"
-    );
-
-
-/* =====================================================
-   4. GET PRODUCTS FROM FIRESTORE
-===================================================== */
-
-async function getAllProducts() {
-
-    try {
-
-        const productsRef =
-            collection(
-                db,
-                "products"
-            );
-
-        const snapshot =
-            await getDocs(
-                productsRef
-            );
-
-        const products =
-            snapshot.docs.map(
-                productDocument => ({
-
-                    id:
-                        productDocument.id,
-
-                    ...productDocument.data()
-
-                })
-            );
-
-        console.log(
-            "KANA product details - Firestore products:",
-            products
-        );
-
-        return products;
-
-    } catch (error) {
-
-        console.error(
-            "Erreur Firebase - chargement des produits:",
-            error
-        );
-
-        return [];
-
-    }
-
+async function loadProduct() {
+    if (!productId || productId.includes("/")) return null;
+    const snapshot = await getDoc(doc(db, "products", productId));
+    if (!snapshot.exists()) return null;
+    return { id: snapshot.id, ...snapshot.data() };
 }
 
-
-/* =====================================================
-   5. FIND PRODUCT
-===================================================== */
-
-async function getProduct() {
-
-    if (!productId) {
-
-        console.error(
-            "Aucun ID produit dans l'URL."
-        );
-
-        return null;
-
-    }
-
-
-    const allProducts =
-        await getAllProducts();
-
-
-    const product =
-        allProducts.find(
-            product =>
-                String(product.id) ===
-                String(productId)
-        );
-
-
-    console.log(
-        "KANA product ID:",
-        productId
-    );
-
-    console.log(
-        "KANA selected product:",
-        product
-    );
-
-
-    return product || null;
-
-}
-
-
-/* =====================================================
-   6. FORMAT PRICE
-===================================================== */
-
-function formatPrice(price) {
-
-    if (
-        price === undefined ||
-        price === null ||
-        price === ""
-    ) {
-
+function formatPrice(value) {
+    const number = Number(value);
+    if (value === "" || value === null || value === undefined || !Number.isFinite(number)) {
         return "Prix sur demande";
-
     }
-
-
-    const number =
-        Number(price);
-
-
-    if (Number.isNaN(number)) {
-
-        return `${price} DA`;
-
-    }
-
-
-    return (
-        `${number.toLocaleString(
-            "fr-FR"
-        )} DA`
-    );
-
+    return number.toLocaleString("fr-FR") + " DA";
 }
 
-
-/* =====================================================
-   7. INSTALLMENT PAYMENT
-===================================================== */
-
-function setupInstallments(
-    product
-) {
-
-    if (
-        !installmentButtons.length ||
-        !installmentPrice
-    ) {
-
-        return;
-
+function getAvailability(product) {
+    if (product.availability === "Disponible" || product.availability === "Indisponible") {
+        return product.availability;
     }
+    return Number(product.stock) > 0 ? "Disponible" : "Indisponible";
+}
 
+function configureInstallments(product) {
+    const amount = Number(product.price);
+    const enabled = Number.isFinite(amount) && amount > 0;
+    if (installmentPrice) installmentPrice.textContent = "—";
 
-    const price =
-        Number(product.price);
+    installmentButtons.forEach(function (button) {
+        button.disabled = !enabled;
+        button.classList.remove("active");
+        button.onclick = null;
+        if (!enabled) return;
 
-
-    if (
-        Number.isNaN(price) ||
-        price <= 0
-    ) {
-
-        installmentButtons.forEach(
-            button => {
-
-                button.disabled =
-                    true;
-
+        button.onclick = function () {
+            const months = Number(button.dataset.months);
+            if (!Number.isFinite(months) || months <= 0) return;
+            installmentButtons.forEach(function (item) { item.classList.remove("active"); });
+            button.classList.add("active");
+            if (installmentPrice) {
+                installmentPrice.textContent =
+                    (amount / months).toLocaleString("fr-FR", { maximumFractionDigits: 0 }) +
+                    " DA / mois";
             }
-        );
-
-
-        installmentPrice.textContent =
-            "—";
-
-        return;
-
-    }
-
-
-    installmentPrice.textContent =
-        "—";
-
-
-    installmentButtons.forEach(
-        button => {
-
-            button.disabled =
-                false;
-
-            button.classList.remove(
-                "active"
-            );
-
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const months =
-                        Number(
-                            button.dataset.months
-                        );
-
-
-                    if (
-                        Number.isNaN(
-                            months
-                        ) ||
-                        months <= 0
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const monthlyPrice =
-                        price / months;
-
-
-                    installmentPrice.textContent =
-                        `${monthlyPrice.toLocaleString(
-                            "fr-FR",
-                            {
-                                maximumFractionDigits: 0
-                            }
-                        )} DA / mois`;
-
-
-                    installmentButtons.forEach(
-                        btn => {
-
-                            btn.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
-                        "active"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   8. DISPLAY PRODUCT
-===================================================== */
-
-function displayProduct(
-    product
-) {
-
-    if (!product) {
-
-        showProductNotFound();
-
-        return;
-
-    }
-
-
-    /* =================================================
-       IMAGE
-    ================================================= */
-
-    if (productImage) {
-
-        if (product.image) {
-
-            productImage.src =
-                product.image;
-
-            productImage.alt =
-                product.name ||
-                "Produit";
-
-            productImage.style.display =
-                "block";
-
-        } else {
-
-            productImage.removeAttribute(
-                "src"
-            );
-
-            productImage.alt =
-                product.name ||
-                "Produit";
-
-            productImage.style.display =
-                "none";
-
-        }
-
-    }
-
-
-    /* =================================================
-       BRAND
-    ================================================= */
-
-    if (productBrand) {
-
-        productBrand.textContent =
-            product.brand ||
-            "KANA";
-
-    }
-
-
-    /* =================================================
-       NAME
-    ================================================= */
-
-    if (productName) {
-
-        productName.textContent =
-            product.name ||
-            "Produit";
-
-    }
-
-
-    /* =================================================
-       DESCRIPTION
-    ================================================= */
-
-    if (productDescription) {
-
-        productDescription.textContent =
-            product.description ||
-            "Découvrez notre produit.";
-
-    }
-
-
-    /* =================================================
-       PRICE
-    ================================================= */
-
-    if (productPrice) {
-
-        productPrice.textContent =
-            formatPrice(
-                product.price
-            );
-
-    }
-
-
-    /* =================================================
-       AVAILABILITY
-    ================================================= */
-
-    if (productAvailability) {
-
-        productAvailability.textContent =
-            product.availability ||
-            (
-                Number(product.stock) > 0
-                    ? "Disponible"
-                    : "Indisponible"
-            );
-
-    }
-
-
-    /* =================================================
-       BREADCRUMB
-    ================================================= */
-
-    if (breadcrumbProduct) {
-
-        breadcrumbProduct.textContent =
-            product.name ||
-            "PRODUIT";
-
-    }
-
-
-    /* =================================================
-       TITLE
-    ================================================= */
-
-    document.title =
-        `${product.name || "Produit"} | KANA`;
-
-
-    /* =================================================
-       INSTALLMENTS
-    ================================================= */
-
-    setupInstallments(
-        product
-    );
-
-
-    /* =================================================
-       WHATSAPP
-    ================================================= */
-
-    setupWhatsApp(
-        product
-    );
-
-
-    /* =================================================
-       CART
-    ================================================= */
-
-    setupAddToCart(
-        product
-    );
-
-
-    /* =================================================
-       ORDER
-    ================================================= */
-
-    setupOrder(
-        product
-    );
-
-}
-
-
-/* =====================================================
-   9. ADD TO CART
-===================================================== */
-
-function setupAddToCart(
-    product
-) {
-
-    if (!addToCartProduct) {
-
-        return;
-
-    }
-
-
-    addToCartProduct.onclick =
-        function () {
-
-            addProductToCart(
-                product
-            );
-
         };
-
+    });
 }
 
-
-/* =====================================================
-   10. ADD PRODUCT TO CART
-===================================================== */
-
-function addProductToCart(
-    product
-) {
-
+function addProductToCart(product) {
     let cart = [];
-
-
     try {
-
-        const savedCart =
-            localStorage.getItem(
-                "kanaCart"
-            );
-
-
-        if (savedCart) {
-
-            const parsedCart =
-                JSON.parse(
-                    savedCart
-                );
-
-
-            if (
-                Array.isArray(
-                    parsedCart
-                )
-            ) {
-
-                cart =
-                    parsedCart;
-
-            }
-
-        }
-
+        const saved = localStorage.getItem("kanaCart");
+        const parsed = saved ? JSON.parse(saved) : [];
+        if (Array.isArray(parsed)) cart = parsed;
     } catch (error) {
-
-        console.error(
-            "Erreur lors du chargement du panier:",
-            error
-        );
-
+        console.error("Erreur de lecture du panier :", error);
     }
 
-
-    const existingProduct =
-        cart.find(
-            item =>
-                String(item.id) ===
-                String(product.id)
-        );
-
-
-    if (existingProduct) {
-
-        existingProduct.quantity =
-            Number(
-                existingProduct.quantity ||
-                1
-            ) + 1;
-
+    const existing = cart.find(function (item) { return String(item.id) === String(product.id); });
+    if (existing) {
+        existing.quantity = Number(existing.quantity || 1) + 1;
     } else {
-
         cart.push({
-
-            id:
-                product.id,
-
-            name:
-                product.name ||
-                "Produit",
-
-            price:
-                product.price ?? 0,
-
-            image:
-                product.image ||
-                "",
-
-            brand:
-                product.brand ||
-                "KANA",
-
-            category:
-                product.category ||
-                "",
-
-            type:
-                product.type ||
-                "",
-
-            quantity:
-                1
-
+            id: product.id,
+            name: product.name || "Produit",
+            price: product.price ?? 0,
+            image: product.image || "",
+            brand: product.brand || "KANA",
+            category: product.category || "",
+            type: product.type || "",
+            quantity: 1
         });
-
     }
-
-
-    try {
-
-        localStorage.setItem(
-            "kanaCart",
-            JSON.stringify(
-                cart
-            )
-        );
-
-
-        showAddedToCart();
-
-    } catch (error) {
-
-        console.error(
-            "Erreur lors de l'enregistrement du panier:",
-            error
-        );
-
-    }
-
+    localStorage.setItem("kanaCart", JSON.stringify(cart));
 }
 
+function configureActions(product) {
+    if (whatsapp) {
+        const message = "Bonjour, je suis intéressé(e) par le produit : " + (product.name || "");
+        whatsapp.href = "https://wa.me/213799846032?text=" + encodeURIComponent(message);
+    }
+    if (order) order.href = "checkout.html?id=" + encodeURIComponent(product.id);
+    if (addToCart) {
+        addToCart.onclick = function () {
+            try {
+                addProductToCart(product);
+                const original = addToCart.dataset.originalText || addToCart.textContent;
+                addToCart.dataset.originalText = original;
+                addToCart.textContent = "AJOUTÉ AU PANIER ✓";
+                window.setTimeout(function () { addToCart.textContent = original; }, 1500);
+            } catch (error) {
+                console.error("Erreur d'enregistrement du panier :", error);
+            }
+        };
+    }
+}
 
-/* =====================================================
-   11. SHOW ADDED MESSAGE
-===================================================== */
+function showNotFound() {
+    if (image) image.style.display = "none";
+    if (brand) brand.textContent = "KANA";
+    if (name) name.textContent = "Produit introuvable";
+    if (description) description.textContent = "Ce produit n'existe pas ou n'est plus disponible.";
+    if (price) price.textContent = "";
+    if (availability) availability.textContent = "Indisponible";
+    if (breadcrumb) breadcrumb.textContent = "PRODUIT";
+    if (installmentPrice) installmentPrice.textContent = "—";
+    installmentButtons.forEach(function (button) {
+        button.disabled = true;
+        button.classList.remove("active");
+    });
+    [whatsapp, order, addToCart].forEach(function (element) {
+        if (element) element.style.display = "none";
+    });
+}
 
-function showAddedToCart() {
-
-    if (!addToCartProduct) {
-
+function displayProduct(product) {
+    if (!product) {
+        showNotFound();
         return;
-
     }
 
-
-    const originalText =
-        addToCartProduct.dataset.originalText ||
-        addToCartProduct.textContent;
-
-
-    addToCartProduct.dataset.originalText =
-        originalText;
-
-
-    addToCartProduct.textContent =
-        "AJOUTÉ AU PANIER ✓";
-
-
-    setTimeout(
-        function () {
-
-            addToCartProduct.textContent =
-                originalText;
-
-        },
-        1500
-    );
-
-}
-
-
-/* =====================================================
-   12. WHATSAPP
-===================================================== */
-
-function setupWhatsApp(
-    product
-) {
-
-    if (!whatsappProduct) {
-
-        return;
-
-    }
-
-
-    const phoneNumber =
-        "213799846032";
-
-
-    const message =
-        `Bonjour, je suis intéressé(e) par le produit : ${
-            product.name || ""
-        }`;
-
-
-    const whatsappURL =
-        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-            message
-        )}`;
-
-
-    whatsappProduct.href =
-        whatsappURL;
-
-}
-
-
-/* =====================================================
-   13. ORDER
-===================================================== */
-
-function setupOrder(
-    product
-) {
-
-    if (!orderProduct) {
-
-        return;
-
-    }
-
-
-    orderProduct.href =
-        `checkout.html?id=${encodeURIComponent(
-            product.id
-        )}`;
-
-}
-
-
-/* =====================================================
-   14. PRODUCT NOT FOUND
-===================================================== */
-
-function showProductNotFound() {
-
-    if (productImage) {
-
-        productImage.style.display =
-            "none";
-
-    }
-
-
-    if (productBrand) {
-
-        productBrand.textContent =
-            "KANA";
-
-    }
-
-
-    if (productName) {
-
-        productName.textContent =
-            "Produit introuvable";
-
-    }
-
-
-    if (productDescription) {
-
-        productDescription.textContent =
-            "Ce produit n'existe pas ou n'est plus disponible.";
-
-    }
-
-
-    if (productPrice) {
-
-        productPrice.textContent =
-            "";
-
-    }
-
-
-    if (productAvailability) {
-
-        productAvailability.textContent =
-            "Indisponible";
-
-    }
-
-
-    if (breadcrumbProduct) {
-
-        breadcrumbProduct.textContent =
-            "PRODUIT";
-
-    }
-
-
-    installmentButtons.forEach(
-        button => {
-
-            button.disabled =
-                true;
-
-            button.classList.remove(
-                "active"
-            );
-
+    if (image) {
+        image.alt = product.name || "Produit";
+        if (product.image) {
+            image.src = product.image;
+            image.style.display = "block";
+            image.onerror = function () { image.style.display = "none"; };
+        } else {
+            image.removeAttribute("src");
+            image.style.display = "none";
         }
-    );
-
-
-    if (installmentPrice) {
-
-        installmentPrice.textContent =
-            "—";
-
     }
+    if (brand) brand.textContent = product.brand || "KANA";
+    if (name) name.textContent = product.name || "Produit";
+    if (description) description.textContent = product.description || "Découvrez notre produit.";
+    if (price) price.textContent = formatPrice(product.price);
+    if (availability) availability.textContent = getAvailability(product);
+    if (breadcrumb) breadcrumb.textContent = product.name || "PRODUIT";
 
-
-    if (whatsappProduct) {
-
-        whatsappProduct.style.display =
-            "none";
-
-    }
-
-
-    if (orderProduct) {
-
-        orderProduct.style.display =
-            "none";
-
-    }
-
-
-    if (addToCartProduct) {
-
-        addToCartProduct.style.display =
-            "none";
-
-    }
-
+    document.title = (product.name || "Produit") + " | KANA";
+    configureInstallments(product);
+    configureActions(product);
 }
 
-
-/* =====================================================
-   15. INITIALIZE
-===================================================== */
-
-async function initProductPage() {
-
-    console.log(
-        "KANA Product page initialized."
-    );
-
-    console.log(
-        "Product ID:",
-        productId
-    );
-
-
-    if (productImage) {
-
-        productImage.style.display =
-            "block";
-
+async function initialize() {
+    try {
+        displayProduct(await loadProduct());
+    } catch (error) {
+        console.error("Erreur Firestore lors du chargement du produit :", error);
+        showNotFound();
     }
-
-
-    const product =
-        await getProduct();
-
-
-    displayProduct(
-        product
-    );
-
 }
 
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initProductPage
-    );
-
-} else {
-
-    initProductPage();
-
-}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialize);
+else initialize();

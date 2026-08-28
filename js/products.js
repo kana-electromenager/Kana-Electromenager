@@ -1,1085 +1,193 @@
-/* =====================================================
-   KANA ÉLECTROMÉNAGER
-   PRODUCTS PAGE
-   FIRESTORE VERSION
-===================================================== */
+/* KANA public catalogue — Firestore is the only product source. */
+import { db, collection, getDocs } from "./firebase.js";
 
-import {
-    db,
-    collection,
-    getDocs
-} from "./firebase.js";
-
-
-/* =====================================================
-   URL
-===================================================== */
-
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const currentCategory =
-    urlParams.get("category");
-
-const currentType =
-    urlParams.get("type");
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const productsCategoryLabel =
-    document.getElementById(
-        "productsCategoryLabel"
-    );
-
-const productsCategoryTitle =
-    document.getElementById(
-        "productsCategoryTitle"
-    );
-
-const productsCategoryDescription =
-    document.getElementById(
-        "productsCategoryDescription"
-    );
-
-const productsTitle =
-    document.getElementById(
-        "productsTitle"
-    );
-
-const productsCount =
-    document.getElementById(
-        "productsCount"
-    );
-
-const productsContainer =
-    document.getElementById(
-        "productsContainer"
-    );
-
-const emptyProducts =
-    document.getElementById(
-        "emptyProducts"
-    );
-
-const sortProducts =
-    document.getElementById(
-        "sortProducts"
-    );
-
-
-/* =====================================================
-   CATEGORY DATABASE
-===================================================== */
+const params = new URLSearchParams(window.location.search);
+const requestedCategory = params.get("category");
+const requestedType = params.get("type");
+const container = document.getElementById("productsContainer");
+const emptyState = document.getElementById("emptyProducts");
+const count = document.getElementById("productsCount");
+const sortSelect = document.getElementById("sortProducts");
 
 const categoryInfo = {
-
-    "maison-entretien": {
-
-        label:
-            "MAISON & ENTRETIEN",
-
-        title:
-            "Maison & Entretien",
-
-        description:
-            "Découvrez notre sélection de produits pour la maison et l'entretien."
-
-    },
-
-    "refrigerateurs-congelateurs": {
-
-        label:
-            "RÉFRIGÉRATEURS - CONGÉLATEURS",
-
-        title:
-            "Réfrigérateurs - Congélateurs",
-
-        description:
-            "Découvrez notre sélection de réfrigérateurs et de congélateurs."
-
-    },
-
-    "televisions": {
-
-        label:
-            "TÉLÉVISIONS",
-
-        title:
-            "Télévisions",
-
-        description:
-            "Découvrez notre sélection de télévisions et Smart TV."
-
-    },
-
-    "machines-a-laver": {
-
-        label:
-            "MACHINES À LAVER",
-
-        title:
-            "Machines à laver",
-
-        description:
-            "Découvrez notre sélection de machines à laver."
-
-    },
-
-    "lave-vaisselle": {
-
-        label:
-            "LAVE-VAISSELLE",
-
-        title:
-            "Lave-vaisselle",
-
-        description:
-            "Découvrez notre sélection de lave-vaisselle."
-
-    },
-
-    "cuisine": {
-
-        label:
-            "CUISINE",
-
-        title:
-            "Cuisine",
-
-        description:
-            "Découvrez notre sélection d'appareils pour la cuisine."
-
-    }
-
+    "maison-entretien": ["MAISON & ENTRETIEN", "Maison & Entretien", "Découvrez notre sélection de produits pour la maison et l'entretien."],
+    "refrigerateurs-congelateurs": ["RÉFRIGÉRATEURS - CONGÉLATEURS", "Réfrigérateurs - Congélateurs", "Découvrez notre sélection de réfrigérateurs et de congélateurs."],
+    televisions: ["TÉLÉVISIONS", "Télévisions", "Découvrez notre sélection de télévisions et Smart TV."],
+    "machines-a-laver": ["MACHINES À LAVER", "Machines à laver", "Découvrez notre sélection de machines à laver."],
+    "lave-vaisselle": ["LAVE-VAISSELLE", "Lave-vaisselle", "Découvrez notre sélection de lave-vaisselle."],
+    cuisine: ["CUISINE", "Cuisine", "Découvrez notre sélection d'appareils pour la cuisine."]
 };
-
-
-/* =====================================================
-   NORMALIZE
-===================================================== */
-
-function normalizeText(value) {
-
-    return String(value || "")
-        .toLowerCase()
-        .trim()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/œ/g, "oe")
-        .replace(/æ/g, "ae")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-
-}
-
-
-/* =====================================================
-   CATEGORY ALIASES
-===================================================== */
 
 const categoryAliases = {
-
-    "maison-entretien":
-        "maison-entretien",
-
-    "maison-et-entretien":
-        "maison-entretien",
-
-    "refrigerateur":
-        "refrigerateurs-congelateurs",
-
-    "refrigerateurs":
-        "refrigerateurs-congelateurs",
-
-    "congelateur":
-        "refrigerateurs-congelateurs",
-
-    "congelateurs":
-        "refrigerateurs-congelateurs",
-
-    "refrigerateur-congelateur":
-        "refrigerateurs-congelateurs",
-
-    "refrigerateurs-congelateurs":
-        "refrigerateurs-congelateurs",
-
-    "tv":
-        "televisions",
-
-    "television":
-        "televisions",
-
-    "televisions":
-        "televisions",
-
-    "machine-a-laver":
-        "machines-a-laver",
-
-    "machines-a-laver":
-        "machines-a-laver",
-
-    "lave-vaisselle":
-        "lave-vaisselle",
-
-    "cuisine":
-        "cuisine"
-
+    "maison-et-entretien": "maison-entretien",
+    refrigerateur: "refrigerateurs-congelateurs",
+    refrigerateurs: "refrigerateurs-congelateurs",
+    congelateur: "refrigerateurs-congelateurs",
+    congelateurs: "refrigerateurs-congelateurs",
+    "refrigerateur-congelateur": "refrigerateurs-congelateurs",
+    tv: "televisions",
+    television: "televisions",
+    "machine-a-laver": "machines-a-laver"
 };
-
-
-/* =====================================================
-   TYPE ALIASES
-===================================================== */
 
 const typeAliases = {
-
-    "aspirateur":
-        "aspirateurs",
-
-    "aspirateurs":
-        "aspirateurs",
-
-    "ventilateur":
-        "ventilateurs",
-
-    "ventilateurs":
-        "ventilateurs",
-
-    "climatiseur":
-        "climatisation",
-
-    "climatiseurs":
-        "climatisation",
-
-    "climatisation":
-        "climatisation",
-
-    "chauffage":
-        "chauffages",
-
-    "chauffages":
-        "chauffages",
-
-    "chauffe-eau":
-        "chauffe-eau",
-
-    "chauffe-eaux":
-        "chauffe-eau",
-
-    "refrigerateur":
-        "refrigerateurs",
-
-    "refrigerateurs":
-        "refrigerateurs",
-
-    "congelateur":
-        "congelateurs",
-
-    "congelateurs":
-        "congelateurs",
-
-    "television":
-        "televisions",
-
-    "televisions":
-        "televisions",
-
-    "machine-a-laver":
-        "machines-a-laver",
-
-    "machines-a-laver":
-        "machines-a-laver",
-
-    "lave-vaisselle":
-        "lave-vaisselle",
-
-    "machine-a-cafe":
-        "machines-a-cafe",
-
-    "machines-a-cafe":
-        "machines-a-cafe",
-
-    "air-fryer":
-        "air-fryer",
-
-    "air-fryers":
-        "air-fryer",
-
-    "blender-hachoir-mixeur-batteur":
-        "blender-hachoir-mixeur-batteur",
-
-    "micro-onde":
-        "micro-ondes",
-
-    "micro-ondes":
-        "micro-ondes",
-
-    "four":
-        "fours",
-
-    "fours":
-        "fours",
-
-    "cuisiniere":
-        "cuisinieres",
-
-    "cuisinieres":
-        "cuisinieres",
-
-    "petran":
-        "petran"
-
+    aspirateur: "aspirateurs", ventilateur: "ventilateurs",
+    climatiseur: "climatisation", climatiseurs: "climatisation",
+    chauffage: "chauffages", "chauffe-eaux": "chauffe-eau",
+    refrigerateur: "refrigerateurs", congelateur: "congelateurs",
+    television: "televisions", "machine-a-laver": "machines-a-laver",
+    "machine-a-cafe": "machines-a-cafe", "air-fryers": "air-fryer",
+    "micro-onde": "micro-ondes", four: "fours", cuisiniere: "cuisinieres"
 };
-
-
-/* =====================================================
-   CATEGORY KEY
-===================================================== */
-
-function getCategoryKey(value) {
-
-    const normalized =
-        normalizeText(value);
-
-    return (
-        categoryAliases[normalized] ||
-        normalized
-    );
-
-}
-
-
-/* =====================================================
-   TYPE KEY
-===================================================== */
-
-function getTypeKey(value) {
-
-    const normalized =
-        normalizeText(value);
-
-    return (
-        typeAliases[normalized] ||
-        normalized
-    );
-
-}
-
-
-/* =====================================================
-   TYPE NAMES
-===================================================== */
 
 const typeNames = {
-
-    "aspirateurs":
-        "Aspirateurs",
-
-    "ventilateurs":
-        "Ventilateurs",
-
-    "climatisation":
-        "Climatisation",
-
-    "chauffages":
-        "Chauffages",
-
-    "chauffe-eau":
-        "Chauffe-eau",
-
-    "refrigerateurs":
-        "Réfrigérateurs",
-
-    "congelateurs":
-        "Congélateurs",
-
-    "televisions":
-        "Télévisions",
-
-    "machines-a-laver":
-        "Machines à laver",
-
-    "lave-vaisselle":
-        "Lave-vaisselle",
-
-    "machines-a-cafe":
-        "Machines à café",
-
-    "air-fryer":
-        "Air Fryer",
-
-    "blender-hachoir-mixeur-batteur":
-        "Hachoir - Mixeur - Batteur - Blender",
-
-    "micro-ondes":
-        "Micro-ondes",
-
-    "fours":
-        "Fours",
-
-    "cuisinieres":
-        "Cuisinières",
-
-    "petran":
-        "Petran"
-
+    aspirateurs: "Aspirateurs", ventilateurs: "Ventilateurs", climatisation: "Climatisation",
+    chauffages: "Chauffages", "chauffe-eau": "Chauffe-eau", refrigerateurs: "Réfrigérateurs",
+    congelateurs: "Congélateurs", televisions: "Télévisions", "machines-a-laver": "Machines à laver",
+    "lave-vaisselle": "Lave-vaisselle", "machines-a-cafe": "Machines à café", "air-fryer": "Air Fryer",
+    "blender-hachoir-mixeur-batteur": "Hachoir - Mixeur - Batteur - Blender",
+    "micro-ondes": "Micro-ondes", fours: "Fours", cuisinieres: "Cuisinières", petran: "Petran"
 };
 
-
-function getTypeDisplayName(type) {
-
-    const key =
-        getTypeKey(type);
-
-    return (
-        typeNames[key] ||
-        "Produits"
-    );
-
+function normalize(value) {
+    return String(value || "").toLowerCase().trim().normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "").replace(/œ/g, "oe").replace(/æ/g, "ae")
+        .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
-
-/* =====================================================
-   CATEGORY INFO
-===================================================== */
-
-function getCategoryInfo() {
-
-    const key =
-        getCategoryKey(
-            currentCategory
-        );
-
-    return (
-        categoryInfo[key] || {
-
-            label:
-                "KANA ÉLECTROMÉNAGER",
-
-            title:
-                "Nos produits",
-
-            description:
-                "Découvrez notre sélection de produits."
-
-        }
-    );
-
+function categoryKey(value) {
+    const key = normalize(value);
+    return categoryAliases[key] || key;
 }
 
-
-/* =====================================================
-   PAGE INFORMATION
-===================================================== */
-
-function updatePageInformation() {
-
-    const category =
-        getCategoryInfo();
-
-
-    if (productsCategoryLabel) {
-
-        productsCategoryLabel.textContent =
-            category.label;
-
-    }
-
-
-    if (productsCategoryTitle) {
-
-        productsCategoryTitle.textContent =
-            category.title;
-
-    }
-
-
-    if (productsCategoryDescription) {
-
-        productsCategoryDescription.textContent =
-            category.description;
-
-    }
-
-
-    if (productsTitle) {
-
-        productsTitle.textContent =
-            currentType
-                ? getTypeDisplayName(currentType)
-                : category.title;
-
-    }
-
-
-    document.title =
-        `${category.title} | KANA`;
-
+function typeKey(value) {
+    const key = normalize(value);
+    return typeAliases[key] || key;
 }
 
-
-/* =====================================================
-   GET PRODUCTS FROM FIRESTORE
-===================================================== */
-
-async function getAllProducts() {
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "products"
-                )
-            );
-
-
-        const products =
-            snapshot.docs.map(
-                productDocument => ({
-
-                    id:
-                        productDocument.id,
-
-                    ...productDocument.data()
-
-                })
-            );
-
-
-        console.log(
-            "KANA — produits Firestore:",
-            products
-        );
-
-
-        return products;
-
-    } catch (error) {
-
-        console.error(
-            "Erreur Firebase:",
-            error
-        );
-
-
-        return [];
-
-    }
-
+function setPageInformation() {
+    const info = categoryInfo[categoryKey(requestedCategory)] ||
+        ["KANA ÉLECTROMÉNAGER", "Nos produits", "Découvrez notre sélection de produits."];
+    const type = typeNames[typeKey(requestedType)] || "Produits";
+    const setText = function (id, text) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = text;
+    };
+    setText("productsCategoryLabel", info[0]);
+    setText("productsCategoryTitle", info[1]);
+    setText("productsCategoryDescription", info[2]);
+    setText("productsTitle", requestedType ? type : info[1]);
+    document.title = info[1] + " | KANA";
 }
 
-
-/* =====================================================
-   FILTER PRODUCTS
-===================================================== */
-
-function filterProducts(products) {
-
-    let filtered =
-        [...products];
-
-
-    /* CATEGORY */
-
-    if (
-        currentCategory &&
-        currentCategory.trim() !== ""
-    ) {
-
-        const requestedCategory =
-            getCategoryKey(
-                currentCategory
-            );
-
-
-        filtered =
-            filtered.filter(
-                product => {
-
-                    const productCategory =
-                        getCategoryKey(
-                            product.category
-                        );
-
-
-                    return (
-                        productCategory ===
-                        requestedCategory
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* TYPE */
-
-    if (
-        currentType &&
-        currentType.trim() !== ""
-    ) {
-
-        const requestedType =
-            getTypeKey(
-                currentType
-            );
-
-
-        filtered =
-            filtered.filter(
-                product => {
-
-                    const productType =
-                        getTypeKey(
-                            product.type
-                        );
-
-
-                    return (
-                        productType ===
-                        requestedType
-                    );
-
-                }
-            );
-
-    }
-
-
-    return filtered;
-
+function element(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
 }
 
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
+function productPrice(product) {
+    const wrapper = element("div", "product-price");
+    const amount = element("strong");
+    const price = Number(product.price);
+    if (product.price === "" || product.price === null || product.price === undefined || !Number.isFinite(price)) {
+        amount.textContent = "Prix sur demande";
+        wrapper.appendChild(amount);
+    } else {
+        amount.textContent = price.toLocaleString("fr-FR");
+        wrapper.append(amount, element("span", "", "DA"));
+    }
+    return wrapper;
 }
 
+function productCard(product) {
+    const card = element("article", "product-card");
+    const link = document.createElement("a");
+    link.href = "product.html?id=" + encodeURIComponent(product.id);
+    const imageBox = element("div", "product-image-container");
 
-/* =====================================================
-   PRICE
-===================================================== */
-
-function formatPrice(price) {
-
-    if (
-        price === undefined ||
-        price === null ||
-        price === ""
-    ) {
-
-        return `
-            <div class="product-price">
-                <strong>
-                    Prix sur demande
-                </strong>
-            </div>
-        `;
-
+    if (product.image) {
+        const image = document.createElement("img");
+        image.src = product.image;
+        image.alt = product.name || "Produit";
+        image.loading = "lazy";
+        image.onerror = function () {
+            imageBox.classList.add("no-image");
+            imageBox.replaceChildren(element("span", "", "Image indisponible"));
+        };
+        imageBox.appendChild(image);
+    } else {
+        imageBox.classList.add("no-image");
+        imageBox.appendChild(element("span", "", "Pas d'image"));
     }
 
-
-    const number =
-        Number(price);
-
-
-    if (Number.isNaN(number)) {
-
-        return `
-            <div class="product-price">
-                <strong>
-                    ${escapeHTML(price)}
-                </strong>
-            </div>
-        `;
-
-    }
-
-
-    return `
-        <div class="product-price">
-
-            <strong>
-                ${number.toLocaleString("fr-FR")}
-            </strong>
-
-            <span>
-                DA
-            </span>
-
-        </div>
-    `;
-
-}
-
-
-/* =====================================================
-   PRODUCT CARD
-===================================================== */
-
-function createProductCard(product) {
-
-    const card =
-        document.createElement("article");
-
-
-    card.className =
-        "product-card";
-
-
-    const image =
-        product.image || "";
-
-
-    /*
-     * IMPORTANT :
-     * product.image contient maintenant
-     * directement le Data URL Firestore.
-     *
-     * Donc :
-     *
-     * src="data:image/jpeg;base64,..."
-     *
-     * fonctionne sur PC, téléphone,
-     * tablette, etc.
-     */
-
-
-    let imageHTML = `
-
-        <div class="product-image-container no-image">
-
-            <span>
-                Pas d'image
-            </span>
-
-        </div>
-
-    `;
-
-
-    if (image) {
-
-        imageHTML = `
-
-            <div class="product-image-container">
-
-                <img
-                    src="${escapeHTML(image)}"
-                    alt="${escapeHTML(
-                        product.name ||
-                        "Produit"
-                    )}"
-                    loading="lazy"
-                >
-
-            </div>
-
-        `;
-
-    }
-
-
-    card.innerHTML = `
-
-        <a
-            href="product.html?id=${encodeURIComponent(
-                product.id
-            )}"
-        >
-
-            ${imageHTML}
-
-            <div class="product-info">
-
-                <h3 class="product-name">
-
-                    ${escapeHTML(
-                        product.name ||
-                        "Produit"
-                    )}
-
-                </h3>
-
-
-                ${
-                    product.brand
-                        ? `
-                            <span class="product-brand">
-                                ${escapeHTML(
-                                    product.brand
-                                )}
-                            </span>
-                        `
-                        : ""
-                }
-
-
-                ${formatPrice(
-                    product.price
-                )}
-
-
-                <div class="product-button">
-
-                    VOIR LE PRODUIT
-
-                </div>
-
-            </div>
-
-        </a>
-
-    `;
-
-
+    const info = element("div", "product-info");
+    info.appendChild(element("h3", "product-name", product.name || "Produit"));
+    if (product.brand) info.appendChild(element("span", "product-brand", product.brand));
+    info.appendChild(productPrice(product));
+    info.appendChild(element("div", "product-button", "VOIR LE PRODUIT"));
+    link.append(imageBox, info);
+    card.appendChild(link);
     return card;
-
 }
 
-
-/* =====================================================
-   DISPLAY PRODUCTS
-===================================================== */
-
-function displayProducts(products) {
-
-    if (!productsContainer) {
-
-        console.error(
-            "productsContainer introuvable."
-        );
-
-        return;
-
-    }
-
-
-    productsContainer.innerHTML =
-        "";
-
+function display(products, message) {
+    if (!container) return;
+    container.replaceChildren();
 
     if (!products.length) {
-
-        productsContainer.style.display =
-            "none";
-
-
-        if (emptyProducts) {
-
-            emptyProducts.hidden =
-                false;
-
-        }
-
-
-        if (productsCount) {
-
-            productsCount.textContent =
-                "Aucun produit disponible.";
-
-        }
-
-
+        container.style.display = "none";
+        if (emptyState) emptyState.hidden = false;
+        if (count) count.textContent = message || "Aucun produit disponible.";
         return;
-
     }
 
-
-    productsContainer.style.display =
-        "";
-
-
-    if (emptyProducts) {
-
-        emptyProducts.hidden =
-            true;
-
-    }
-
-
-    products.forEach(product => {
-
-        productsContainer.appendChild(
-            createProductCard(product)
-        );
-
-    });
-
-
-    if (productsCount) {
-
-        productsCount.textContent =
-            `${products.length} produit${
-                products.length > 1
-                    ? "s"
-                    : ""
-            } disponible${
-                products.length > 1
-                    ? "s"
-                    : ""
-            }.`;
-
-    }
-
+    container.style.display = "";
+    if (emptyState) emptyState.hidden = true;
+    if (count) count.textContent = products.length + (products.length > 1 ? " produits" : " produit");
+    products.forEach(function (product) { container.appendChild(productCard(product)); });
 }
 
+function sortProducts(products) {
+    const result = products.slice();
+    const price = function (item) {
+        const value = Number(item.price);
+        return Number.isFinite(value) ? value : Number.POSITIVE_INFINITY;
+    };
 
-/* =====================================================
-   SORT
-===================================================== */
-
-function sortProductsList(
-    products,
-    sortType
-) {
-
-    const sorted =
-        [...products];
-
-
-    if (sortType === "price-asc") {
-
-        sorted.sort(
-            (a, b) =>
-                Number(a.price || 0) -
-                Number(b.price || 0)
-        );
-
+    if (sortSelect && sortSelect.value === "price-asc") result.sort(function (a, b) { return price(a) - price(b); });
+    if (sortSelect && sortSelect.value === "price-desc") result.sort(function (a, b) { return price(b) - price(a); });
+    if (sortSelect && sortSelect.value === "name") {
+        result.sort(function (a, b) { return String(a.name || "").localeCompare(String(b.name || ""), "fr"); });
     }
-
-
-    if (sortType === "price-desc") {
-
-        sorted.sort(
-            (a, b) =>
-                Number(b.price || 0) -
-                Number(a.price || 0)
-        );
-
-    }
-
-
-    if (sortType === "name") {
-
-        sorted.sort(
-            (a, b) =>
-                String(a.name || "")
-                    .localeCompare(
-                        String(b.name || ""),
-                        "fr"
-                    )
-        );
-
-    }
-
-
-    return sorted;
-
+    return result;
 }
 
-
-/* =====================================================
-   INIT
-===================================================== */
-
-async function initProductsPage() {
-
-    updatePageInformation();
-
-
-    if (productsContainer) {
-
-        productsContainer.innerHTML = `
-            <p class="products-loading">
-                Chargement des produits...
-            </p>
-        `;
-
-    }
-
-
-    const allProducts =
-        await getAllProducts();
-
-
-    const filteredProducts =
-        filterProducts(
-            allProducts
-        );
-
-
-    console.log(
-        "KANA — produits filtrés:",
-        filteredProducts
-    );
-
-
-    displayProducts(
-        filteredProducts
-    );
-
-
-    if (sortProducts) {
-
-        sortProducts.addEventListener(
-            "change",
-            function () {
-
-                const sorted =
-                    sortProductsList(
-                        filteredProducts,
-                        this.value
-                    );
-
-
-                displayProducts(
-                    sorted
-                );
-
-            }
-        );
-
-    }
-
+async function loadCatalogue() {
+    const snapshot = await getDocs(collection(db, "products"));
+    return snapshot.docs.map(function (item) { return { id: item.id, ...item.data() }; });
 }
 
+async function initialize() {
+    setPageInformation();
+    if (container) container.replaceChildren(element("p", "products-loading", "Chargement des produits..."));
 
-/* =====================================================
-   DOM READY
-===================================================== */
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initProductsPage
-    );
-
-} else {
-
-    initProductsPage();
-
+    try {
+        const category = categoryKey(requestedCategory);
+        const type = typeKey(requestedType);
+        const filtered = (await loadCatalogue()).filter(function (product) {
+            return (!category || categoryKey(product.category) === category) &&
+                (!type || typeKey(product.type) === type);
+        });
+        const render = function () { display(sortProducts(filtered)); };
+        if (sortSelect) sortSelect.addEventListener("change", render);
+        render();
+    } catch (error) {
+        console.error("Erreur Firestore lors du chargement des produits :", error);
+        display([], "Impossible de charger les produits.");
+    }
 }
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialize);
+else initialize();

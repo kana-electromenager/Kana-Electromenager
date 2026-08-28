@@ -554,79 +554,90 @@ img {
 
 
 /* =====================================================
-   FOOTER — KANA ÉLECTROMÉNAGER
+   FOOTER
 ===================================================== */
 
 .footer {
+
     width: 100%;
-    padding: 42px 6% 25px;
+
+    padding: 70px 7% 30px;
 
     background: #050505;
+
     color: #ffffff;
 
-    border-top: 1px solid rgba(212, 175, 55, 0.20);
+    border-top: 1px solid
+        rgba(212, 175, 55, 0.20);
 
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    box-sizing: border-box;
 }
 
 
 /* =====================================================
-   BRAND
+   FOOTER BRAND
 ===================================================== */
 
 .footer-brand {
+
     display: flex;
-    flex-direction: row;
+
     align-items: center;
 
-    gap: 13px;
+    gap: 14px;
 
-    margin-bottom: 32px;
+    margin-bottom: 35px;
 }
 
+
 .footer-brand img {
+
     width: 52px;
+
     height: 52px;
 
     object-fit: contain;
+
     flex-shrink: 0;
 }
 
-.footer-brand .logo-icon {
-    font-size: 44px;
-    color: #ffffff;
-}
 
 .footer-brand > div {
+
     display: flex;
+
     flex-direction: column;
+
     align-items: flex-start;
 }
 
+
 .footer-brand strong {
+
     color: #ffffff;
 
-    font-family: "Times New Roman", Georgia, serif;
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
 
     font-size: 21px;
+
     font-weight: 500;
 
     letter-spacing: 1.5px;
-    line-height: 1;
-    white-space: nowrap;
+
+    line-height: 1.1;
 }
 
-.footer-brand span,
-.footer-brand .tagline {
-    margin-top: 5px;
+
+.footer-brand span {
+
+    margin-top: 6px;
 
     color: #d4af37;
 
     font-size: 9px;
+
     font-weight: 600;
 
     letter-spacing: 2px;
@@ -634,301 +645,403 @@ img {
 
 
 /* =====================================================
-   NOS MAGASINS
+   SEPARATOR
 ===================================================== */
 
-.footer-stores {
-    width: 100%;
-    max-width: 400px;
+.footer-separator {
 
-    margin-bottom: 20px;
+    width: 100%;
+
+    height: 1px;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    margin: 0 0 40px;
+}
+
+
+/* =====================================================
+   FOOTER GRID
+===================================================== */
+
+.footer-grid {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 45px;
+
+    margin-bottom: 55px;
+}
+
+
+/* =====================================================
+   FOOTER COLUMN
+===================================================== */
+
+.footer-column {
 
     display: flex;
+
     flex-direction: column;
+
     align-items: flex-start;
 }
 
-.footer-stores h3 {
-    margin: 0 0 17px;
+
+.footer-column h3 {
+
+    margin: 0 0 20px;
+
+    color: #d4af37;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+}
+
+
+.footer-column p {
+
+    max-width: 220px;
+
+    margin: 0;
+
+    color:
+     white (255, 255, 255, 0.55);
+
+    font-size: 11px;
+
+    line-height: 1.8;
+}
+
+
+/* =====================================================
+   FOOTER LINKS
+===================================================== */
+
+.footer-column a {
+
+    margin-bottom: 11px;
+
+    color:
+     white (255, 255, 255, 0.72);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    text-decoration: none;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+.footer-column a:hover {
+
+    color: #d4af37;
+
+    transform: translateX(3px);
+}
+
+
+/* =====================================================
+   ADMINISTRATION
+===================================================== */
+
+.footer-admin {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    margin-bottom: 35px;
+}
+
+
+.footer-admin h3 {
+
+    margin: 0 0 15px;
+
+    color: #d4af37;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+}
+
+
+.admin-access {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 11px 18px;
+
+    border: 1px solid
+        white (255, 255, 255, 0.35);
 
     color: #ffffff;
 
-    font-family: "Times New Roman", Georgia, serif;
+    font-size: 8px;
 
-    font-size: 13px;
-    font-weight: 400;
+    font-weight: 600;
 
     letter-spacing: 1.5px;
 
     text-transform: uppercase;
-}
-
-
-/* =====================================================
-   STORE
-===================================================== */
-
-.store {
-    width: 100%;
-
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-
-    display: flex;
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    border-bottom: 1px solid rgba(212, 175, 55, 0.18);
-}
-
-.store:last-child {
-    border-bottom: none;
-}
-
-.store p {
-    margin: 0 0 6px;
-
-    color: #ffffff;
-
-    font-size: 10px;
-    font-weight: 600;
-
-    letter-spacing: 0.5px;
-}
-
-.location-link {
-    display: inline-block;
-
-    color: #d4af37;
-
-    font-size: 9px;
-    font-weight: 600;
-
-    letter-spacing: 0.8px;
 
     text-decoration: none;
 
-    transition: color 0.3s ease;
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease;
 }
 
-.location-link:hover {
-    color: #ffffff;
-}
 
-
-/* =====================================================
-   ADMIN
-===================================================== */
-
-.footer-admin-link,
-.admin-access {
-    width: 100%;
-
-    display: block;
-
-    margin: 8px 0 25px;
-
-    color: #ffffff;
-
-    font-size: 9px;
-    font-weight: 600;
-
-    letter-spacing: 2px;
-
-    text-align: center;
-    text-decoration: none;
-
-    text-transform: uppercase;
-
-    transition: color 0.3s ease;
-}
-
-.footer-admin-link:hover,
 .admin-access:hover {
-    color: #d4af37;
+
+    background: #d4af37;
+
+    border-color: #d4af37;
+
+    color: #111111;
 }
 
 
 /* =====================================================
-   BOTTOM — COPYRIGHT + DEVELOPER
+   FOOTER BOTTOM
 ===================================================== */
 
 .footer-bottom {
+
     width: 100%;
 
-    display: flex; 
-    align-items: center;
-    justify-content: center;
+    display: flex;
 
-    gap: 10px;
+    align-items: center;
+
+    justify-content: center;
 
     text-align: center;
 }
 
-.footer-copy {
+
+.footer-bottom p {
+
     margin: 0;
 
-    color: #ffffff;
+    color:
+     white (255, 255, 255, 0.55);
 
     font-size: 9px;
 
-    letter-spacing: 0.5px;
+    letter-spacing: 0.7px;
+
+    text-transform: uppercase;
 }
-
-.dev-by {
-    margin: 0;
-
-    color: #ffffff;
-
-    font-size: 9px;
-
-    letter-spacing: 0.5px;
-
-    opacity: 0.9;
-}
-
 
 
 /* =====================================================
-   MOBILE
+   FOOTER — TABLET
 ===================================================== */
 
-@media (max-width: 750px) {
+@media (max-width: 1000px) {
+
+    .footer-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 40px 30px;
+    }
+
+}
+
+
+/* =====================================================
+   FOOTER — MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
 
     .footer {
-        padding: 32px 5% 22px;
+
+        padding: 45px 6% 25px;
     }
+
 
     .footer-brand {
-        gap: 11px;
+
         margin-bottom: 28px;
+
+        gap: 11px;
     }
+
 
     .footer-brand img {
-        width: 48px;
-        height: 48px;
+
+        width: 45px;
+
+        height: 45px;
     }
 
-    .footer-brand .logo-icon {
-        font-size: 40px;
-    }
 
     .footer-brand strong {
-        font-size: 18px;
-        letter-spacing: 1.2px;
+
+        font-size: 17px;
+
+        letter-spacing: 1px;
     }
 
-    .footer-brand span,
-    .footer-brand .tagline {
-        font-size: 8px;
+
+    .footer-brand span {
+
+        font-size: 7px;
+
         letter-spacing: 1.7px;
     }
 
-    .footer-stores {
-        max-width: 100%;
+
+    .footer-separator {
+
+        margin-bottom: 32px;
     }
 
-    .footer-stores h3 {
-        font-size: 12px;
+
+    .footer-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 35px 25px;
+
+        margin-bottom: 40px;
     }
 
-    .store p {
+
+    .footer-column h3 {
+
+        font-size: 8px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .footer-column a {
+
         font-size: 9px;
+
+        margin-bottom: 9px;
     }
 
-    .location-link {
-        font-size: 8px;
+
+    .footer-column p {
+
+        font-size: 9px;
+
+        line-height: 1.7;
     }
 
-    .footer-admin-link,
-    .admin-access {
-        font-size: 8px;
-        margin-top: 6px;
-        margin-bottom: 22px;
+
+    .footer-admin {
+
+        margin-bottom: 30px;
     }
 
-    .footer-bottom {
-        gap: 7px;
-        flex-wrap: nowrap;
+
+    .footer-bottom p {
+
+        font-size: 7px;
+
+        letter-spacing: 0.5px;
     }
 
-    .footer-copy,
-    .dev-by {
-        font-size: 7.5px;
-        white-space: nowrap;
-    }
 }
 
 
 /* =====================================================
-   SMALL PHONE
+   FOOTER — SMALL PHONE
 ===================================================== */
 
 @media (max-width: 450px) {
 
     .footer {
-        padding: 28px 5% 20px;
+
+        padding: 38px 5% 22px;
     }
 
-    .footer-brand {
-        gap: 9px;
-        margin-bottom: 25px;
+
+    .footer-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 30px 18px;
     }
 
-    .footer-brand img {
-        width: 44px;
-        height: 44px;
-    }
-
-    .footer-brand .logo-icon {
-        font-size: 37px;
-    }
 
     .footer-brand strong {
-        font-size: 16px;
-        letter-spacing: 1px;
+
+        font-size: 15px;
     }
 
-    .footer-brand span,
-    .footer-brand .tagline {
+
+    .footer-brand img {
+
+        width: 40px;
+
+        height: 40px;
+    }
+
+
+    .footer-column h3 {
+
         font-size: 7px;
-        letter-spacing: 1.4px;
+
+        letter-spacing: 1.8px;
     }
 
-    .footer-stores h3 {
-        font-size: 11px;
-    }
 
-    .store {
-        margin-bottom: 13px;
-        padding-bottom: 10px;
-    }
+    .footer-column a {
 
-    .store p {
         font-size: 8px;
     }
 
-    .location-link {
-        font-size: 7px;
+
+    .footer-column p {
+
+        font-size: 8px;
     }
 
-    .footer-admin-link,
-    .admin-access {
-        font-size: 7px;
-        letter-spacing: 1.5px;
-    }
 
-    .footer-bottom {
-        gap: 5px;
-    }
+    .footer-bottom p {
 
-    .footer-copy,
-    .dev-by {
         font-size: 6.5px;
     }
-}
 
+}
 /* =====================================================
    TABLET
 ===================================================== */
@@ -1319,3 +1432,254 @@ img {
     }
 }
 
+/* =====================================================
+   NOS MARQUES — CONTINUOUS MARQUEE
+===================================================== */
+
+.brands-section {
+
+    background: #ffffff;
+
+    padding: 90px 0 80px;
+
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   HEADING
+===================================================== */
+
+.brands-section .section-heading {
+
+    max-width: 850px;
+
+    margin: 0 auto 55px;
+
+    padding: 0 6%;
+
+    text-align: center;
+}
+
+
+.brands-section .section-label {
+
+    margin-bottom: 18px;
+
+    color: #d4af37;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+}
+
+
+.brands-section h2 {
+
+    margin-bottom: 18px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(38px, 5vw, 65px);
+
+    font-weight: 400;
+
+    line-height: 1.05;
+}
+
+
+.brands-section .section-heading span {
+
+    color: #777777;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   MARQUEE
+===================================================== */
+
+.brands-marquee {
+
+    width: 100%;
+
+    overflow: hidden;
+
+    border-top: 1px solid #e5e5e5;
+
+    border-bottom: 1px solid #e5e5e5;
+
+    padding: 30px 0;
+
+}
+
+
+/* =====================================================
+   MOVING TRACK
+===================================================== */
+
+.brands-track {
+
+    width: max-content;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 70px;
+
+    animation:
+        brandsScroll 25s linear infinite;
+}
+
+
+/* =====================================================
+   BRAND NAME
+===================================================== */
+
+.brands-track a {
+
+    flex-shrink: 0;
+
+    color: #151515;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    white-space: nowrap;
+
+    text-decoration: none;
+
+    transition:
+        color 0.3s ease;
+}
+
+
+.brands-track a:hover {
+
+    color: #d4af37;
+}
+
+
+/* =====================================================
+   GOLD SEPARATOR
+===================================================== */
+
+.brands-track a::after {
+
+    content: "•";
+
+    margin-left: 70px;
+
+    color: #d4af37;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   INFINITE ANIMATION
+===================================================== */
+
+@keyframes brandsScroll {
+
+    from {
+
+        transform:
+            translateX(0);
+
+    }
+
+    to {
+
+        transform:
+            translateX(-50%);
+
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .brands-section {
+
+        padding: 65px 0 55px;
+    }
+
+
+    .brands-section .section-heading {
+
+        margin-bottom: 40px;
+
+        padding: 0 5%;
+    }
+
+
+    .brands-section h2 {
+
+        font-size: 38px;
+    }
+
+
+    .brands-section .section-heading span {
+
+        font-size: 10px;
+    }
+
+
+    .brands-marquee {
+
+        padding: 24px 0;
+    }
+
+
+    .brands-track {
+
+        gap: 45px;
+
+        animation-duration: 20s;
+    }
+
+
+    .brands-track a {
+
+        font-size: 12px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .brands-track a::after {
+
+        margin-left: 45px;
+
+        font-size: 9px;
+    }
+
+}
