@@ -1552,6 +1552,104 @@ function showNotFound() {
 
 }
 
+/* =====================================================
+   SEO — PRODUCT STRUCTURED DATA
+===================================================== */
+
+function updateProductStructuredData(product) {
+
+    const existing =
+        document.getElementById("productStructuredData");
+
+    if (existing) {
+        existing.remove();
+    }
+
+    if (!product) {
+        return;
+    }
+
+    const currentPrice =
+        Number(product.price);
+
+    if (!Number.isFinite(currentPrice) || currentPrice <= 0) {
+        return;
+    }
+
+    const structuredData = {
+
+        "@context": "https://schema.org",
+
+        "@type": "Product",
+
+        "name":
+            product.name ||
+            "Produit KANA Électroménager",
+
+        "description":
+            product.description ||
+            "Produit électroménager KANA.",
+
+        "image":
+            product.image
+                ? [product.image]
+                : [],
+
+        "brand": {
+
+            "@type": "Brand",
+
+            "name":
+                product.brand ||
+                "KANA"
+
+        },
+
+        "offers": {
+
+            "@type": "Offer",
+
+            "url":
+                window.location.href,
+
+            "priceCurrency": "DZD",
+
+            "price":
+                currentPrice,
+
+            "availability":
+                getAvailability(product) ===
+                "Disponible"
+                    ? "https://schema.org/InStock"
+                    : "https://schema.org/OutOfStock",
+
+            "itemCondition":
+                "https://schema.org/NewCondition"
+
+        }
+
+    };
+
+
+    const script =
+        document.createElement("script");
+
+    script.type =
+        "application/ld+json";
+
+    script.id =
+        "productStructuredData";
+
+    script.textContent =
+        JSON.stringify(
+            structuredData
+        );
+
+    document.head.appendChild(
+        script
+    );
+
+}
 
 /* =====================================================
    DISPLAY PRODUCT
@@ -1567,6 +1665,7 @@ function displayProduct(product) {
 
     }
 
+    updateProductStructuredData(product);
 
     /* =================================================
        IMAGE
