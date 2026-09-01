@@ -35,7 +35,7 @@ import {
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyCv34mIllggc415xCCt3LiiPj1LTLdlJkQ",
+    apiKey: "AIzaSyDWvc1mpzDaJ7gp7MC0U4EnBODzauIS9zw",
 
     authDomain: "kana-electromenager.firebaseapp.com",
 
