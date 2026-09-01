@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tinhinanyamani156-star.github.io/KANA-ELECTROMENAGER/sitemap.xml
