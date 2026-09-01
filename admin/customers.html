@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Clients | KANA Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="customers.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         ADMIN HEADER
+    ====================================================== -->
+
+    <header class="admin-header">
+
+        <a
+            href="index.html"
+            class="admin-logo"
+        >
+
+            <img
+                src="../images/logo/logo.png"
+                alt="KANA Électroménager"
+            >
+
+            <div>
+
+                <strong>
+                    KANA Électroménager
+                </strong>
+
+                <span>
+                    Administration
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="../index.html"
+            class="view-site"
+        >
+            Voir le site
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="customers-page">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <section class="customers-heading">
+
+            <div>
+
+                <span class="page-kicker">
+                    KANA ADMIN
+                </span>
+
+                <h1>
+                    Clients
+                </h1>
+
+                <p>
+                    Consultez les clients ayant passé une commande.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="refreshCustomers"
+                class="refresh-button"
+            >
+                ACTUALISER
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <section
+            class="customers-stats"
+            aria-label="Statistiques clients"
+        >
+
+            <div class="stat-card">
+
+                <span>
+                    CLIENTS
+                </span>
+
+                <strong id="totalCustomers">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    COMMANDES
+                </span>
+
+                <strong id="totalOrders">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    CLIENTS FIDÈLES
+                </span>
+
+                <strong id="returningCustomers">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    CHIFFRE D'AFFAIRES
+                </span>
+
+                <strong id="totalRevenue">
+                    0 DA
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <section class="customers-tools">
+
+            <div class="search-box">
+
+                <label for="customerSearch">
+                    RECHERCHER UN CLIENT
+                </label>
+
+                <input
+                    type="search"
+                    id="customerSearch"
+                    placeholder="Nom, téléphone, wilaya..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CUSTOMERS CONTAINER
+        ================================================== -->
+
+        <section class="customers-section">
+
+            <div
+                id="customersContainer"
+                class="customers-container"
+            >
+
+                <div class="customers-loading">
+
+                    <div class="loading-spinner"></div>
+
+                    <p>
+                        Chargement des clients...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script
+        type="module"
+        src="customers.js"
+    ></script>
+
+
+</body>
+
+</html>

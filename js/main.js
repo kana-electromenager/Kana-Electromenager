@@ -1,7 +1,491 @@
 /* =====================================================
    KANA ÉLECTROMÉNAGER
-   HOME.JS
+   MAIN.JS
+   HOME + MOBILE SIDE MENU + NESTED CATEGORIES
+   + HERO SLIDER + FIRESTORE PRODUCTS
 ===================================================== */
+
+import {
+    db,
+    collection,
+    getDocs
+} from "./firebase.js";
+
+
+/* =====================================================
+   MOBILE SIDE MENU
+===================================================== */
+
+const menuToggle =
+    document.getElementById("menuToggle");
+
+const sideMenu =
+    document.getElementById("sideMenu");
+
+const sideMenuOverlay =
+    document.getElementById("sideMenuOverlay");
+
+const sideMenuClose =
+    document.getElementById("sideMenuClose");
+
+
+/* =====================================================
+   OPEN SIDE MENU
+===================================================== */
+
+function openSideMenu() {
+
+    if (!sideMenu) {
+        return;
+    }
+
+    sideMenu.classList.add("active");
+
+    if (sideMenuOverlay) {
+        sideMenuOverlay.classList.add("active");
+    }
+
+    document.body.classList.add("menu-open");
+
+    if (menuToggle) {
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+    }
+
+    sideMenu.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+/* =====================================================
+   CLOSE SIDE MENU
+===================================================== */
+
+function closeSideMenu() {
+
+    if (!sideMenu) {
+        return;
+    }
+
+    /* Remove focus from the close button BEFORE
+       hiding the menu from assistive technology */
+
+    if (
+        document.activeElement &&
+        sideMenu.contains(document.activeElement)
+    ) {
+        document.activeElement.blur();
+    }
+
+    sideMenu.classList.remove("active");
+
+    if (sideMenuOverlay) {
+        sideMenuOverlay.classList.remove("active");
+    }
+
+    document.body.classList.remove("menu-open");
+
+    if (menuToggle) {
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+    sideMenu.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+/* =====================================================
+   MENU TOGGLE
+===================================================== */
+
+if (menuToggle) {
+
+    menuToggle.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (
+                sideMenu &&
+                sideMenu.classList.contains("active")
+            ) {
+
+                closeSideMenu();
+
+            }
+
+            else {
+
+                openSideMenu();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+if (sideMenuClose) {
+
+    sideMenuClose.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            closeSideMenu();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+if (sideMenuOverlay) {
+
+    sideMenuOverlay.addEventListener(
+        "click",
+        function () {
+
+            closeSideMenu();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            closeSideMenu();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CLOSE MENU AFTER CLICKING FINAL LINK
+===================================================== */
+
+if (sideMenu) {
+
+    const finalLinks =
+        sideMenu.querySelectorAll(
+            "a"
+        );
+
+    finalLinks.forEach(
+        function (link) {
+
+            link.addEventListener(
+                "click",
+                function () {
+
+                    closeSideMenu();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CATEGORIES DROPDOWN
+===================================================== */
+
+const categoriesMenuButton =
+    document.getElementById("categoriesMenuButton");
+
+const categoriesSubmenu =
+    document.getElementById("categoriesSubmenu");
+
+const categoriesArrow =
+    document.getElementById("categoriesArrow");
+
+
+/* =====================================================
+   MAIN CATEGORIES TOGGLE
+===================================================== */
+
+if (
+    categoriesMenuButton &&
+    categoriesSubmenu
+) {
+
+    categoriesMenuButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isOpen =
+                categoriesSubmenu.classList.contains("active");
+
+
+            if (isOpen) {
+
+                /* CLOSE MAIN CATEGORIES */
+
+                categoriesSubmenu.classList.remove("active");
+
+                categoriesMenuButton.classList.remove("active");
+
+                categoriesMenuButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+                if (categoriesArrow) {
+                    categoriesArrow.textContent = "↓";
+                }
+
+
+                /* CLOSE ALL NESTED SUBMENUS */
+
+                closeAllNestedCategories();
+
+            }
+
+            else {
+
+                /* OPEN MAIN CATEGORIES */
+
+                categoriesSubmenu.classList.add("active");
+
+                categoriesMenuButton.classList.add("active");
+
+                categoriesMenuButton.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+                if (categoriesArrow) {
+                    categoriesArrow.textContent = "↑";
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NESTED CATEGORY ELEMENTS
+===================================================== */
+
+const maisonMenuButton =
+    document.getElementById("maisonMenuButton");
+
+const maisonSubmenu =
+    document.getElementById("maisonSubmenu");
+
+
+const cuisineMenuButton =
+    document.getElementById("cuisineMenuButton");
+
+const cuisineSubmenu =
+    document.getElementById("cuisineSubmenu");
+
+
+const refrigerateursMenuButton =
+    document.getElementById("refrigerateursMenuButton");
+
+const refrigerateursSubmenu =
+    document.getElementById("refrigerateursSubmenu");
+
+
+/* =====================================================
+   CLOSE ALL NESTED CATEGORIES
+===================================================== */
+
+function closeAllNestedCategories() {
+
+    const buttons = [
+
+        maisonMenuButton,
+
+        cuisineMenuButton,
+
+        refrigerateursMenuButton
+
+    ];
+
+
+    const submenus = [
+
+        maisonSubmenu,
+
+        cuisineSubmenu,
+
+        refrigerateursSubmenu
+
+    ];
+
+
+    buttons.forEach(
+        function (button) {
+
+            if (!button) {
+                return;
+            }
+
+            button.classList.remove("active");
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+    );
+
+
+    submenus.forEach(
+        function (submenu) {
+
+            if (!submenu) {
+                return;
+            }
+
+            submenu.classList.remove("active");
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NESTED CATEGORY TOGGLE
+===================================================== */
+
+function setupNestedCategory(
+    button,
+    submenu
+) {
+
+    if (!button || !submenu) {
+        return;
+    }
+
+
+    button.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            const isOpen =
+                submenu.classList.contains("active");
+
+
+            /*
+
+               Close every other submenu first.
+
+            */
+
+            closeAllNestedCategories();
+
+
+            /*
+
+               If the clicked submenu was closed,
+               open it.
+
+               If it was already open,
+               it stays closed.
+
+            */
+
+            if (!isOpen) {
+
+                submenu.classList.add("active");
+
+                button.classList.add("active");
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MAISON & ENTRETIEN
+===================================================== */
+
+setupNestedCategory(
+    maisonMenuButton,
+    maisonSubmenu
+);
+
+
+/* =====================================================
+   CUISINE
+===================================================== */
+
+setupNestedCategory(
+    cuisineMenuButton,
+    cuisineSubmenu
+);
+
+
+/* =====================================================
+   RÉFRIGÉRATEURS & CONGÉLATEURS
+===================================================== */
+
+setupNestedCategory(
+    refrigerateursMenuButton,
+    refrigerateursSubmenu
+);
 
 
 /* =====================================================
@@ -13,98 +497,124 @@ const heroSlides = [
     {
         image: "images/hero/hero-1.jpg",
 
+        label: "KANA ÉLECTROMÉNAGER",
 
-        title: "L'électroménager, élevé au rang d'art.",
+        title:
+            "L'électroménager, élevé au rang d'art.",
 
-        text: "Des pièces d'exception, une livraison irréprochable et un service à la hauteur de votre intérieur..",
+        text:
+            "Des pièces d'exception, une livraison irréprochable et un service à la hauteur de votre intérieur.",
 
-        features: "QUALITÉ • PERFORMANCE • DESIGN",
+        features:
+            "QUALITÉ • PERFORMANCE • DESIGN",
 
-        button: "DÉCOUVRIR"
+        button:
+            "DÉCOUVRIR"
+
     },
 
 
     {
         image: "images/hero/hero-2.jpg",
 
+        label: "TÉLÉVISIONS",
 
+        title:
+            "L'image cinéma, chez vous.",
 
-        title: "L'image cinéma, chez vous.",
+        text:
+            "OLED, QLED, Neo QLED — les plus grandes marques signées Kana.",
 
-        text: "OLED, QLED, Neo QLED — les plus grandes marques signées Kana..",
+        features:
+            "STYLE • PERFORMANCE",
 
-        features: "STYLE • PERFORMANCE",
+        button:
+            "DÉCOUVRIR"
 
-        button: "DÉCOUVRIR"
     },
 
 
     {
         image: "images/hero/hero-3.jpg",
 
+        label: "RÉFRIGÉRATEURS",
 
-        title: "Fraîcheur signature, silence maîtrisé..",
+        title:
+            "Fraîcheur signature, silence maîtrisé.",
 
-        text: "Réfrigérateurs multi-portes, side-by-side et French Door..",
+        text:
+            "Réfrigérateurs multi-portes, side-by-side et French Door.",
 
-        features: "TECHNOLOGIE • EFFICACITÉ • CONFORT",
+        features:
+            "TECHNOLOGIE • EFFICACITÉ • CONFORT",
 
-        button: "DÉCOUVRIR"
+        button:
+            "DÉCOUVRIR"
+
     },
 
 
     {
         image: "images/hero/hero-4.jpg",
 
-        title: "L'art culinaire, réinventé..",
+        label: "CUISINE",
 
-        text: "Robots, machines à café et équipements d'exception pour sublimer votre cuisine..",
+        title:
+            "L'art culinaire, réinventé.",
 
-        features: "STYLE • PERFORMANCE.",
+        text:
+            "Robots, machines à café et équipements d'exception pour sublimer votre cuisine.",
 
-        button: "DÉCOUVRIR"
+        features:
+            "STYLE • PERFORMANCE",
+
+        button:
+            "DÉCOUVRIR"
+
     }
 
 ];
-
 
 
 /* =====================================================
    HERO ELEMENTS
 ===================================================== */
 
-const heroImage = document.getElementById("heroImage");
+const heroImage =
+    document.getElementById("heroImage");
 
-const heroLabel = document.getElementById("heroLabel");
+const heroLabel =
+    document.getElementById("heroLabel");
 
-const heroTitle = document.getElementById("heroTitle");
+const heroTitle =
+    document.getElementById("heroTitle");
 
-const heroText = document.getElementById("heroText");
+const heroText =
+    document.getElementById("heroText");
 
-const heroFeatures = document.getElementById("heroFeatures");
+const heroFeatures =
+    document.getElementById("heroFeatures");
 
-const heroButton = document.getElementById("heroButton");
+const heroButton =
+    document.getElementById("heroButton");
 
-const prevSlideButton = document.getElementById("prevSlide");
+const prevSlideButton =
+    document.getElementById("prevSlide");
 
-const nextSlideButton = document.getElementById("nextSlide");
+const nextSlideButton =
+    document.getElementById("nextSlide");
 
-const sliderDots = document.getElementById("sliderDots");
+const sliderDots =
+    document.getElementById("sliderDots");
 
-
-
-/* =====================================================
-   CURRENT SLIDE
-===================================================== */
 
 let currentSlide = 0;
 
-let autoSlide;
-
+let autoSlide = null;
 
 
 /* =====================================================
-   DISPLAY SLIDE
+   SHOW SLIDE
 ===================================================== */
 
 function showSlide(index) {
@@ -114,25 +624,16 @@ function showSlide(index) {
     }
 
 
-    /*
-        Revenir au premier slide
-        si on dépasse la fin.
-    */
-
     if (index >= heroSlides.length) {
 
         currentSlide = 0;
 
     }
 
-    /*
-        Aller au dernier slide
-        si on revient avant le premier.
-    */
-
     else if (index < 0) {
 
-        currentSlide = heroSlides.length - 1;
+        currentSlide =
+            heroSlides.length - 1;
 
     }
 
@@ -143,61 +644,80 @@ function showSlide(index) {
     }
 
 
-    const slide = heroSlides[currentSlide];
+    const slide =
+        heroSlides[currentSlide];
 
 
+    if (heroImage) {
 
-    /* =================================================
-       IMAGE
-    ================================================= */
-
-    heroImage.style.opacity = "0";
+        heroImage.style.opacity = "0";
 
 
-    setTimeout(() => {
+        setTimeout(
+            function () {
 
-        heroImage.src = slide.image;
+                heroImage.src =
+                    slide.image;
 
-        heroImage.alt = slide.title;
+                heroImage.alt =
+                    slide.title;
 
-        heroImage.style.opacity = "1";
+                heroImage.style.opacity =
+                    "1";
 
-    }, 250);
+            },
+            250
+        );
 
-
-
-    /* =================================================
-       TEXT
-    ================================================= */
-
-    heroLabel.textContent = slide.label;
-
-    heroTitle.textContent = slide.title;
-
-    heroText.textContent = slide.text;
-
-    heroFeatures.textContent = slide.features;
-
-    heroButton.textContent = slide.button;
+    }
 
 
+    if (heroLabel) {
 
-    /* =================================================
-       BUTTON LINK
-    ================================================= */
+        heroLabel.textContent =
+            slide.label || "";
 
-    heroButton.href = "#categories";
-
+    }
 
 
-    /* =================================================
-       DOTS
-    ================================================= */
+    if (heroTitle) {
+
+        heroTitle.textContent =
+            slide.title || "";
+
+    }
+
+
+    if (heroText) {
+
+        heroText.textContent =
+            slide.text || "";
+
+    }
+
+
+    if (heroFeatures) {
+
+        heroFeatures.textContent =
+            slide.features || "";
+
+    }
+
+
+    if (heroButton) {
+
+        heroButton.textContent =
+            slide.button || "DÉCOUVRIR";
+
+        heroButton.href =
+            "#categories";
+
+    }
+
 
     updateDots();
 
 }
-
 
 
 /* =====================================================
@@ -206,12 +726,13 @@ function showSlide(index) {
 
 function nextSlide() {
 
-    showSlide(currentSlide + 1);
+    showSlide(
+        currentSlide + 1
+    );
 
     restartAutoSlide();
 
 }
-
 
 
 /* =====================================================
@@ -220,55 +741,73 @@ function nextSlide() {
 
 function previousSlide() {
 
-    showSlide(currentSlide - 1);
+    showSlide(
+        currentSlide - 1
+    );
 
     restartAutoSlide();
 
 }
 
 
-
 /* =====================================================
-   SLIDER DOTS
+   CREATE DOTS
 ===================================================== */
 
 function createDots() {
 
+    if (!sliderDots) {
+        return;
+    }
+
+
     sliderDots.innerHTML = "";
 
 
-    heroSlides.forEach((slide, index) => {
+    heroSlides.forEach(
+        function (slide, index) {
 
-        const dot = document.createElement("button");
-
-        dot.classList.add("slider-dot");
-
-        dot.type = "button";
-
-        dot.setAttribute(
-            "aria-label",
-            `Aller au slide ${index + 1}`
-        );
+            const dot =
+                document.createElement(
+                    "button"
+                );
 
 
-        dot.addEventListener("click", () => {
+            dot.type = "button";
 
-            showSlide(index);
-
-            restartAutoSlide();
-
-        });
+            dot.className =
+                "slider-dot";
 
 
-        sliderDots.appendChild(dot);
+            dot.setAttribute(
+                "aria-label",
+                `Aller au slide ${index + 1}`
+            );
 
-    });
+
+            dot.addEventListener(
+                "click",
+                function () {
+
+                    showSlide(index);
+
+                    restartAutoSlide();
+
+                }
+            );
+
+
+            sliderDots.appendChild(
+                dot
+            );
+
+        }
+    );
 
 
     updateDots();
 
 }
-
 
 
 /* =====================================================
@@ -277,37 +816,53 @@ function createDots() {
 
 function updateDots() {
 
+    if (!sliderDots) {
+        return;
+    }
+
+
     const dots =
-        sliderDots.querySelectorAll(".slider-dot");
-
-
-    dots.forEach((dot, index) => {
-
-        dot.classList.toggle(
-            "active",
-            index === currentSlide
+        sliderDots.querySelectorAll(
+            ".slider-dot"
         );
 
-    });
+
+    dots.forEach(
+        function (dot, index) {
+
+            dot.classList.toggle(
+                "active",
+                index === currentSlide
+            );
+
+        }
+    );
 
 }
 
 
-
 /* =====================================================
-   AUTO SLIDER
+   START AUTO SLIDER
 ===================================================== */
 
 function startAutoSlide() {
 
-    autoSlide = setInterval(() => {
+    clearInterval(autoSlide);
 
-        showSlide(currentSlide + 1);
 
-    }, 5000);
+    autoSlide =
+        setInterval(
+            function () {
+
+                showSlide(
+                    currentSlide + 1
+                );
+
+            },
+            5000
+        );
 
 }
-
 
 
 /* =====================================================
@@ -323,9 +878,8 @@ function restartAutoSlide() {
 }
 
 
-
 /* =====================================================
-   ARROWS
+   HERO ARROWS
 ===================================================== */
 
 if (nextSlideButton) {
@@ -348,65 +902,79 @@ if (prevSlideButton) {
 }
 
 
-
 /* =====================================================
-   PAUSE SLIDER WHEN MOUSE IS OVER IT
+   PAUSE SLIDER ON HOVER
 ===================================================== */
 
-const hero = document.querySelector(".hero");
+const hero =
+    document.querySelector(".hero");
 
 
 if (hero) {
 
-    hero.addEventListener("mouseenter", () => {
+    hero.addEventListener(
+        "mouseenter",
+        function () {
 
-        clearInterval(autoSlide);
+            clearInterval(autoSlide);
 
-    });
+        }
+    );
 
 
-    hero.addEventListener("mouseleave", () => {
+    hero.addEventListener(
+        "mouseleave",
+        function () {
 
-        startAutoSlide();
+            startAutoSlide();
 
-    });
+        }
+    );
 
 }
 
 
-
 /* =====================================================
-   CATEGORIES
+   HOME CATEGORIES
 ===================================================== */
 
 const categories = [
 
     {
-        name: "Maison & Entretien",
+        name:
+            "Maison & Entretien",
 
-        image: "images/categories/maison-entretien.jpg",
+        image:
+            "images/categories/maison-entretien.jpg",
 
         description:
             "Des appareils pour faciliter votre quotidien.",
 
-        link: "category.html?category=maison-entretien"
+        link:
+            "category.html?category=maison-entretien"
+
     },
 
 
     {
-        name: "Cuisine",
+        name:
+            "Cuisine",
 
-        image: "images/categories/cuisine.jpg",
+        image:
+            "images/categories/cuisine.jpg",
 
         description:
             "Tout pour une cuisine pratique et moderne.",
 
-        link: "category.html?category=cuisine"
+        link:
+            "category.html?category=cuisine"
+
     },
 
 
     {
-        name: "Réfrigérateur - Congélateur",
+        name:
+            "Réfrigérateurs - Congélateurs",
 
         image:
             "images/categories/refrigerateur-congelateur.jpg",
@@ -416,11 +984,13 @@ const categories = [
 
         link:
             "category.html?category=refrigerateur-congelateur"
+
     },
 
 
     {
-        name: "Télévisions",
+        name:
+            "Télévisions",
 
         image:
             "images/categories/televisions.jpg",
@@ -430,11 +1000,13 @@ const categories = [
 
         link:
             "category.html?category=televisions"
+
     },
 
 
     {
-        name: "Machines à laver",
+        name:
+            "Machines à laver",
 
         image:
             "images/categories/machines-a-laver.jpg",
@@ -444,11 +1016,13 @@ const categories = [
 
         link:
             "category.html?category=machines-a-laver"
+
     },
 
 
     {
-        name: "Lave-vaisselle",
+        name:
+            "Lave-vaisselle",
 
         image:
             "images/categories/lave-vaisselle.jpg",
@@ -458,10 +1032,10 @@ const categories = [
 
         link:
             "category.html?category=lave-vaisselle"
+
     }
 
 ];
-
 
 
 /* =====================================================
@@ -472,7 +1046,6 @@ const categoriesContainer =
     document.getElementById(
         "categoriesContainer"
     );
-
 
 
 /* =====================================================
@@ -489,71 +1062,573 @@ function displayCategories() {
     categoriesContainer.innerHTML = "";
 
 
-    categories.forEach((category, index) => {
+    categories.forEach(
+        function (category, index) {
 
-        const card =
-            document.createElement("a");
-
-
-        card.className = "category-card";
-
-        card.href = category.link;
+            const card =
+                document.createElement("a");
 
 
-        card.innerHTML = `
+            card.className =
+                "category-card";
 
-            <img
-                src="${category.image}"
-                alt="${category.name}"
-                loading="lazy"
-            >
 
-            <div class="category-content">
+            card.href =
+                category.link;
 
-                <span class="category-number">
-                    0${index + 1}
+
+            card.innerHTML = `
+
+                <img
+                    src="${category.image}"
+                    alt="${category.name}"
+                    loading="lazy"
+                >
+
+                <div class="category-content">
+
+                    <span class="category-number">
+                        ${String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <h3>
+                        ${category.name}
+                    </h3>
+
+                    <p>
+                        ${category.description}
+                    </p>
+
+                </div>
+
+                <span class="category-arrow">
+                    →
                 </span>
 
-                <h3>
-                    ${category.name}
-                </h3>
-
-                <p>
-                    ${category.description}
-                </p>
-
-            </div>
-
-            <span class="category-arrow">
-                →
-            </span>
-
-        `;
+            `;
 
 
-        categoriesContainer.appendChild(card);
+            categoriesContainer.appendChild(
+                card
+            );
 
-    });
+        }
+    );
 
 }
 
 
-
 /* =====================================================
-   INITIALIZE
+   FIRESTORE PRODUCTS
 ===================================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+let homeProducts = [];
 
-        createDots();
 
-        showSlide(0);
+/* =====================================================
+   LOAD PRODUCTS
+===================================================== */
 
-        displayCategories();
+async function loadHomeProducts() {
 
-        startAutoSlide();
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "products"
+                )
+            );
+
+
+        homeProducts =
+            snapshot.docs.map(
+                function (document) {
+
+                    return {
+
+                        id:
+                            document.id,
+
+                        ...document.data()
+
+                    };
+
+                }
+            );
+
+
+        console.log(
+            "KANA — Produits chargés depuis Firestore:",
+            homeProducts
+        );
+
+
+        return homeProducts;
 
     }
-);
+
+    catch (error) {
+
+        console.error(
+            "KANA — Erreur Firestore:",
+            error
+        );
+
+
+        homeProducts = [];
+
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   PRODUCT PRICE
+===================================================== */
+
+function getProductPriceHTML(product) {
+
+    const rawPrice = product.price;
+
+    const price = Number(rawPrice);
+
+    /* =================================================
+       NO VALID PRICE
+    ================================================= */
+
+    if (
+        rawPrice === null ||
+        rawPrice === undefined ||
+        rawPrice === "" ||
+        !Number.isFinite(price)
+    ) {
+
+        return `
+            <p class="home-product-price">
+                Prix sur demande
+            </p>
+        `;
+
+    }
+
+
+    /* =================================================
+       PROMOTION
+    ================================================= */
+
+    const oldPrice = Number(product.oldPrice);
+
+    const hasPromotion =
+        product.promotion === true &&
+        Number.isFinite(oldPrice) &&
+        oldPrice > price;
+
+
+    if (hasPromotion) {
+
+        return `
+            <div class="home-product-price product-price">
+
+                <del class="product-old-price">
+                    ${oldPrice.toLocaleString("fr-FR")} DA
+                </del>
+
+                <strong class="product-new-price">
+                    ${price.toLocaleString("fr-FR")} DA
+                </strong>
+
+            </div>
+        `;
+
+    }
+
+
+    /* =================================================
+       NORMAL PRICE
+    ================================================= */
+
+    return `
+        <p class="home-product-price">
+            ${price.toLocaleString("fr-FR")} DA
+        </p>
+    `;
+
+}
+/* =====================================================
+   HOME PRODUCT CARD
+===================================================== */
+
+function createHomeProductCard(product) {
+
+    const card =
+        document.createElement("a");
+
+
+    card.className =
+        "home-product-card";
+
+
+    card.href =
+        `product.html?id=${encodeURIComponent(
+            product.id
+        )}`;
+
+
+    /* =================================================
+       IMAGE
+    ================================================= */
+
+    const image =
+        product.image || "";
+
+
+    let imageHTML;
+
+
+    if (image) {
+
+        imageHTML = `
+
+            <img
+                src="${image}"
+                alt="${product.name || "Produit"}"
+                loading="lazy"
+            >
+
+        `;
+
+    }
+
+    else {
+
+        imageHTML = `
+
+            <div class="home-product-no-image">
+                Image indisponible
+            </div>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       LABEL
+    ================================================= */
+
+    let labelHTML = "";
+
+
+    if (product.bestSeller === true) {
+
+        labelHTML = `
+
+            <span class="home-product-label">
+                BEST SELLER
+            </span>
+
+        `;
+
+    }
+
+    else if (product.promotion === true) {
+
+        labelHTML = `
+
+            <span class="home-product-label">
+                PROMOTION
+            </span>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       DESCRIPTION
+    ================================================= */
+
+    const description =
+        product.description || "";
+
+
+    let descriptionHTML = "";
+
+
+    if (description) {
+
+        descriptionHTML = `
+
+            <p class="home-product-description">
+                ${description}
+            </p>
+
+        `;
+
+    }
+
+
+    /* =================================================
+       PRICE
+    ================================================= */
+
+    const priceHTML =
+        getProductPriceHTML(product);
+
+
+    /* =================================================
+       CARD HTML
+    ================================================= */
+
+    card.innerHTML = `
+
+        <div class="home-product-image">
+
+            ${imageHTML}
+
+        </div>
+
+
+        <div class="home-product-info">
+
+            ${labelHTML}
+
+
+            <h3>
+                ${product.name || "Produit"}
+            </h3>
+
+
+            ${descriptionHTML}
+
+
+            ${priceHTML}
+
+
+        </div>
+
+    `;
+
+
+    return card;
+
+}
+
+
+/* =====================================================
+   DISPLAY PRODUCTS
+===================================================== */
+
+function displayHomeProducts(
+    products,
+    containerId
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    if (!products.length) {
+
+        container.innerHTML = `
+
+            <p class="home-products-empty">
+                Aucun produit disponible
+                pour le moment.
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    products.forEach(
+        function (product) {
+
+            container.appendChild(
+                createHomeProductCard(
+                    product
+                )
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   BEST SELLERS
+===================================================== */
+
+function displayBestSellers() {
+
+    const products =
+        homeProducts
+            .filter(
+                function (product) {
+
+                    return (
+                        product.bestSeller === true
+                    );
+
+                }
+            )
+            .slice(0, 5);
+
+
+    displayHomeProducts(
+        products,
+        "bestSellersContainer"
+    );
+
+}
+
+
+/* =====================================================
+   PROMOTIONS
+===================================================== */
+
+function displayPromotions() {
+
+    const products =
+        homeProducts
+            .filter(
+                function (product) {
+
+                    return (
+                        product.promotion === true
+                    );
+
+                }
+            )
+            .slice(0, 4);
+
+
+    displayHomeProducts(
+        products,
+        "promotionsContainer"
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE HOME
+===================================================== */
+
+async function initializeHome() {
+
+    console.log(
+        "KANA — main.js chargé"
+    );
+
+
+    /* HERO */
+
+    createDots();
+
+    showSlide(0);
+
+
+    /* CATEGORIES */
+
+    displayCategories();
+
+
+    /* PRODUCT LOADING */
+
+    const bestSellersContainer =
+        document.getElementById(
+            "bestSellersContainer"
+        );
+
+
+    const promotionsContainer =
+        document.getElementById(
+            "promotionsContainer"
+        );
+
+
+    if (bestSellersContainer) {
+
+        bestSellersContainer.innerHTML = `
+
+            <p class="home-products-empty">
+                Chargement...
+            </p>
+
+        `;
+
+    }
+
+
+    if (promotionsContainer) {
+
+        promotionsContainer.innerHTML = `
+
+            <p class="home-products-empty">
+                Chargement...
+            </p>
+
+        `;
+
+    }
+
+
+    /* FIRESTORE */
+
+    await loadHomeProducts();
+
+
+    /* PRODUCTS */
+
+    displayBestSellers();
+
+    displayPromotions();
+
+
+    /* SLIDER */
+
+    startAutoSlide();
+
+}
+
+
+/* =====================================================
+   START APPLICATION
+===================================================== */
+
+if (
+    document.readyState === "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeHome
+    );
+
+}
+
+else {
+
+    initializeHome();
+
+}

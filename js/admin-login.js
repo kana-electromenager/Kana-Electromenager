@@ -1,9 +1,21 @@
-import { auth } from "./firebase.js";
+/* =====================================================
+   KANA ÉLECTROMÉNAGER
+   ADMIN LOGIN
+   Firebase Authentication
+===================================================== */
+
+import {
+    auth
+} from "./firebase.js";
 
 import {
     signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
 const loginForm =
     document.getElementById("loginForm");
@@ -12,55 +24,79 @@ const loginError =
     document.getElementById("loginError");
 
 
-loginForm.addEventListener(
-    "submit",
-    async function (event) {
+/* =====================================================
+   LOGIN
+===================================================== */
 
-        event.preventDefault();
+if (loginForm) {
 
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
 
-        const email =
-            document
-                .getElementById("email")
-                .value
-                .trim();
-
-
-        const password =
-            document
-                .getElementById("password")
-                .value;
+            event.preventDefault();
 
 
-        // Hide previous error
-        loginError.hidden = true;
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
 
 
-        try {
-
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
 
 
-            // Login successful
-            window.location.href =
-                "index.html";
+            if (loginError) {
+
+                loginError.hidden = true;
+
+            }
 
 
-        } catch (error) {
+            try {
 
-            console.error(
-                "Login Error:",
-                error
-            );
+                const userCredential =
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
 
 
-            loginError.hidden = false;
+                console.log(
+                    "KANA — Login successful:",
+                    userCredential.user.email
+                );
+
+
+                window.location.href =
+                    "index.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "KANA — Login Error:",
+                    error
+                );
+
+
+                if (loginError) {
+
+                    loginError.hidden = false;
+
+                    loginError.textContent =
+                        "Adresse e-mail ou mot de passe incorrect.";
+
+                }
+
+            }
 
         }
+    );
 
-    }
-);
+}

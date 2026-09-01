@@ -9,6 +9,11 @@ import {
 
 
 import {
+    getAuth
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+import {
     getFirestore,
     collection,
     addDoc,
@@ -22,11 +27,6 @@ import {
     orderBy,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-import {
-    getAuth
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
 /* =====================================================
@@ -54,21 +54,24 @@ const firebaseConfig = {
    INITIALIZE FIREBASE
 ===================================================== */
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(firebaseConfig);
+
+
+/* =====================================================
+   FIREBASE AUTHENTICATION
+===================================================== */
+
+const auth =
+    getAuth(app);
 
 
 /* =====================================================
    FIRESTORE
 ===================================================== */
 
-const db = getFirestore(app);
-
-
-/* =====================================================
-   AUTHENTICATION
-===================================================== */
-
-const auth = getAuth(app);
+const db =
+    getFirestore(app);
 
 
 /* =====================================================
@@ -78,6 +81,8 @@ const auth = getAuth(app);
 export {
 
     app,
+
+    auth,
 
     db,
 
@@ -92,8 +97,6 @@ export {
     query,
     where,
     orderBy,
-    serverTimestamp,
+    serverTimestamp
 
-    auth
-
-};     
+};

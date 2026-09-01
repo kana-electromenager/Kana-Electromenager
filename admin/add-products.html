@@ -19,14 +19,15 @@
 
 </head>
 
-
 <body>
 
-
-    
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
     <aside class="admin-sidebar">
 
+        <!-- LOGO -->
 
         <a
             href="../index.html"
@@ -42,15 +43,18 @@
 
                 <strong>KANA</strong>
 
-                <span>ADMIN PANEL</span>
+                <span>
+                    ADMIN PANEL
+                </span>
 
             </div>
 
         </a>
 
 
-        <nav class="admin-nav">
+        <!-- NAVIGATION -->
 
+        <nav class="admin-nav">
 
             <a
                 href="index.html"
@@ -116,15 +120,6 @@
 
 
             <a
-                href="about.html"
-                class="admin-nav-link"
-            >
-                <span>i</span>
-                About
-            </a>
-
-
-            <a
                 href="settings.html"
                 class="admin-nav-link"
             >
@@ -132,9 +127,10 @@
                 Settings
             </a>
 
-
         </nav>
 
+
+        <!-- LOGOUT -->
 
         <button
             type="button"
@@ -145,6 +141,8 @@
         </button>
 
 
+        <!-- STORE -->
+
         <a
             href="../index.html"
             class="admin-store-link"
@@ -152,17 +150,18 @@
             ← Voir le site
         </a>
 
-
     </aside>
 
 
-
-   
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
 
     <main class="admin-main">
 
-
-        
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
 
         <header class="admin-topbar">
 
@@ -190,11 +189,11 @@
         </header>
 
 
-
-        
+        <!-- =================================================
+             PRODUCT FORM SECTION
+        ================================================== -->
 
         <section class="admin-section">
-
 
             <div class="admin-section-heading">
 
@@ -213,17 +212,20 @@
             </div>
 
 
+            <!-- =================================================
+                 FORM
+            ================================================== -->
 
             <div class="admin-product-form-container">
-
 
                 <form
                     id="addProductForm"
                     class="admin-product-form"
                 >
 
-
-                    
+                    <!-- =================================================
+                         PRODUCT NAME
+                    ================================================== -->
 
                     <div class="admin-form-group">
 
@@ -236,14 +238,16 @@
                             id="productName"
                             name="productName"
                             placeholder="Ex : Samsung Smart TV 55 pouces"
+                            autocomplete="off"
                             required
                         >
 
                     </div>
 
 
-
-                    
+                    <!-- =================================================
+                         CATEGORY
+                    ================================================== -->
 
                     <div class="admin-form-group">
 
@@ -262,7 +266,7 @@
                             </option>
 
                             <option value="maison-entretien">
-                                Maison & Entretien
+                                Maison &amp; Entretien
                             </option>
 
                             <option value="refrigerateurs-congelateurs">
@@ -290,8 +294,9 @@
                     </div>
 
 
-
-                    
+                    <!-- =================================================
+                         SUBCATEGORY
+                    ================================================== -->
 
                     <div class="admin-form-group">
 
@@ -315,8 +320,9 @@
                     </div>
 
 
-
-                    <!-- BRAND -->
+                    <!-- =================================================
+                         BRAND
+                    ================================================== -->
 
                     <div class="admin-form-group">
 
@@ -329,17 +335,18 @@
                             id="productBrand"
                             name="productBrand"
                             placeholder="Ex : Samsung"
+                            autocomplete="off"
                             required
                         >
 
                     </div>
 
 
-
-                    <!-- PRICE + STOCK -->
+                    <!-- =================================================
+                         PRICE + STOCK
+                    ================================================== -->
 
                     <div class="admin-form-row">
-
 
                         <div class="admin-form-group">
 
@@ -354,11 +361,11 @@
                                 placeholder="Ex : 85000"
                                 min="0"
                                 step="1"
+                                inputmode="numeric"
                                 required
                             >
 
                         </div>
-
 
 
                         <div class="admin-form-group">
@@ -374,18 +381,106 @@
                                 placeholder="Ex : 10"
                                 min="0"
                                 step="1"
+                                inputmode="numeric"
                                 required
                             >
 
                         </div>
 
+                    </div>
+
+
+                    <!-- =================================================
+                         PRODUCT STATUS
+                    ================================================== -->
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Mise en avant du produit
+                        </label>
+
+                        <div class="admin-product-options">
+
+                            <!-- BEST SELLER -->
+
+                            <label
+                                class="admin-checkbox-option"
+                                for="productBestSeller"
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    id="productBestSeller"
+                                    name="productBestSeller"
+                                >
+
+                                <span>
+                                    Best Seller
+                                </span>
+
+                            </label>
+
+
+                            <!-- PROMOTION -->
+
+                            <label
+                                class="admin-checkbox-option"
+                                for="productPromotion"
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    id="productPromotion"
+                                    name="productPromotion"
+                                >
+
+                                <span>
+                                    Promotion
+                                </span>
+
+                            </label>
+
+                        </div>
 
                     </div>
 
 
+                    <!-- =================================================
+                         PROMOTION PRICE
+                    ================================================== -->
 
-    
-    
+                    <div
+                        id="promotionPriceGroup"
+                        class="admin-form-group"
+                        style="display: none;"
+                    >
+
+                        <label for="productOldPrice">
+                            Ancien prix (DA)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="productOldPrice"
+                            name="productOldPrice"
+                            placeholder="Ex : 100000"
+                            min="0"
+                            step="1"
+                            inputmode="numeric"
+                        >
+
+                        <small class="admin-image-help">
+                            Prix avant la promotion.
+                        </small>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         IMAGE
+                    ================================================== -->
+
                     <div class="admin-form-group">
 
                         <label for="productImage">
@@ -413,8 +508,9 @@
                     </div>
 
 
-
-                    
+                    <!-- =================================================
+                         DESCRIPTION
+                    ================================================== -->
 
                     <div class="admin-form-group">
 
@@ -432,11 +528,55 @@
                     </div>
 
 
+                    <!-- =================================================
+                         CHARACTERISTICS
+                    ================================================== -->
 
-                    <!-- BUTTONS -->
+                    <section
+                        class="admin-characteristics-section"
+                    >
+
+                        <div
+                            class="admin-characteristics-heading"
+                        >
+
+                            <p
+                                class="admin-characteristics-eyebrow"
+                            >
+                                CARACTÉRISTIQUES DU PRODUIT
+                            </p>
+
+                            <h3>
+                                Ajoutez les caractéristiques
+                                spécifiques à ce produit.
+                            </h3>
+
+                        </div>
+
+
+                        <div
+                            id="characteristicsContainer"
+                            class="admin-characteristics-container"
+                        >
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="addCharacteristicButton"
+                            class="admin-add-characteristic-button"
+                        >
+                            + Ajouter une caractéristique
+                        </button>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         FORM BUTTONS
+                    ================================================== -->
 
                     <div class="admin-form-buttons">
-
 
                         <a
                             href="products.html"
@@ -454,26 +594,24 @@
                             AJOUTER LE PRODUIT
                         </button>
 
-
                     </div>
-
 
                 </form>
 
-
             </div>
 
-
         </section>
-
 
     </main>
 
 
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
     <script
-     type="module"
-     src="../js/admin-add-products.js"
+        type="module"
+        src="../js/admin-add-products.js"
     ></script>
 
 </body>

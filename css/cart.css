@@ -395,29 +395,36 @@ button {
 
 
 /* =====================================================
-   TOTAL
+   TOTAL — SIMPLE BLACK FRAME
 ===================================================== */
 
 .cart-total {
     width: 100%;
 
-    padding: 35px 40px;
+    padding: 25px 30px;
 
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
 
-    gap: 35px;
+    background: #ffffff;
 
-    background: #111111;
+    border: 2px solid #111111;
 
-    color: #ffffff;
+    color: #111111;
+
+    gap: 25px;
 }
 
-.cart-total h2 {
-    margin-right: auto;
 
-    color: #d4af37;
+/* =====================================================
+   TOTAL TITLE
+===================================================== */
+
+.cart-total h2 {
+    margin: 0;
+
+    color: #111111;
 
     font-family:
         "Times New Roman",
@@ -430,36 +437,62 @@ button {
     letter-spacing: 2px;
 }
 
+
+/* =====================================================
+   TOTAL PRICE
+===================================================== */
+
 .cart-total strong {
-    color: #ffffff;
+    color: #111111;
 
     font-size: 20px;
+    font-weight: 700;
 
     letter-spacing: 0.5px;
+
+    margin-left: auto;
 }
 
 
 /* =====================================================
-   CHECKOUT BUTTON
+   PASSER LA COMMANDE
+   SMALL BLACK FRAME INSIDE
 ===================================================== */
 
 .cart-total a {
-    padding: 15px 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-    background: #d4af37;
+    padding: 12px 20px;
 
-    color: #111111;
+    background: #111111;
+
+    border: 1px solid #111111;
+
+    color: #ffffff;
 
     font-size: 9px;
     font-weight: 700;
 
     letter-spacing: 1.5px;
 
-    transition: 0.3s ease;
+    white-space: nowrap;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
 }
+
+
+/* =====================================================
+   HOVER
+===================================================== */
 
 .cart-total a:hover {
     background: #ffffff;
+
+    color: #111111;
 }
 
 

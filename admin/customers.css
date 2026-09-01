@@ -1,0 +1,1214 @@
+/* =====================================================
+   KANA ÉLECTROMÉNAGER
+   ADMIN - CUSTOMERS
+===================================================== */
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+html {
+
+    width: 100%;
+
+    min-height: 100%;
+
+}
+
+
+body {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    background: #f7f7f5;
+
+    color: #111111;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow-x: hidden;
+
+}
+
+
+a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+/* =====================================================
+   ADMIN HEADER
+===================================================== */
+
+.admin-header {
+
+    width: 100%;
+
+    min-height: 82px;
+
+    padding:
+        16px 6%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: #000000;
+
+}
+
+
+.admin-logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.admin-logo img {
+
+    width: 45px;
+
+    height: 45px;
+
+    object-fit: contain;
+
+}
+
+
+.admin-logo > div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+}
+
+
+.admin-logo strong {
+
+    color: #ffffff;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 19px;
+
+    font-weight: 500;
+
+    letter-spacing: 1.5px;
+
+    line-height: 1.1;
+
+}
+
+
+.admin-logo span {
+
+    margin-top: 5px;
+
+    color: #d4af37;
+
+    font-size: 7px;
+
+    font-weight: 600;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.view-site {
+
+    color: #ffffff;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    transition:
+        color 0.3s ease;
+
+}
+
+
+.view-site:hover {
+
+    color: #d4af37;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.customers-page {
+
+    width: min(
+        1250px,
+        88%
+    );
+
+    margin:
+        0 auto;
+
+    padding:
+        65px 0
+        100px;
+
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.customers-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 45px;
+
+}
+
+
+.page-kicker {
+
+    display: block;
+
+    margin-bottom: 13px;
+
+    color: #d4af37;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+
+}
+
+
+.customers-heading h1 {
+
+    margin-bottom: 12px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(44px, 6vw, 70px);
+
+    font-weight: 400;
+
+    line-height: 0.95;
+
+}
+
+
+.customers-heading p {
+
+    color: #777777;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+.refresh-button {
+
+    min-width: 150px;
+
+    min-height: 42px;
+
+    padding:
+        0 18px;
+
+    background: #111111;
+
+    border: 1px solid #111111;
+
+    color: #ffffff;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+
+}
+
+
+.refresh-button:hover {
+
+    background: #d4af37;
+
+    border-color: #d4af37;
+
+    color: #111111;
+
+}
+
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+.customers-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.stat-card {
+
+    min-height: 120px;
+
+    padding: 23px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e4e4;
+
+}
+
+
+.stat-card span {
+
+    color: #777777;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+}
+
+
+.stat-card strong {
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 27px;
+
+    font-weight: 400;
+
+}
+
+
+/* =====================================================
+   TOOLS
+===================================================== */
+
+.customers-tools {
+
+    width: 100%;
+
+    margin-bottom: 25px;
+
+}
+
+
+.search-box {
+
+    width: 100%;
+
+    max-width: 500px;
+
+}
+
+
+.search-box label {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #777777;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    min-height: 45px;
+
+    padding:
+        0 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #dcdcdc;
+
+    color: #111111;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 11px;
+
+    outline: none;
+
+    transition:
+        border-color 0.3s ease;
+
+}
+
+
+.search-box input::placeholder {
+
+    color: #aaaaaa;
+
+}
+
+
+.search-box input:focus {
+
+    border-color: #d4af37;
+
+}
+
+
+/* =====================================================
+   CUSTOMERS CONTAINER
+===================================================== */
+
+.customers-container {
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+}
+
+
+/* =====================================================
+   CUSTOMER CARD
+===================================================== */
+
+.customer-card {
+
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e2e2;
+
+    transition:
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+
+}
+
+
+.customer-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(
+            0,
+            0,
+            0,
+            0.06
+        );
+
+}
+
+
+/* =====================================================
+   CUSTOMER HEADER
+===================================================== */
+
+.customer-header {
+
+    padding:
+        22px 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom:
+        1px solid #eeeeee;
+
+}
+
+
+.customer-label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #d4af37;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+}
+
+
+.customer-title h2 {
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 25px;
+
+    font-weight: 400;
+
+}
+
+
+.customer-orders {
+
+    min-width: 90px;
+
+    text-align: right;
+
+}
+
+
+.customer-orders strong {
+
+    display: block;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 27px;
+
+    font-weight: 400;
+
+}
+
+
+.customer-orders span {
+
+    color: #777777;
+
+    font-size: 7px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* =====================================================
+   CUSTOMER BODY
+===================================================== */
+
+.customer-body {
+
+    padding:
+        24px 25px;
+
+    display: grid;
+
+    grid-template-columns:
+        1.1fr
+        1.5fr
+        0.9fr
+        0.9fr;
+
+    gap: 30px;
+
+}
+
+
+.customer-info-block {
+
+    min-width: 0;
+
+}
+
+
+.info-label {
+
+    display: block;
+
+    margin-bottom: 11px;
+
+    color: #999999;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.customer-info-block p {
+
+    margin-bottom: 5px;
+
+    color: #555555;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.customer-info-block p strong {
+
+    color: #111111;
+
+}
+
+
+.customer-phone {
+
+    color: #111111;
+
+    font-weight: 600;
+
+    transition:
+        color 0.3s ease;
+
+}
+
+
+.customer-phone:hover {
+
+    color: #d4af37;
+
+}
+
+
+.customer-total {
+
+    color: #111111;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        Times,
+        serif;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.customers-loading {
+
+    min-height: 250px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e4e4;
+
+}
+
+
+.loading-spinner {
+
+    width: 25px;
+
+    height: 25px;
+
+    border:
+        2px solid #eeeeee;
+
+    border-top-color:
+        #d4af37;
+
+    border-radius: 50%;
+
+    animation:
+        customerSpin 0.8s linear infinite;
+
+}
+
+
+.customers-loading p {
+
+    color: #777777;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+}
+
+
+@keyframes customerSpin {
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-customers {
+
+    padding:
+        80px 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e4e4;
+
+}
+
+
+.empty-icon {
+
+    margin-bottom: 15px;
+
+    color: #d4af37;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 35px;
+
+}
+
+
+.empty-customers h3 {
+
+    margin-bottom: 10px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 28px;
+
+    font-weight: 400;
+
+}
+
+
+.empty-customers p {
+
+    color: #777777;
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.customers-error {
+
+    padding:
+        70px 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e4e4;
+
+}
+
+
+.error-icon {
+
+    margin-bottom: 15px;
+
+    color: #d4af37;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 35px;
+
+}
+
+
+.customers-error h3 {
+
+    margin-bottom: 10px;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 27px;
+
+    font-weight: 400;
+
+}
+
+
+.customers-error p {
+
+    margin-bottom: 10px;
+
+    color: #777777;
+
+    font-size: 11px;
+
+}
+
+
+.customers-error small {
+
+    color: #999999;
+
+    font-size: 9px;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .customers-stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .customer-body {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 25px;
+
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .admin-header {
+
+        padding:
+            14px 5%;
+
+    }
+
+
+    .admin-logo img {
+
+        width: 40px;
+
+        height: 40px;
+
+    }
+
+
+    .admin-logo strong {
+
+        font-size: 16px;
+
+    }
+
+
+    .admin-logo span {
+
+        font-size: 6px;
+
+    }
+
+
+    .view-site {
+
+        font-size: 7px;
+
+    }
+
+
+    .customers-page {
+
+        width: 90%;
+
+        padding:
+            45px 0
+            70px;
+
+    }
+
+
+    .customers-heading {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 25px;
+
+        margin-bottom: 35px;
+
+    }
+
+
+    .customers-heading h1 {
+
+        font-size: 48px;
+
+    }
+
+
+    .refresh-button {
+
+        width: 100%;
+
+    }
+
+
+    .customers-stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+
+        margin-bottom: 28px;
+
+    }
+
+
+    .stat-card {
+
+        min-height: 105px;
+
+        padding: 17px;
+
+    }
+
+
+    .stat-card strong {
+
+        font-size: 22px;
+
+    }
+
+
+    .customer-header {
+
+        padding:
+            18px;
+
+    }
+
+
+    .customer-title h2 {
+
+        font-size: 21px;
+
+    }
+
+
+    .customer-orders {
+
+        min-width: 70px;
+
+    }
+
+
+    .customer-orders strong {
+
+        font-size: 22px;
+
+    }
+
+
+    .customer-body {
+
+        padding:
+            20px 18px;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 22px 15px;
+
+    }
+
+
+    .customer-info-block p {
+
+        font-size: 9px;
+
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media (max-width: 450px) {
+
+    .customers-page {
+
+        width: 92%;
+
+        padding-top: 38px;
+
+    }
+
+
+    .admin-logo strong {
+
+        font-size: 14px;
+
+    }
+
+
+    .customers-heading h1 {
+
+        font-size: 43px;
+
+    }
+
+
+    .customers-heading p {
+
+        font-size: 10px;
+
+    }
+
+
+    .customers-stats {
+
+        gap: 8px;
+
+    }
+
+
+    .stat-card {
+
+        min-height: 95px;
+
+        padding: 14px;
+
+    }
+
+
+    .stat-card span {
+
+        font-size: 6.5px;
+
+        letter-spacing: 1.5px;
+
+    }
+
+
+    .stat-card strong {
+
+        font-size: 19px;
+
+    }
+
+
+    .customer-header {
+
+        padding:
+            16px;
+
+    }
+
+
+    .customer-title h2 {
+
+        font-size: 18px;
+
+    }
+
+
+    .customer-body {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 18px;
+
+    }
+
+
+    .customer-total {
+
+        font-size: 15px;
+
+    }
+
+}

@@ -725,11 +725,13 @@ function createOrderCard(order) {
 
 
     const price =
-        Number(
-            order.price ??
-            order.total ??
-            0
-        );
+      Number(
+        order.price ??
+        order.productPrice ??
+        order.product?.price ??
+        order.total ??
+        0
+    );
 
 
     const orderId =

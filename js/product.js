@@ -1,7 +1,10 @@
 /* =====================================================
    KANA — PRODUCT DETAIL
    Firestore
-   Compatible with the exact product.html
+   Cart Drawer
+   Promotion Price
+   Characteristics
+   Installments
 ===================================================== */
 
 import {
@@ -16,7 +19,9 @@ import {
 ===================================================== */
 
 const productId =
-new URLSearchParams(window.location.search).get("id");
+    new URLSearchParams(
+        window.location.search
+    ).get("id");
 
 
 /* =====================================================
@@ -27,33 +32,33 @@ const image =
     document.getElementById("productImage");
 
 const imageSkeleton =
-document.getElementById(
-"productImageSkeleton"
-);
+    document.getElementById(
+        "productImageSkeleton"
+    );
 
 const brand =
-document.getElementById("productBrand");
+    document.getElementById("productBrand");
 
 const name =
-document.getElementById("productName");
+    document.getElementById("productName");
 
 const description =
-document.getElementById(
-"productDescription"
-);
+    document.getElementById(
+        "productDescription"
+    );
 
 const price =
-document.getElementById("productPrice");
+    document.getElementById("productPrice");
 
 const availability =
-document.getElementById(
-"productAvailability"
-);
+    document.getElementById(
+        "productAvailability"
+    );
 
 const breadcrumb =
-document.getElementById(
-"breadcrumbProduct"
-);
+    document.getElementById(
+        "breadcrumbProduct"
+    );
 
 const characteristics =
     document.getElementById(
@@ -66,19 +71,19 @@ const characteristicsTitle =
     );
 
 const whatsapp =
-document.getElementById(
-"whatsappProduct"
-);
+    document.getElementById(
+        "whatsappProduct"
+    );
 
 const order =
-document.getElementById(
-"orderProduct"
-);
+    document.getElementById(
+        "orderProduct"
+    );
 
 const addToCart =
-document.getElementById(
-"addToCartProduct"
-);
+    document.getElementById(
+        "addToCartProduct"
+    );
 
 const installmentPrice =
     document.getElementById(
@@ -86,126 +91,175 @@ const installmentPrice =
     );
 
 const installmentButtons =
-document.querySelectorAll(
-".installment-options button"
+    document.querySelectorAll(
+        ".installment-options button"
     );
 
 
 /* =====================================================
-   REMOVE SKELETON
+   CART DRAWER
 ===================================================== */
 
-function removeSkeletons() {
+const cartDrawer =
+    document.getElementById("cartDrawer");
 
-    /*
-       Remove skeleton class from every element
-       that has it.
+const cartOverlay =
+    document.getElementById("cartOverlay");
 
-       This is the important part for your HTML.
-    */
+const closeCartDrawer =
+    document.getElementById("closeCartDrawer");
 
-    const skeletons =
-        document.querySelectorAll(
-            ".skeleton"
-        );
+const cartDrawerContent =
+    document.getElementById("cartDrawerContent");
+
+const cartDrawerFooter =
+    document.getElementById("cartDrawerFooter");
 
 
-    skeletons.forEach(
-        function (element) {
+/* =====================================================
+   FORMAT PRICE
+===================================================== */
 
-            element.classList.remove(
-                "skeleton"
-            );
+function formatPrice(value) {
 
-            /*
-               Also remove individual skeleton
-               modifier classes.
-            */
+    const number =
+        Number(value);
 
-            element.classList.remove(
-                "skeleton-brand",
-                "skeleton-title",
-                "skeleton-description",
-                "skeleton-price",
-                "skeleton-payment-title",
-                "skeleton-payment-btn",
-                "skeleton-installment-result",
-                "skeleton-characteristics-title",
-                "skeleton-availability",
-                "skeleton-action"
-            );
+    if (!Number.isFinite(number)) {
 
-        }
+        return "Prix sur demande";
+
+    }
+
+    return (
+        number.toLocaleString("fr-FR") +
+        " DA"
     );
-
-
-    /*
-       Product image skeleton
-    */
-
-    if (imageSkeleton) {
-
-        imageSkeleton.style.display =
-            "none";
-
-    }
-
-
-    /*
-       Make sure the real product image
-       is visible when it exists.
-    */
-
-    if (image) {
-
-        image.style.visibility =
-            "visible";
-
-    }
 
 }
 
 
 /* =====================================================
-   SHOW SKELETON
+   PROMOTION
 ===================================================== */
 
-function showSkeleton() {
+/*
+    Promotion works like this:
 
-    const skeletons =
-        document.querySelectorAll(
-            ".skeleton"
+    promotion = true
+    oldPrice = previous price
+    price = promotional/current price
+
+    Example:
+
+    price    = 75000
+    oldPrice = 90000
+    promotion = true
+
+    Display:
+
+    90 000 DA
+    75 000 DA
+*/
+
+function hasValidPromotion(product) {
+
+    const currentPrice =
+        Number(product.price);
+
+    const oldPrice =
+        Number(product.oldPrice);
+
+    return (
+        product.promotion === true &&
+        Number.isFinite(currentPrice) &&
+        Number.isFinite(oldPrice) &&
+        oldPrice > currentPrice
+    );
+
+}
+
+
+function displayProductPrice(product) {
+
+    if (!price) {
+        return;
+    }
+
+
+    price.replaceChildren();
+
+
+    const currentPrice =
+        Number(product.price);
+
+
+    if (!Number.isFinite(currentPrice)) {
+
+        price.textContent =
+            "Prix sur demande";
+
+        return;
+
+    }
+
+
+    if (
+        hasValidPromotion(product)
+    ) {
+
+        const oldPriceElement =
+            document.createElement("del");
+
+        oldPriceElement.className =
+            "product-old-price";
+
+        oldPriceElement.textContent =
+            formatPrice(
+                product.oldPrice
+            );
+
+
+        const newPriceElement =
+            document.createElement("strong");
+
+        newPriceElement.className =
+            "product-new-price";
+
+        newPriceElement.textContent =
+            formatPrice(
+                product.price
+            );
+
+
+        price.append(
+            oldPriceElement,
+            newPriceElement
         );
 
 
-    skeletons.forEach(
-        function (element) {
-
-            element.style.display = "";
-
-        }
-    );
-
-
-    if (imageSkeleton) {
-
-        imageSkeleton.style.display =
-            "";
+        return;
 
     }
+
+
+    price.textContent =
+        formatPrice(
+            product.price
+        );
 
 }
 
 
 /* =====================================================
-   LOAD PRODUCT FROM FIRESTORE
+   LOAD PRODUCT
 ===================================================== */
 
 async function loadProduct() {
 
     if (
-!productId ||
-productId.includes("/")
+        !productId ||
+        productId.includes("/")
     ) {
 
         return null;
@@ -227,9 +281,7 @@ productId.includes("/")
         );
 
 
-    if (
-        !snapshot.exists()
-    ) {
+    if (!snapshot.exists()) {
 
         return null;
 
@@ -249,41 +301,83 @@ productId.includes("/")
 
 
 /* =====================================================
-   FORMAT PRICE
+   SKELETONS
 ===================================================== */
 
-function formatPrice(value) {
-    
-    if (
-value === "" ||
-value === null ||
-value === undefined
-    ) {
+function removeSkeletons() {
 
-        return "Prix sur demande";
-
-    }
+    const skeletons =
+        document.querySelectorAll(
+            ".skeleton"
+        );
 
 
-    const number =
-        Number(value);
+    skeletons.forEach(
+        function (element) {
 
+            element.classList.remove(
+                "skeleton"
+            );
 
-    if (
-!Number.isFinite(number)
-) {
+            element.classList.remove(
+                "skeleton-brand",
+                "skeleton-title",
+                "skeleton-description",
+                "skeleton-price",
+                "skeleton-payment-title",
+                "skeleton-payment-btn",
+                "skeleton-installment-result",
+                "skeleton-characteristics-title",
+                "skeleton-availability",
+                "skeleton-action"
+            );
 
-        return "Prix sur demande";
-    
-    }
-
-
-    return (
-number.toLocaleString(
-            "fr-FR"
-        ) +
-        " DA"
+        }
     );
+
+
+    if (imageSkeleton) {
+
+        imageSkeleton.style.display =
+            "none";
+
+    }
+
+
+    if (image) {
+
+        image.style.visibility =
+            "visible";
+
+    }
+
+}
+
+
+function showSkeleton() {
+
+    const skeletons =
+        document.querySelectorAll(
+            ".skeleton"
+        );
+
+
+    skeletons.forEach(
+        function (element) {
+
+            element.style.display =
+                "";
+
+        }
+    );
+
+
+    if (imageSkeleton) {
+
+        imageSkeleton.style.display =
+            "";
+
+    }
 
 }
 
@@ -295,8 +389,8 @@ number.toLocaleString(
 function getAvailability(product) {
 
     if (
-product.availability ===
-"Disponible"
+        product.availability ===
+        "Disponible"
     ) {
 
         return "Disponible";
@@ -305,7 +399,7 @@ product.availability ===
 
 
     if (
-product.availability ===
+        product.availability ===
         "Indisponible"
     ) {
 
@@ -325,9 +419,7 @@ product.availability ===
    CHARACTERISTICS
 ===================================================== */
 
-function displayCharacteristics(
-    product
-) {
+function displayCharacteristics(product) {
 
     if (!characteristics) {
 
@@ -343,10 +435,6 @@ function displayCharacteristics(
         product.characteristics;
 
 
-    /*
-       No characteristics
-    */
-
     if (
         !data ||
         typeof data !== "object" ||
@@ -356,12 +444,14 @@ function displayCharacteristics(
         characteristics.style.display =
             "none";
 
+
         if (characteristicsTitle) {
 
             characteristicsTitle.style.display =
                 "none";
 
         }
+
 
         return;
 
@@ -382,14 +472,11 @@ function displayCharacteristics(
             );
 
 
-    /*
-       Empty characteristics
-    */
-
     if (!entries.length) {
 
         characteristics.style.display =
             "none";
+
 
         if (characteristicsTitle) {
 
@@ -398,14 +485,11 @@ function displayCharacteristics(
 
         }
 
+
         return;
 
     }
 
-
-    /*
-       Show section
-    */
 
     characteristics.style.display =
         "";
@@ -420,9 +504,7 @@ function displayCharacteristics(
 
 
     const list =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     list.className =
@@ -433,9 +515,7 @@ function displayCharacteristics(
         function ([key, value]) {
 
             const row =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             row.className =
@@ -443,9 +523,7 @@ function displayCharacteristics(
 
 
             const label =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
 
 
             label.className =
@@ -457,9 +535,7 @@ function displayCharacteristics(
 
 
             const result =
-                document.createElement(
-                    "strong"
-                );
+                document.createElement("strong");
 
 
             result.className =
@@ -470,12 +546,8 @@ function displayCharacteristics(
                 value;
 
 
-            row.appendChild(
-                label
-            );
-
-
-            row.appendChild(
+            row.append(
+                label,
                 result
             );
 
@@ -497,128 +569,117 @@ function displayCharacteristics(
 
 /* =====================================================
    INSTALLMENTS
+   Promotion = NEW PRICE
 ===================================================== */
 
-function configureInstallments(
-    product
-) {
+function configureInstallments(product) {
 
-    const amount =
-        Number(
-            product.price
-        );
+    console.log("PRODUCT PRICE:", product.price);
+    console.log("PRODUCT OLD PRICE:", product.oldPrice);
+    console.log("PRODUCT PROMOTION:", product.promotion);
 
+    const currentPrice = Number(product.price);
 
-    const enabled =
-        Number.isFinite(amount) &&
-        amount > 0;
+    const validPrice =
+        Number.isFinite(currentPrice) &&
+        currentPrice > 0;
 
 
-            if (installmentPrice) {
+    if (installmentPrice) {
 
-                installmentPrice.textContent =
-                    "—";
+        installmentPrice.textContent = "—";
 
     }
 
 
-    installmentButtons.forEach(
-        function (button) {
+    installmentButtons.forEach(function (button) {
 
-            button.disabled =
-                !enabled;
+        button.disabled = !validPrice;
 
-
-            button.classList.remove(
-                "active"
-            );
+        button.classList.remove("active");
 
 
-            button.onclick =
-                null;
+        if (!validPrice) {
+
+            return;
+
+        }
 
 
-            if (!enabled) {
+        button.onclick = function () {
+
+            const months =
+                Number(button.dataset.months);
+
+
+            if (
+                !Number.isFinite(months) ||
+                months <= 0
+            ) {
 
                 return;
 
             }
 
 
-            button.onclick =
-                function () {
+            installmentButtons.forEach(function (item) {
 
-                    const months =
-                        Number(
-                            button.dataset.months
-                        );
+                item.classList.remove("active");
+
+            });
 
 
-                    if (
-                        !Number.isFinite(
-                            months
-                        ) ||
-                        months <= 0
-                    ) {
-
-                        return;
-
-                    }
+            button.classList.add("active");
 
 
-                    installmentButtons
-                        .forEach(
-                            function (item) {
-
-                                item.classList.remove(
-                                    "active"
-                                );
-
-                            }
-                        );
+            const monthlyAmount =
+                currentPrice / months;
 
 
-                    button.classList.add(
-                        "active"
-                    );
+            if (installmentPrice) {
 
-
-                    if (
-                        installmentPrice
-                    ) {
-
-                        installmentPrice
-                            .textContent =
-                            (
-                                amount /
-                                months
-                            )
-                            .toLocaleString(
-                                "fr-FR",
-                                {
-maximumFractionDigits:
-                                        0
-                                }
-) +
+                installmentPrice.textContent =
+                    monthlyAmount.toLocaleString(
+                        "fr-FR",
+                        {
+                            maximumFractionDigits: 0
+                        }
+                    ) +
                     " DA / mois";
-            
-                    }
 
-                };
+            }
 
-        }
-    );
+        };
+
+    });
+
+
+    /*
+       ============================================
+       AFFICHER AUTOMATIQUEMENT 10 MOIS
+       SI UN BOUTON 10 MOIS EXISTE
+       ============================================
+    */
+
+    const defaultButton =
+        document.querySelector(
+            '.installment-options button[data-months="10"]'
+        );
+
+
+    if (defaultButton && validPrice) {
+
+        defaultButton.click();
+
+    }
 
 }
 
-
 /* =====================================================
-   CART
+   ADD PRODUCT TO CART
 ===================================================== */
 
-function addProductToCart(
-product
-) {
+function addProductToCart(product) {
 
     let cart = [];
 
@@ -626,7 +687,7 @@ product
     try {
 
         const saved =
-localStorage.getItem(
+            localStorage.getItem(
                 "kanaCart"
             );
 
@@ -634,15 +695,11 @@ localStorage.getItem(
         if (saved) {
 
             const parsed =
-                JSON.parse(
-                    saved
-                );
+                JSON.parse(saved);
 
 
             if (
-                Array.isArray(
-                    parsed
-                )
+                Array.isArray(parsed)
             ) {
 
                 cart =
@@ -655,7 +712,7 @@ localStorage.getItem(
     } catch (error) {
 
         console.error(
-"Erreur panier :",
+            "Erreur panier :",
             error
         );
 
@@ -666,11 +723,9 @@ localStorage.getItem(
         cart.find(
             function (item) {
 
-                return String(
-                    item.id
-                ) ===
-                String(
-                    product.id
+                return (
+                    String(item.id) ===
+                    String(product.id)
                 );
 
             }
@@ -680,29 +735,66 @@ localStorage.getItem(
     if (existing) {
 
         existing.quantity =
-Number(
-existing.quantity || 1
-) + 1;
+            (
+                Number(
+                    existing.quantity
+                ) || 1
+            ) + 1;
+        existing.price =
+             product.price ?? 0;
+
+        existing.oldPrice =
+             product.oldPrice ?? null;
+
+        existing.promotion =
+             product.promotion === true;
+
+        existing.name =
+              product.name ||
+              "Produit";
+
+        existing.image =
+              product.image ||
+             "";
+
+        existing.brand =
+              product.brand ||
+             "KANA";
+
+        existing.category =
+             product.category ||
+             "";
+
+        existing.type =
+               product.type ||
+              "";    
 
     } else {
 
         cart.push({
 
             id:
-product.id,
+                product.id,
 
             name:
-product.name ||
-"Produit",
+                product.name ||
+                "Produit",
 
             price:
-product.price ??
-0,
+                product.price ??
+                0,
+
+            oldPrice:
+                product.oldPrice ??
+                null,
+
+            promotion:
+                product.promotion === true,
 
             image:
-product.image ||
-"",
-            
+                product.image ||
+                "",
+
             brand:
                 product.brand ||
                 "KANA",
@@ -725,9 +817,500 @@ product.image ||
 
     localStorage.setItem(
         "kanaCart",
-        JSON.stringify(
-            cart
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =====================================================
+   GET CART
+===================================================== */
+
+function getCart() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "kanaCart"
+            );
+
+
+        if (!saved) {
+
+            return [];
+
+        }
+
+
+        const cart =
+            JSON.parse(saved);
+
+
+        return Array.isArray(cart)
+            ? cart
+            : [];
+
+    } catch (error) {
+
+        console.error(
+            "Erreur panier :",
+            error
+        );
+
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE CART
+===================================================== */
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        "kanaCart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =====================================================
+   CART PRICE
+===================================================== */
+
+function formatCartPrice(value) {
+
+    const number =
+        Number(value) || 0;
+
+
+    return (
+        number.toLocaleString(
+            "fr-FR"
+        ) +
+        " DA"
+    );
+
+}
+
+
+/* =====================================================
+   CART DRAWER
+===================================================== */
+
+function renderCartDrawer() {
+
+    if (!cartDrawerContent) {
+
+        return;
+
+    }
+
+
+    const cart =
+        getCart();
+
+
+    /* ---------------------------------------------
+       EMPTY
+    --------------------------------------------- */
+
+    if (!cart.length) {
+
+        cartDrawerContent.innerHTML = `
+
+            <div class="cart-drawer-empty">
+
+                <div class="cart-empty-icon">
+                    🛒
+                </div>
+
+                <h3>
+                    Votre panier est vide
+                </h3>
+
+                <p>
+                    Aucun produit ajouté pour le moment.
+                </p>
+
+            </div>
+
+        `;
+
+
+        if (cartDrawerFooter) {
+
+            cartDrawerFooter.innerHTML = `
+
+                <a
+                    href="cart.html"
+                    class="cart-drawer-view-cart"
+                >
+                    VOIR MON PANIER
+                </a>
+
+            `;
+
+        }
+
+
+        return;
+
+    }
+
+
+    cartDrawerContent.innerHTML =
+        "";
+
+
+    let total =
+        0;
+
+
+    cart.forEach(
+        function (product, index) {
+
+            const itemPrice =
+                Number(
+                    product.price
+                ) || 0;
+
+
+            const quantity =
+                Number(
+                    product.quantity
+                ) || 1;
+
+
+            const subtotal =
+                itemPrice *
+                quantity;
+
+
+            total +=
+                subtotal;
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "cart-drawer-item";
+
+
+            item.innerHTML = `
+
+                <div class="cart-drawer-image">
+
+                    <img
+                        src="${product.image || ""}"
+                        alt="${product.name || "Produit"}"
+                    >
+
+                </div>
+
+
+                <div class="cart-drawer-info">
+
+                    <h3>
+                        ${product.name || "Produit"}
+                    </h3>
+
+
+                    <span class="cart-drawer-price">
+                        ${formatCartPrice(itemPrice)}
+                    </span>
+
+
+                    <div class="cart-drawer-controls">
+
+                        <button
+                            type="button"
+                            class="drawer-quantity-btn"
+                            data-index="${index}"
+                            data-change="-1"
+                        >
+                            −
+                        </button>
+
+
+                        <span>
+                            ${quantity}
+                        </span>
+
+
+                        <button
+                            type="button"
+                            class="drawer-quantity-btn"
+                            data-index="${index}"
+                            data-change="1"
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+
+                    <strong class="cart-drawer-subtotal">
+                        ${formatCartPrice(subtotal)}
+                    </strong>
+
+
+                    <button
+                        type="button"
+                        class="drawer-remove-btn"
+                        data-index="${index}"
+                    >
+                        SUPPRIMER
+                    </button>
+
+                </div>
+
+            `;
+
+
+            cartDrawerContent.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    /* ---------------------------------------------
+       FOOTER
+    --------------------------------------------- */
+
+    if (cartDrawerFooter) {
+
+        cartDrawerFooter.innerHTML = `
+
+            <div class="cart-drawer-total">
+
+                <span>
+                    TOTAL
+                </span>
+
+                <strong>
+                    ${formatCartPrice(total)}
+                </strong>
+
+            </div>
+
+
+            <a
+                href="checkout.html"
+                class="cart-drawer-checkout"
+            >
+                COMMANDER
+            </a>
+
+
+            <a
+                href="cart.html"
+                class="cart-drawer-view-cart"
+            >
+                VOIR LE PANIER
+            </a>
+
+        `;
+
+    }
+
+
+    /* ---------------------------------------------
+       QUANTITY
+    --------------------------------------------- */
+
+    document
+        .querySelectorAll(
+            ".drawer-quantity-btn"
         )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const index =
+                            Number(
+                                button.dataset.index
+                            );
+
+
+                        const change =
+                            Number(
+                                button.dataset.change
+                            );
+
+
+                        const updatedCart =
+                            getCart();
+
+
+                        if (
+                            !updatedCart[index]
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        updatedCart[index].quantity =
+                            (
+                                Number(
+                                    updatedCart[index].quantity
+                                ) || 1
+                            ) +
+                            change;
+
+
+                        if (
+                            updatedCart[index].quantity <=
+                            0
+                        ) {
+
+                            updatedCart.splice(
+                                index,
+                                1
+                            );
+
+                        }
+
+
+                        saveCart(
+                            updatedCart
+                        );
+
+
+                        renderCartDrawer();
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* ---------------------------------------------
+       REMOVE
+    --------------------------------------------- */
+
+    document
+        .querySelectorAll(
+            ".drawer-remove-btn"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const index =
+                            Number(
+                                button.dataset.index
+                            );
+
+
+                        const updatedCart =
+                            getCart();
+
+
+                        updatedCart.splice(
+                            index,
+                            1
+                        );
+
+
+                        saveCart(
+                            updatedCart
+                        );
+
+
+                        renderCartDrawer();
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   OPEN CART
+===================================================== */
+
+function openCartDrawer() {
+
+    renderCartDrawer();
+
+
+    if (cartDrawer) {
+
+        cartDrawer.classList.add(
+            "open"
+        );
+
+    }
+
+
+    if (cartOverlay) {
+
+        cartOverlay.classList.add(
+            "show"
+        );
+
+    }
+
+
+    document.body.classList.add(
+        "cart-drawer-open"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE CART
+===================================================== */
+
+function closeCartDrawerMenu() {
+
+    if (cartDrawer) {
+
+        cartDrawer.classList.remove(
+            "open"
+        );
+
+    }
+
+
+    if (cartOverlay) {
+
+        cartOverlay.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    document.body.classList.remove(
+        "cart-drawer-open"
     );
 
 }
@@ -737,26 +1320,24 @@ product.image ||
    ACTIONS
 ===================================================== */
 
-function configureActions(
-product
-) {
+function configureActions(product) {
 
-    /*
+    /* ---------------------------------------------
        WHATSAPP
-    */
+    --------------------------------------------- */
 
     if (whatsapp) {
 
         const message =
-"Bonjour, je suis intéressé(e) par le produit : " +
+            "Bonjour, je suis intéressé(e) par le produit : " +
             (
-product.name ||
+                product.name ||
                 ""
-);
+            );
 
 
         whatsapp.href =
-"https://wa.me/213799846032?text=" +
+            "https://wa.me/213799846032?text=" +
             encodeURIComponent(
                 message
             );
@@ -764,27 +1345,27 @@ product.name ||
     }
 
 
-    /*
+    /* ---------------------------------------------
        ORDER
-    */
+    --------------------------------------------- */
 
     if (order) {
 
         order.href =
-"checkout.html?id=" +
-encodeURIComponent(
-product.id
-);
+            "checkout.html?id=" +
+            encodeURIComponent(
+                product.id
+            );
 
     }
 
 
-    /*
+    /* ---------------------------------------------
        CART
-    */
+    --------------------------------------------- */
 
     if (addToCart) {
-        
+
         addToCart.onclick =
             function () {
 
@@ -793,6 +1374,9 @@ product.id
                     addProductToCart(
                         product
                     );
+
+
+                    openCartDrawer();
 
 
                     const original =
@@ -806,23 +1390,23 @@ product.id
                         original;
 
 
-                addToCart.textContent =
-"AJOUTÉ AU PANIER ✓";
+                    addToCart.textContent =
+                        "AJOUTÉ AU PANIER ✓";
 
 
-                window.setTimeout(
-function () {
+                    window.setTimeout(
+                        function () {
 
-addToCart.textContent =
-original;
+                            addToCart.textContent =
+                                original;
 
                         },
-1500
-);
+                        1500
+                    );
 
 
-            } catch (error) {
-                
+                } catch (error) {
+
                     console.error(
                         "Erreur panier :",
                         error
@@ -842,17 +1426,13 @@ original;
 ===================================================== */
 
 function showNotFound() {
-    
-    /*
-       First remove skeleton.
-    */
 
     removeSkeletons();
 
 
     if (image) {
 
-image.style.display =
+        image.style.display =
             "none";
 
     }
@@ -877,40 +1457,40 @@ image.style.display =
     if (name) {
 
         name.textContent =
-"Produit introuvable";
-    
+            "Produit introuvable";
+
     }
 
 
     if (description) {
 
-description.textContent =
-"Ce produit n'existe pas ou n'est plus disponible.";
-    
+        description.textContent =
+            "Ce produit n'existe pas ou n'est plus disponible.";
+
     }
 
 
     if (price) {
 
-price.textContent =
-"";
-    
+        price.textContent =
+            "";
+
     }
 
 
     if (availability) {
 
-availability.textContent =
-"Indisponible";
-    
+        availability.textContent =
+            "Indisponible";
+
     }
 
 
     if (breadcrumb) {
 
-breadcrumb.textContent =
-"PRODUIT";
-    
+        breadcrumb.textContent =
+            "PRODUIT";
+
     }
 
 
@@ -932,37 +1512,37 @@ breadcrumb.textContent =
 
     if (installmentPrice) {
 
-installmentPrice.textContent =
-"—";
+        installmentPrice.textContent =
+            "—";
 
     }
 
 
     installmentButtons.forEach(
-function (button) {
+        function (button) {
 
-        button.disabled =
-true;
+            button.disabled =
+                true;
 
-        button.classList.remove(
-"active"
-);
-    
+            button.classList.remove(
+                "active"
+            );
+
         }
-);
-    
+    );
+
 
     [
-whatsapp,
-order,
-addToCart
+        whatsapp,
+        order,
+        addToCart
 
-].forEach(
-function (element) {
+    ].forEach(
+        function (element) {
 
-        if (element) {
+            if (element) {
 
-element.style.display =
+                element.style.display =
                     "none";
 
             }
@@ -977,9 +1557,7 @@ element.style.display =
    DISPLAY PRODUCT
 ===================================================== */
 
-function displayProduct(
-product
-) {
+function displayProduct(product) {
 
     if (!product) {
 
@@ -997,8 +1575,8 @@ product
     if (image) {
 
         image.alt =
-product.name ||
-"Produit";
+            product.name ||
+            "Produit";
 
 
         image.onerror =
@@ -1019,11 +1597,6 @@ product.name ||
 
 
         if (product.image) {
-            
-            /*
-               Keep skeleton until image is
-               actually loaded.
-            */
 
             image.style.display =
                 "none";
@@ -1048,7 +1621,7 @@ product.name ||
                     }
 
 
-image.style.display =
+                    image.style.display =
                         "block";
 
                 };
@@ -1060,8 +1633,8 @@ image.style.display =
         } else {
 
             image.removeAttribute(
-"src"
-);
+                "src"
+            );
 
 
             image.style.display =
@@ -1112,10 +1685,10 @@ image.style.display =
 
     if (description) {
 
-description.textContent =
-product.description ||
-"Découvrez notre produit.";
-    
+        description.textContent =
+            product.description ||
+            "Découvrez notre produit.";
+
     }
 
 
@@ -1123,14 +1696,9 @@ product.description ||
        PRICE
     ================================================= */
 
-    if (price) {
-
-price.textContent =
-formatPrice(
-product.price
-);
-    
-    }
+    displayProductPrice(
+        product
+    );
 
 
     /* =================================================
@@ -1139,11 +1707,11 @@ product.price
 
     if (availability) {
 
-availability.textContent =
-getAvailability(
-product
-);
-    
+        availability.textContent =
+            getAvailability(
+                product
+            );
+
     }
 
 
@@ -1153,7 +1721,7 @@ product
 
     if (breadcrumb) {
 
-breadcrumb.textContent =
+        breadcrumb.textContent =
             product.name ||
             "PRODUIT";
 
@@ -1170,7 +1738,7 @@ breadcrumb.textContent =
 
 
     /* =================================================
-       PAGE TITLE
+       TITLE
     ================================================= */
 
     document.title =
@@ -1199,15 +1767,51 @@ breadcrumb.textContent =
     );
 
 
-    /*
-       NOW:
-       Product data exists.
-       Remove skeletons from text/buttons.
-    */
-
     removeSkeletons();
 
 }
+
+
+/* =====================================================
+   CART DRAWER EVENTS
+===================================================== */
+
+if (closeCartDrawer) {
+
+    closeCartDrawer.addEventListener(
+        "click",
+        closeCartDrawerMenu
+    );
+
+}
+
+
+if (cartOverlay) {
+
+    cartOverlay.addEventListener(
+        "click",
+        closeCartDrawerMenu
+    );
+
+}
+
+
+/* =====================================================
+   ESC
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            closeCartDrawerMenu();
+
+        }
+
+    }
+);
 
 
 /* =====================================================
@@ -1215,11 +1819,6 @@ breadcrumb.textContent =
 ===================================================== */
 
 async function initialize() {
-    
-    /*
-       Keep skeleton visible while Firestore
-       is loading.
-    */
 
     showSkeleton();
 
@@ -1237,14 +1836,14 @@ async function initialize() {
     } catch (error) {
 
         console.error(
-"Erreur Firestore lors du chargement du produit :",
-error
-);
+            "Erreur Firestore lors du chargement du produit :",
+            error
+        );
 
 
         showNotFound();
-    
-}
+
+    }
 
 }
 
@@ -1254,17 +1853,17 @@ error
 ===================================================== */
 
 if (
-document.readyState ===
-"loading"
+    document.readyState ===
+    "loading"
 ) {
 
-document.addEventListener(
-"DOMContentLoaded",
-initialize
-);
+    document.addEventListener(
+        "DOMContentLoaded",
+        initialize
+    );
 
 } else {
 
-initialize();
+    initialize();
 
-}
+}  

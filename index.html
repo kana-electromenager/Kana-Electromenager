@@ -5,11 +5,17 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>KANA Électroménager</title>
 
-    <link rel="stylesheet" href="css/main.css">
+    <link
+        rel="stylesheet"
+        href="css/main.css"
+    >
 
 </head>
 
@@ -23,7 +29,10 @@
 
 <header class="header">
 
-    <a href="index.html" class="brand">
+    <a
+        href="index.html"
+        class="brand"
+    >
 
         <img
             src="images/logo/logo.png"
@@ -33,47 +42,472 @@
 
         <div class="brand-text">
 
-            <strong >KANA Électroménager </strong>
+            <strong>
+                KANA Électroménager
+            </strong>
 
-            <span>Chez Amrane</span>
-            
+            <span>
+                Chez Amrane
+            </span>
 
         </div>
 
     </a>
 
 
+    <!-- DESKTOP NAVIGATION -->
+
     <nav class="nav">
 
-        <a href="index.html">Accueil</a>
+        <a href="index.html">
+            Accueil
+        </a>
 
-        <a href="#categories">Catégories</a>
+        <a href="#categories">
+            Catégories
+        </a>
 
-        <a href="#about">À propos</a>
+        <a href="#best-sellers">
+            Best Sellers
+        </a>
 
-        <a href="#contact">Contact</a>
-         
-        <a href="cart.html">Panier</a>
-    
+        <a href="#promotions">
+            Promotions
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+        <a href="cart.html">
+            Panier
+        </a>
+
     </nav>
 
 
+    <!-- WHATSAPP -->
+
     <a
-        href="https://wa.me/0799846032"
+        href="https://wa.me/213799846032"
         target="_blank"
+        rel="noopener noreferrer"
         class="whatsapp-btn"
     >
         WhatsApp
     </a>
-    
 
+
+    <!-- MOBILE MENU BUTTON -->
+
+    <button
+        type="button"
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Ouvrir le menu"
+        aria-expanded="false"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
 
 </header>
 
 
 
 <!-- =====================================================
-     HERO SLIDER
+     MOBILE MENU OVERLAY
+===================================================== -->
+
+<div
+    class="side-menu-overlay"
+    id="sideMenuOverlay"
+></div>
+
+
+<!-- =====================================================
+     MOBILE SIDE MENU
+===================================================== -->
+
+
+
+<aside
+    class="side-menu"
+    id="sideMenu"
+    aria-hidden="true"
+>
+
+    <!-- SIDE MENU HEADER -->
+
+    <div class="side-menu-header">
+
+        <div class="side-menu-brand">
+
+            <img
+                src="images/logo/logo.png"
+                alt="KANA"
+            >
+
+            <div class="side-menu-brand-text">
+
+                <strong>
+                    KANA
+                </strong>
+
+                <span>
+                    Électroménager
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="side-menu-close"
+            id="sideMenuClose"
+            aria-label="Fermer le menu"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         MENU
+    ================================================== -->
+
+    <nav class="side-menu-nav">
+
+
+        <!-- ACCUEIL -->
+
+        <a
+            href="index.html"
+            class="side-menu-link"
+        >
+            <span>
+                Accueil
+            </span>
+        </a>
+
+
+        <!-- =================================================
+             CATÉGORIES
+        ================================================== -->
+
+        <button
+            type="button"
+            class="side-menu-link side-menu-dropdown"
+            id="categoriesMenuButton"
+            aria-expanded="false"
+        >
+
+            <span>
+                Catégories
+            </span>
+
+            <span
+                class="side-menu-arrow"
+                id="categoriesArrow"
+            >
+                ↓
+            </span>
+
+        </button>
+
+
+        <!-- =================================================
+             CATEGORIES CONTENT
+        ================================================== -->
+
+        <div
+            class="side-submenu"
+            id="categoriesSubmenu"
+        >
+
+
+            <!-- =============================================
+                 MAISON & ENTRETIEN
+            ============================================== -->
+
+            <button
+                type="button"
+                class="side-subcategory-toggle"
+                id="maisonMenuButton"
+                aria-expanded="false"
+            >
+
+                <span>
+                    Maison & Entretien
+                </span>
+
+                <span class="subcategory-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <div
+                class="side-nested-submenu"
+                id="maisonSubmenu"
+            >
+
+                <a
+                    href="products.html?category=maison-entretien&type=aspirateurs"
+                >
+                    Aspirateurs
+                </a>
+
+                <a
+                    href="products.html?category=maison-entretien&type=ventilateurs"
+                >
+                    Ventilateurs
+                </a>
+
+                <a
+                    href="products.html?category=maison-entretien&type=climatisation"
+                >
+                    Climatisation
+                </a>
+
+                <a
+                    href="products.html?category=maison-entretien&type=chauffages"
+                >
+                    Chauffages
+                </a>
+
+                <a
+                    href="products.html?category=maison-entretien&type=chauffe-eau"
+                >
+                    Chauffe-eau
+                </a>
+
+            </div>
+
+
+            <!-- =============================================
+                 CUISINE
+            ============================================== -->
+
+            <button
+                type="button"
+                class="side-subcategory-toggle"
+                id="cuisineMenuButton"
+                aria-expanded="false"
+            >
+
+                <span>
+                    Cuisine
+                </span>
+
+                <span class="subcategory-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <div
+                class="side-nested-submenu"
+                id="cuisineSubmenu"
+            >
+
+                <a
+                    href="products.html?category=cuisine&type=machines-a-cafe"
+                >
+                    Machines à café
+                </a>
+
+                <a
+                    href="products.html?category=cuisine&type=air-fryer"
+                >
+                    Air Fryer
+                </a>
+
+                <a
+                    href="products.html?category=cuisine&type=hachoir-mixeur-batteur-blender"
+                >
+                    hachoir-mixeur-batteur-blender
+                </a>
+
+                <a
+                    href="products.html?category=cuisine&type=micro-ondes"
+                >
+                    Micro-ondes
+                </a>
+
+                <a
+                    href="products.html?category=cuisine&type=fours"
+                >
+                    Fours
+                </a>
+
+                <a
+                    href="products.html?category=cuisine&type=cuisinieres"
+                >
+                    Cuisinières
+                </a>
+
+                <a href="products.html?category=cuisine&type=petran">
+                  Petran
+                </a>
+
+            </div>
+
+
+            <!-- =============================================
+                 RÉFRIGÉRATEURS & CONGÉLATEURS
+            ============================================== -->
+
+            <button
+                type="button"
+                class="side-subcategory-toggle"
+                id="refrigerateursMenuButton"
+                aria-expanded="false"
+            >
+
+                <span>
+                    Réfrigérateurs et Congélateurs
+                </span>
+
+                <span class="subcategory-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <div
+                class="side-nested-submenu"
+                id="refrigerateursSubmenu"
+            >
+
+                <a
+                    href="products.html?category=refrigerateur-congelateur&type=refrigerateurs"
+                >
+                    Réfrigérateurs
+                </a>
+
+                <a
+                    href="products.html?category=refrigerateur-congelateur&type=congelateurs"
+                >
+                    Congélateurs
+                </a>
+
+            </div>
+
+
+            <!-- =============================================
+                 TÉLÉVISIONS
+            ============================================== -->
+
+            <a
+                href="category.html?category=televisions"
+                class="side-subcategory-link"
+            >
+                Télévisions
+            </a>
+
+
+            <!-- =============================================
+                 MACHINES À LAVER
+            ============================================== -->
+
+            <a
+                href="category.html?category=machines-a-laver"
+                class="side-subcategory-link"
+            >
+                Machines à laver
+            </a>
+
+
+            <!-- =============================================
+                 LAVE-VAISSELLE
+            ============================================== -->
+
+            <a
+                href="category.html?category=lave-vaisselle"
+                class="side-subcategory-link"
+            >
+                Lave-vaisselle
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             BEST SELLERS
+        ================================================== -->
+
+        <a
+            href="products.html?type=best-seller"
+            class="side-menu-link"
+        >
+            <span>
+                Best Sellers
+            </span>
+        </a>
+
+
+        <!-- =================================================
+             PROMOTIONS
+        ================================================== -->
+
+        <a
+            href="products.html?type=promotion"
+            class="side-menu-link"
+        >
+            <span>
+                Promotions
+            </span>
+        </a>
+
+
+        <!-- =================================================
+             PANIER
+        ================================================== -->
+        <a
+          href="cart.html"
+         class="side-menu-link side-menu-cart"
+        >
+          <span>
+              Panier 🛒
+           </span>
+        </a>
+     
+
+        <!-- =================================================
+             CONTACT → WHATSAPP
+        ================================================== -->
+
+        <a
+            href="https://wa.me/213799846032"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="side-menu-link side-menu-contact"
+        >
+
+            <span>
+                Contact
+            </span>
+
+        </a>
+
+
+    </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     HERO
 ===================================================== -->
 
 <section class="hero">
@@ -81,13 +515,11 @@
     <img
         id="heroImage"
         class="hero-image"
-        src="images/categories/maison-entretien.jpg"
+        src="images/hero/hero-1.jpg"
         alt="KANA Électroménager"
     >
 
-
     <div class="hero-overlay"></div>
-
 
     <div class="hero-content">
 
@@ -95,21 +527,17 @@
             id="heroLabel"
             class="hero-label"
         >
-            MAISON & ENTRETIEN
+            KANA ÉLECTROMÉNAGER
         </p>
-
 
         <h1 id="heroTitle">
-            L'élégance commence chez vous.
+            L'électroménager, élevé au rang d'art.
         </h1>
 
-
         <p id="heroText">
-            Découvrez une sélection d'appareils
-            électroménagers conçus pour améliorer
-            votre quotidien.
+            Des pièces d'exception, une livraison irréprochable
+            et un service à la hauteur de votre intérieur.
         </p>
-
 
         <div
             id="heroFeatures"
@@ -122,17 +550,15 @@
             DESIGN
         </div>
 
-
         <a
             id="heroButton"
             class="hero-button"
             href="#categories"
         >
-            DÉCOUVRIR LA COLLECTION
+            DÉCOUVRIR
         </a>
 
     </div>
-
 
 
     <div
@@ -155,9 +581,13 @@
 
     <div class="section-heading">
 
-        <p>KANA ÉLECTROMÉNAGER</p>
+        <p>
+            KANA ÉLECTROMÉNAGER
+        </p>
 
-        <h2>Nos catégories</h2>
+        <h2>
+            Nos catégories
+        </h2>
 
         <span>
             Découvrez notre sélection pour chaque espace
@@ -174,8 +604,96 @@
 
 </section>
 
+
+
 <!-- =====================================================
-     NOS MARQUES
+     BEST SELLERS
+===================================================== -->
+
+<section
+    id="best-sellers"
+    class="home-products-section"
+>
+
+    <div class="section-heading">
+
+        <p class="section-label">
+            NOS INCONTOURNABLES
+        </p>
+
+        <h2>
+            Best Sellers
+        </h2>
+
+        <span>
+            Découvrez les produits les plus appréciés.
+        </span>
+
+    </div>
+
+
+    <div
+        id="bestSellersContainer"
+        class="home-products-grid"
+    ></div>
+
+
+    <a
+        href="products.html?type=best-seller"
+        class="home-products-button"
+    >
+        VOIR TOUS LES PRODUITS
+    </a>
+
+</section>
+
+
+
+<!-- =====================================================
+     PROMOTIONS
+===================================================== -->
+
+<section
+    id="promotions"
+    class="home-products-section promotions-section"
+>
+
+    <div class="section-heading">
+
+        <p class="section-label">
+            OFFRES DU MOMENT
+        </p>
+
+        <h2>
+            Promotions
+        </h2>
+
+        <span>
+            Profitez de nos offres sélectionnées.
+        </span>
+
+    </div>
+
+
+    <div
+        id="promotionsContainer"
+        class="home-products-grid"
+    ></div>
+
+
+    <a
+        href="products.html?type=promotion"
+        class="home-products-button"
+    >
+        VOIR TOUTES LES OFFRES
+    </a>
+
+</section>
+
+
+
+<!-- =====================================================
+     BRANDS
 ===================================================== -->
 
 <section class="brands-section">
@@ -202,40 +720,70 @@
 
         <div class="brands-track">
 
-            <a href="products.html?brand=condor">CONDOR</a>
+            <a href="products.html?brand=condor">
+                CONDOR
+            </a>
 
-            <a href="products.html?brand=samsung">SAMSUNG</a>
+            <a href="products.html?brand=samsung">
+                SAMSUNG
+            </a>
 
-            <a href="products.html?brand=lg">LG</a>
+            <a href="products.html?brand=lg">
+                LG
+            </a>
 
-            <a href="products.html?brand=brandt">BRANDT</a>
+            <a href="products.html?brand=brandt">
+                BRANDT
+            </a>
 
-            <a href="products.html?brand=iris">IRIS</a>
+            <a href="products.html?brand=iris">
+                IRIS
+            </a>
 
-            <a href="products.html?brand=beko">BEKO</a>
+            <a href="products.html?brand=beko">
+                BEKO
+            </a>
 
-            <a href="products.html?brand=bosch">BOSCH</a>
+            <a href="products.html?brand=bosch">
+                BOSCH
+            </a>
 
-            <a href="products.html?brand=hisense">HISENSE</a>
+            <a href="products.html?brand=hisense">
+                HISENSE
+            </a>
 
 
-            <!-- DUPLICATION POUR L'EFFET INFINI -->
+            <a href="products.html?brand=condor">
+                CONDOR
+            </a>
 
-            <a href="products.html?brand=condor">CONDOR</a>
+            <a href="products.html?brand=samsung">
+                SAMSUNG
+            </a>
 
-            <a href="products.html?brand=samsung">SAMSUNG</a>
+            <a href="products.html?brand=lg">
+                LG
+            </a>
 
-            <a href="products.html?brand=lg">LG</a>
+            <a href="products.html?brand=brandt">
+                BRANDT
+            </a>
 
-            <a href="products.html?brand=brandt">BRANDT</a>
+            <a href="products.html?brand=iris">
+                IRIS
+            </a>
 
-            <a href="products.html?brand=iris">IRIS</a>
+            <a href="products.html?brand=beko">
+                BEKO
+            </a>
 
-            <a href="products.html?brand=beko">BEKO</a>
+            <a href="products.html?brand=bosch">
+                BOSCH
+            </a>
 
-            <a href="products.html?brand=bosch">BOSCH</a>
-
-            <a href="products.html?brand=hisense">HISENSE</a>
+            <a href="products.html?brand=hisense">
+                HISENSE
+            </a>
 
         </div>
 
@@ -249,9 +797,12 @@
      FOOTER
 ===================================================== -->
 
-<footer class="footer">
+<footer
+    class="footer"
+    id="contact"
+>
 
-    <!-- BRAND -->
+
     <div class="footer-brand">
 
         <img
@@ -260,76 +811,82 @@
         >
 
         <div>
-            <strong>KANA ÉLECTROMÉNAGER</strong>
-            <span>Chez Amrane</span>
+
+            <strong>
+                KANA ÉLECTROMÉNAGER
+            </strong>
+
+            <span>
+                Chez Amrane
+            </span>
+
         </div>
 
     </div>
 
 
-    <!-- SEPARATOR -->
     <div class="footer-separator"></div>
 
 
-    <!-- FOOTER COLUMNS -->
     <div class="footer-grid">
 
 
-        <!-- =================================================
-             À PROPOS
-        ================================================== -->
-
         <div class="footer-column">
 
-            <h3>À PROPOS</h3>
+            <h3>
+                À PROPOS
+            </h3>
 
             <p>
-             KANA Électroménager est une plateforme web dédiée à la vente et à la présentation d’appareils électroménagers,
-              offrant une expérience moderne et simple aux clients.
-                
+                KANA Électroménager est une plateforme web
+                dédiée à la vente et à la présentation
+                d’appareils électroménagers, offrant une
+                expérience moderne et simple aux clients.
             </p>
 
         </div>
 
 
-        <!-- =================================================
-             NAVIGATION
-        ================================================== -->
 
         <div class="footer-column">
 
-            <h3>NAVIGATION</h3>
+            <h3>
+                NAVIGATION
+            </h3>
 
             <a href="index.html">
                 Accueil
-            </a>
-
-            <a href="products.html">
-                Produits
             </a>
 
             <a href="#categories">
                 Catégories
             </a>
 
-            <a href="#about">
-                À propos
+            <a href="#best-sellers">
+                Best Sellers
+            </a>
+
+            <a href="#promotions">
+                Promotions
             </a>
 
             <a href="#contact">
                 Contact
             </a>
 
+            <a href="cart.html">
+                Panier
+            </a>
+
         </div>
 
 
-        <!-- =================================================
-             SERVICES
-        ================================================== -->
 
         <div class="footer-column">
 
-            <h3>SERVICES</h3>
+            <h3>
+                SERVICES
+            </h3>
 
             <a href="#contact">
                 Livraison
@@ -342,16 +899,12 @@
         </div>
 
 
-        <!-- =================================================
-             NOS MAGASINS
-        ================================================== -->
 
         <div class="footer-column">
 
-            <h3>NOS MAGASINS</h3>
-
-
-            <!-- MAGASIN 1 -->
+            <h3>
+                NOS MAGASINS
+            </h3>
 
             <a
                 href="https://maps.app.goo.gl/2qSQxfSM5Y6Nz84y8"
@@ -360,9 +913,6 @@
             >
                 Magasin 1 — Voir sur Google Maps
             </a>
-
-
-            <!-- MAGASIN 2 -->
 
             <a
                 href="https://maps.app.goo.gl/5QKhNSnasC9cp64Z9"
@@ -375,21 +925,12 @@
         </div>
 
 
-        <!-- =================================================
-             SUIVEZ-NOUS
-        ================================================== -->
 
         <div class="footer-column">
 
-            <h3>SUIVEZ-NOUS</h3>
-
-
-            <!-- INSTAGRAM -->
-
-            
-
-
-            <!-- FACEBOOK -->
+            <h3>
+                SUIVEZ-NOUS
+            </h3>
 
             <a
                 href="https://web.facebook.com/profile.php?id=100069816216836"
@@ -398,9 +939,6 @@
             >
                 Facebook
             </a>
-
-
-            <!-- WHATSAPP -->
 
             <a
                 href="https://wa.me/213799846032"
@@ -415,29 +953,25 @@
     </div>
 
 
-    <!-- =====================================================
-         ADMINISTRATION
-    ====================================================== -->
 
     <div class="footer-admin">
 
-        <h3>Administration</h3>
+        <h3>
+            ADMINISTRATION
+        </h3>
 
         <a
             href="admin/login.html"
             class="admin-access"
         >
-            Accès administrateur
+            ACCÈS ADMIN
         </a>
 
     </div>
 
 
-    <!-- =====================================================
-         BOTTOM
-    ====================================================== -->
-
     <div class="footer-separator"></div>
+
 
     <div class="footer-bottom">
 
@@ -447,11 +981,28 @@
 
     </div>
 
-</footer> 
+</footer>
 
 
-<script src="data/products-data.js"></script>
-<script src="js/main.js"></script>
+
+<script
+    type="module"
+    src="js/main.js"
+></script>
+ 
+<!-- =====================================================
+     FLOATING WHATSAPP
+===================================================== -->
+
+<a
+    href="https://wa.me/213XXXXXXXXX"
+    class="floating-whatsapp"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Contactez-nous sur WhatsApp"
+>
+    ☎
+</a>
 
 </body>
 

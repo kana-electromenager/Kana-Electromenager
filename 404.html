@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Page introuvable | KANA Électroménager</title>
+
+
+    <style>
+
+        /* =====================================================
+           KANA ÉLECTROMÉNAGER
+           404 ERROR PAGE
+        ===================================================== */
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            width: 100%;
+            min-height: 100%;
+        }
+
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+
+            background: #050505;
+
+            color: #ffffff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .error-page {
+
+            width: 100%;
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 40px 6%;
+
+            text-align: center;
+
+        }
+
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .error-content {
+
+            width: min(650px, 100%);
+
+        }
+
+
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        .error-logo {
+
+            width: 70px;
+            height: 70px;
+
+            margin:
+                0 auto
+                30px;
+
+            object-fit: contain;
+
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .brand-name {
+
+            display: block;
+
+            margin-bottom: 45px;
+
+            color: #d4af37;
+
+            font-family:
+                "Times New Roman",
+                Georgia,
+                serif;
+
+            font-size: 24px;
+
+            font-weight: 500;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        /* =====================================================
+           404
+        ===================================================== */
+
+        .error-number {
+
+            margin-bottom: 20px;
+
+            color: #d4af37;
+
+            font-family:
+                "Times New Roman",
+                Georgia,
+                serif;
+
+            font-size:
+                clamp(100px, 25vw, 190px);
+
+            font-weight: 400;
+
+            line-height: 0.8;
+
+            letter-spacing: 8px;
+
+        }
+
+
+        /* =====================================================
+           TITLE
+        ===================================================== */
+
+        .error-title {
+
+            margin-bottom: 18px;
+
+            color: #ffffff;
+
+            font-family:
+                "Times New Roman",
+                Georgia,
+                serif;
+
+            font-size:
+                clamp(28px, 5vw, 42px);
+
+            font-weight: 400;
+
+            line-height: 1.1;
+
+        }
+
+
+        /* =====================================================
+           DESCRIPTION
+        ===================================================== */
+
+        .error-description {
+
+            max-width: 480px;
+
+            margin:
+                0 auto
+                35px;
+
+            color:
+                rgba(255, 255, 255, 0.55);
+
+            font-size: 12px;
+
+            line-height: 1.8;
+
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        .error-button {
+
+            min-width: 190px;
+
+            min-height: 45px;
+
+            padding:
+                0 25px;
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #d4af37;
+
+            border: 1px solid #d4af37;
+
+            color: #050505;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            text-decoration: none;
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease;
+
+        }
+
+
+        .error-button:hover {
+
+            background: transparent;
+
+            border-color: #d4af37;
+
+            color: #d4af37;
+
+        }
+
+
+        /* =====================================================
+           FOOTER TEXT
+        ===================================================== */
+
+        .error-footer {
+
+            margin-top: 55px;
+
+            color:
+                rgba(255, 255, 255, 0.35);
+
+            font-size: 8px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .error-page {
+
+                padding:
+                    30px 6%;
+
+            }
+
+
+            .error-logo {
+
+                width: 55px;
+                height: 55px;
+
+                margin-bottom: 22px;
+
+            }
+
+
+            .brand-name {
+
+                margin-bottom: 40px;
+
+                font-size: 18px;
+
+                letter-spacing: 2px;
+
+            }
+
+
+            .error-number {
+
+                margin-bottom: 18px;
+
+                letter-spacing: 4px;
+
+            }
+
+
+            .error-title {
+
+                font-size: 30px;
+
+            }
+
+
+            .error-description {
+
+                font-size: 11px;
+
+                margin-bottom: 30px;
+
+            }
+
+
+            .error-footer {
+
+                margin-top: 45px;
+
+                font-size: 7px;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           SMALL PHONE
+        ===================================================== */
+
+        @media (max-width: 450px) {
+
+            .error-page {
+
+                padding:
+                    25px 5%;
+
+            }
+
+
+            .error-logo {
+
+                width: 48px;
+                height: 48px;
+
+            }
+
+
+            .brand-name {
+
+                font-size: 16px;
+
+            }
+
+
+            .error-number {
+
+                font-size: 105px;
+
+            }
+
+
+            .error-title {
+
+                font-size: 27px;
+
+            }
+
+
+            .error-description {
+
+                font-size: 10px;
+
+            }
+
+
+            .error-button {
+
+                width: 100%;
+
+                max-width: 220px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="error-page">
+
+        <div class="error-content">
+
+
+            <!-- =================================================
+                 LOGO
+            ================================================== -->
+
+            <img
+                src="images/logo/logo.png"
+                alt="KANA Électroménager"
+                class="error-logo"
+            >
+
+
+            <!-- =================================================
+                 BRAND
+            ================================================== -->
+
+            <span class="brand-name">
+                KANA Électroménager
+            </span>
+
+
+            <!-- =================================================
+                 ERROR NUMBER
+            ================================================== -->
+
+            <div class="error-number">
+                404
+            </div>
+
+
+            <!-- =================================================
+                 TITLE
+            ================================================== -->
+
+            <h1 class="error-title">
+                Page introuvable
+            </h1>
+
+
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
+
+            <p class="error-description">
+
+                Désolé, la page que vous recherchez
+                n'existe pas ou a peut-être été déplacée.
+
+            </p>
+
+
+            <!-- =================================================
+                 HOME BUTTON
+            ================================================== -->
+
+            <a
+                href="index.html"
+                class="error-button"
+            >
+                Retour à l'accueil
+            </a>
+
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
+            <p class="error-footer">
+                KANA Électroménager
+            </p>
+
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

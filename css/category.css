@@ -1,6 +1,7 @@
 /* =====================================================
    KANA ÉLECTROMÉNAGER
    CATEGORY PAGE
+   CLEAN COMPLETE VERSION
 ===================================================== */
 
 
@@ -15,9 +16,9 @@
 }
 
 html {
-    scroll-behavior: smooth;
     width: 100%;
     min-height: 100%;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -66,7 +67,9 @@ img {
 }
 
 
-/* BRAND */
+/* =====================================================
+   BRAND
+===================================================== */
 
 .brand {
     display: flex;
@@ -74,9 +77,9 @@ img {
 
     gap: 12px;
 
-    color: #ffffff;
-
     min-width: 0;
+
+    color: #ffffff;
 }
 
 .brand-logo {
@@ -127,7 +130,9 @@ img {
 }
 
 
-/* BACK HOME */
+/* =====================================================
+   HEADER LINKS
+===================================================== */
 
 .back-home {
     color: #ffffff;
@@ -139,6 +144,8 @@ img {
 
     text-transform: uppercase;
 
+    white-space: nowrap;
+
     transition: color 0.3s ease;
 }
 
@@ -148,15 +155,21 @@ img {
 
 .cart-link {
     color: #ffffff;
+
     font-size: 10px;
     font-weight: 600;
+
     letter-spacing: 1.5px;
+
     text-transform: uppercase;
+
+    transition: color 0.3s ease;
 }
 
 .cart-link:hover {
     color: #d4af37;
 }
+
 
 /* =====================================================
    CATEGORY HERO
@@ -181,8 +194,6 @@ img {
         );
 
     color: #ffffff;
-
-    margin: 0;
 }
 
 .category-hero-content {
@@ -246,13 +257,11 @@ img {
     padding: 45px 6% 100px;
 
     background: #f5f5f3;
-
-    margin: 0;
 }
 
 
 /* =====================================================
-   SECTION HEADING
+   CATEGORY SECTION HEADING
 ===================================================== */
 
 .category-heading {
@@ -303,17 +312,26 @@ img {
 
 
 /* =====================================================
-   IMPORTANT
-   CATEGORY / SOUS-CATEGORY ITEMS
+   CATEGORIES GRID
 ===================================================== */
 
-/*
-   Ces règles empêchent category.css de transformer
-   les catégories carrées en rectangles.
+.categories-grid {
+    width: min(1100px, 100%);
 
-   Si categories.js crée des éléments avec ces classes,
-   ils resteront carrés.
-*/
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+/* =====================================================
+   CATEGORY CARD
+===================================================== */
 
 .category-card,
 .category-item,
@@ -321,11 +339,39 @@ img {
 .subcategory-item,
 .category-box,
 .subcategory-box {
-    aspect-ratio: 1 / 1;
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e5e5;
+
+    /*
+       THIS MAKES THE CORNERS ROUNDED
+    */
+    border-radius: 22px;
+
+    /*
+       Important so image follows rounded corners
+    */
+    isolation: isolate;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 
-/* Images des catégories */
+/* =====================================================
+   CATEGORY CARD IMAGE
+===================================================== */
 
 .category-card img,
 .category-item img,
@@ -334,9 +380,196 @@ img {
 .category-box img,
 .subcategory-box img {
     width: 100%;
-    height: 100%;
+
+    /*
+       Square image area
+    */
+    aspect-ratio: 1 / 1;
+
+    height: auto;
 
     object-fit: cover;
+
+    flex-shrink: 0;
+
+    border-radius: 21px 21px 0 0;
+
+    transition:
+        transform 0.5s ease;
+}
+
+
+/* =====================================================
+   CATEGORY CARD HOVER
+===================================================== */
+
+.category-card:hover,
+.category-item:hover,
+.subcategory-card:hover,
+.subcategory-item:hover,
+.category-box:hover,
+.subcategory-box:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 14px 35px rgba(0, 0, 0, 0.12);
+}
+
+.category-card:hover img,
+.category-item:hover img,
+.subcategory-card:hover img,
+.subcategory-item:hover img,
+.category-box:hover img,
+.subcategory-box:hover img {
+    transform: scale(1.03);
+}
+
+
+/* =====================================================
+   CATEGORY NAME
+===================================================== */
+
+/*
+   Works with common category HTML structures.
+*/
+
+.category-card h2,
+.category-card h3,
+.category-item h2,
+.category-item h3,
+.subcategory-card h2,
+.subcategory-card h3,
+.subcategory-item h2,
+.subcategory-item h3,
+.category-box h2,
+.category-box h3,
+.subcategory-box h2,
+.subcategory-box h3 {
+    margin: 14px 16px 0;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 21px;
+
+    font-weight: 500;
+
+    line-height: 1.1;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   CATEGORY NAME
+   IF IT USES A CLASS
+===================================================== */
+
+.category-name,
+.subcategory-name {
+    margin: 14px 16px 0;
+
+    color: #111111;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 21px;
+
+    font-weight: 500;
+
+    line-height: 1.1;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   VOIR LES PRODUITS
+===================================================== */
+
+/*
+   TIGHTER SPACE BETWEEN CATEGORY NAME
+   AND THE BUTTON
+*/
+
+.category-card a,
+.category-item a,
+.subcategory-card a,
+.subcategory-item a,
+.category-box a,
+.subcategory-box a {
+    display: block;
+
+    width: fit-content;
+
+    margin: 5px auto 15px;
+
+    color: #a38425;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    line-height: 1.2;
+
+    text-transform: uppercase;
+
+    transition:
+        color 0.25s ease;
+}
+
+.category-card a:hover,
+.category-item a:hover,
+.subcategory-card a:hover,
+.subcategory-item a:hover,
+.category-box a:hover,
+.subcategory-box a:hover {
+    color: #111111;
+}
+
+
+/* =====================================================
+   CLASS VERSION OF BUTTON
+===================================================== */
+
+.category-button,
+.subcategory-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+
+    margin: 5px auto 15px;
+
+    color: #a38425;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    line-height: 1.2;
+
+    text-transform: uppercase;
+
+    transition: color 0.25s ease;
+}
+
+.category-button:hover,
+.subcategory-button:hover {
+    color: #111111;
 }
 
 
@@ -355,36 +588,6 @@ img {
         repeat(4, minmax(0, 1fr));
 
     gap: 18px;
-}
-
-
-/* =====================================================
-   PRODUCT CARD
-===================================================== */
-
-.product-card {
-    position: relative;
-
-    width: 100%;
-    min-width: 0;
-
-    overflow: hidden;
-
-    background: #ffffff;
-
-    border: 1px solid #e8e8e8;
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-6px);
-
-    box-shadow:
-        0 15px 40px
-        rgba(0, 0, 0, 0.10);
 }
 
 
@@ -543,6 +746,7 @@ img {
         serif;
 
     font-size: 30px;
+
     font-weight: 400;
 }
 
@@ -558,10 +762,9 @@ img {
 ===================================================== */
 
 .footer {
-
     width: 100%;
 
-    padding: 70px 7% 30px;
+    padding: 65px 7% 28px;
 
     background: #050505;
 
@@ -569,7 +772,6 @@ img {
 
     border-top: 1px solid
         rgba(212, 175, 55, 0.20);
-
 }
 
 
@@ -578,21 +780,17 @@ img {
 ===================================================== */
 
 .footer-brand {
-
     display: flex;
 
     align-items: center;
 
     gap: 14px;
 
-    margin-bottom: 35px;
+    margin-bottom: 38px;
 }
 
-
 .footer-brand img {
-
     width: 52px;
-
     height: 52px;
 
     object-fit: contain;
@@ -600,9 +798,7 @@ img {
     flex-shrink: 0;
 }
 
-
 .footer-brand > div {
-
     display: flex;
 
     flex-direction: column;
@@ -610,9 +806,7 @@ img {
     align-items: flex-start;
 }
 
-
 .footer-brand strong {
-
     color: #ffffff;
 
     font-family:
@@ -629,9 +823,7 @@ img {
     line-height: 1.1;
 }
 
-
 .footer-brand span {
-
     margin-top: 6px;
 
     color: #d4af37;
@@ -640,24 +832,25 @@ img {
 
     font-weight: 600;
 
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
 }
 
 
 /* =====================================================
-   SEPARATOR
+   FOOTER SEPARATOR
 ===================================================== */
 
 .footer-separator {
-
     width: 100%;
 
     height: 1px;
 
+    margin: 0 0 42px;
+
     background:
         rgba(255, 255, 255, 0.12);
-
-    margin: 0 0 40px;
 }
 
 
@@ -666,26 +859,28 @@ img {
 ===================================================== */
 
 .footer-grid {
-
     width: 100%;
 
     display: grid;
 
     grid-template-columns:
-        repeat(5, 1fr);
+        1.5fr
+        1fr
+        0.9fr
+        1.2fr
+        1fr;
 
-    gap: 45px;
+    gap: 40px;
 
-    margin-bottom: 55px;
+    margin-bottom: 50px;
 }
 
 
 /* =====================================================
-   FOOTER COLUMN
+   FOOTER COLUMNS
 ===================================================== */
 
 .footer-column {
-
     display: flex;
 
     flex-direction: column;
@@ -693,9 +888,7 @@ img {
     align-items: flex-start;
 }
 
-
 .footer-column h3 {
-
     margin: 0 0 20px;
 
     color: #d4af37;
@@ -709,19 +902,17 @@ img {
     text-transform: uppercase;
 }
 
-
 .footer-column p {
-
-    max-width: 220px;
+    max-width: 270px;
 
     margin: 0;
 
     color:
-     white (255, 255, 255, 0.55);
+        rgba(255, 255, 255, 0.58);
 
     font-size: 11px;
 
-    line-height: 1.8;
+    line-height: 1.85;
 }
 
 
@@ -730,11 +921,16 @@ img {
 ===================================================== */
 
 .footer-column a {
+    display: flex;
 
-    margin-bottom: 11px;
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    margin-bottom: 13px;
 
     color:
-     white (255, 255, 255, 0.72);
+        rgba(255, 255, 255, 0.75);
 
     font-size: 10px;
 
@@ -743,13 +939,11 @@ img {
     text-decoration: none;
 
     transition:
-        color 0.3s ease,
-        transform 0.3s ease;
+        color 0.25s ease,
+        transform 0.25s ease;
 }
 
-
 .footer-column a:hover {
-
     color: #d4af37;
 
     transform: translateX(3px);
@@ -757,28 +951,48 @@ img {
 
 
 /* =====================================================
-   ADMINISTRATION
+   GOOGLE MAP DETAIL
+===================================================== */
+
+.footer-link-detail {
+    margin-top: 3px;
+
+    color:
+        rgba(255, 255, 255, 0.38);
+
+    font-size: 8px;
+
+    letter-spacing: 0.3px;
+
+    transition: color 0.25s ease;
+}
+
+.footer-column a:hover .footer-link-detail {
+    color:
+        rgba(212, 175, 55, 0.75);
+}
+
+
+/* =====================================================
+   FOOTER ADMIN
 ===================================================== */
 
 .footer-admin {
-
     display: flex;
 
     flex-direction: column;
 
     align-items: flex-start;
 
-    margin-bottom: 35px;
+    margin-bottom: 30px;
 }
 
-
 .footer-admin h3 {
-
-    margin: 0 0 15px;
+    margin: 0 0 13px;
 
     color: #d4af37;
 
-    font-size: 9px;
+    font-size: 8px;
 
     font-weight: 700;
 
@@ -787,23 +1001,20 @@ img {
     text-transform: uppercase;
 }
 
-
 .admin-access {
-
     display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
-    padding: 11px 18px;
+    padding: 10px 16px;
 
     border: 1px solid
-        white (255, 255, 255, 0.35);
+        rgba(255, 255, 255, 0.30);
 
     color: #ffffff;
 
-    font-size: 8px;
+    font-size: 7px;
 
     font-weight: 600;
 
@@ -811,22 +1022,18 @@ img {
 
     text-transform: uppercase;
 
-    text-decoration: none;
-
     transition:
         background 0.3s ease,
         border-color 0.3s ease,
         color 0.3s ease;
 }
 
-
 .admin-access:hover {
-
     background: #d4af37;
 
     border-color: #d4af37;
 
-    color: #111111;
+    color: #050505;
 }
 
 
@@ -835,213 +1042,47 @@ img {
 ===================================================== */
 
 .footer-bottom {
-
     width: 100%;
 
     display: flex;
 
     align-items: center;
 
-    justify-content: center;
+    justify-content: space-between;
 
-    text-align: center;
+    gap: 20px;
 }
 
-
 .footer-bottom p {
-
     margin: 0;
 
     color:
-     white (255, 255, 255, 0.55);
+        rgba(255, 255, 255, 0.55);
 
-    font-size: 9px;
+    font-size: 8px;
 
-    letter-spacing: 0.7px;
+    font-weight: 600;
+
+    letter-spacing: 1px;
 
     text-transform: uppercase;
 }
 
+.footer-bottom span {
+    color:
+        rgba(212, 175, 55, 0.65);
 
-/* =====================================================
-   FOOTER — TABLET
-===================================================== */
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
 
-@media (max-width: 1000px) {
+    font-size: 10px;
 
-    .footer-grid {
-
-        grid-template-columns:
-            repeat(3, 1fr);
-
-        gap: 40px 30px;
-    }
-
+    font-style: italic;
 }
 
 
-/* =====================================================
-   FOOTER — MOBILE
-===================================================== */
-
-@media (max-width: 700px) {
-
-    .footer {
-
-        padding: 45px 6% 25px;
-    }
-
-
-    .footer-brand {
-
-        margin-bottom: 28px;
-
-        gap: 11px;
-    }
-
-
-    .footer-brand img {
-
-        width: 45px;
-
-        height: 45px;
-    }
-
-
-    .footer-brand strong {
-
-        font-size: 17px;
-
-        letter-spacing: 1px;
-    }
-
-
-    .footer-brand span {
-
-        font-size: 7px;
-
-        letter-spacing: 1.7px;
-    }
-
-
-    .footer-separator {
-
-        margin-bottom: 32px;
-    }
-
-
-    .footer-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        gap: 35px 25px;
-
-        margin-bottom: 40px;
-    }
-
-
-    .footer-column h3 {
-
-        font-size: 8px;
-
-        margin-bottom: 15px;
-    }
-
-
-    .footer-column a {
-
-        font-size: 9px;
-
-        margin-bottom: 9px;
-    }
-
-
-    .footer-column p {
-
-        font-size: 9px;
-
-        line-height: 1.7;
-    }
-
-
-    .footer-admin {
-
-        margin-bottom: 30px;
-    }
-
-
-    .footer-bottom p {
-
-        font-size: 7px;
-
-        letter-spacing: 0.5px;
-    }
-
-}
-
-
-/* =====================================================
-   FOOTER — SMALL PHONE
-===================================================== */
-
-@media (max-width: 450px) {
-
-    .footer {
-
-        padding: 38px 5% 22px;
-    }
-
-
-    .footer-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        gap: 30px 18px;
-    }
-
-
-    .footer-brand strong {
-
-        font-size: 15px;
-    }
-
-
-    .footer-brand img {
-
-        width: 40px;
-
-        height: 40px;
-    }
-
-
-    .footer-column h3 {
-
-        font-size: 7px;
-
-        letter-spacing: 1.8px;
-    }
-
-
-    .footer-column a {
-
-        font-size: 8px;
-    }
-
-
-    .footer-column p {
-
-        font-size: 8px;
-    }
-
-
-    .footer-bottom p {
-
-        font-size: 6.5px;
-    }
-
-}
 /* =====================================================
    TABLET
 ===================================================== */
@@ -1055,20 +1096,18 @@ img {
         gap: 14px;
     }
 
-    .footer {
-        padding: 30px 4%;
+    .categories-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
 
-        gap: 20px;
+        gap: 14px;
     }
 
-    .footer-stores {
-        gap: 18px;
+    .footer-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
 
-        margin-left: 15px;
-    }
-
-    .store {
-        min-width: 105px;
+        gap: 40px 30px;
     }
 }
 
@@ -1111,8 +1150,12 @@ img {
         font-size: 7px;
 
         letter-spacing: 1px;
+    }
 
-        white-space: nowrap;
+    .cart-link {
+        font-size: 7px;
+
+        letter-spacing: 1px;
     }
 
 
@@ -1175,7 +1218,81 @@ img {
     }
 
 
-    /* PRODUCTS */
+    /* =================================================
+       CATEGORY CARDS
+    ================================================= */
+
+    .categories-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+    .category-card,
+    .category-item,
+    .subcategory-card,
+    .subcategory-item,
+    .category-box,
+    .subcategory-box {
+        border-radius: 16px;
+    }
+
+    .category-card img,
+    .category-item img,
+    .subcategory-card img,
+    .subcategory-item img,
+    .category-box img,
+    .subcategory-box img {
+        border-radius: 15px 15px 0 0;
+    }
+
+
+    /* CATEGORY NAME */
+
+    .category-card h2,
+    .category-card h3,
+    .category-item h2,
+    .category-item h3,
+    .subcategory-card h2,
+    .subcategory-card h3,
+    .subcategory-item h2,
+    .subcategory-item h3,
+    .category-box h2,
+    .category-box h3,
+    .subcategory-box h2,
+    .subcategory-box h3,
+    .category-name,
+    .subcategory-name {
+        margin: 10px 8px 0;
+
+        font-size: 16px;
+
+        line-height: 1.05;
+    }
+
+
+    /* VOIR LES PRODUITS */
+
+    .category-card a,
+    .category-item a,
+    .subcategory-card a,
+    .subcategory-item a,
+    .category-box a,
+    .subcategory-box a,
+    .category-button,
+    .subcategory-button {
+        margin: 4px auto 11px;
+
+        font-size: 6.5px;
+
+        letter-spacing: 1.1px;
+    }
+
+
+    /* =================================================
+       PRODUCTS
+    ================================================= */
 
     .products-grid {
         grid-template-columns:
@@ -1217,70 +1334,110 @@ img {
     }
 
 
-    /* FOOTER */
+    /* =================================================
+       FOOTER
+    ================================================= */
 
     .footer {
-        min-height: 0;
-
-        padding: 30px 5%;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        justify-content: flex-start;
-
-        gap: 22px;
+        padding: 45px 6% 25px;
     }
 
     .footer-brand {
-        width: 100%;
+        margin-bottom: 28px;
+
+        gap: 11px;
+    }
+
+    .footer-brand img {
+        width: 45px;
+        height: 45px;
     }
 
     .footer-brand strong {
-        font-size: 16px;
+        font-size: 17px;
+
+        letter-spacing: 1px;
     }
 
-    .footer-stores {
-        width: 100%;
+    .footer-brand span {
+        font-size: 7px;
 
-        margin-left: 0;
-
-        gap: 25px;
+        letter-spacing: 1.7px;
     }
 
-    .store {
-        min-width: 0;
-
-        flex: 1;
+    .footer-separator {
+        margin-bottom: 32px;
     }
 
-    .store p {
+    .footer-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 35px 25px;
+
+        margin-bottom: 35px;
+    }
+
+    .footer-column h3 {
+        font-size: 8px;
+
+        margin-bottom: 15px;
+
+        letter-spacing: 2px;
+    }
+
+    .footer-column a {
         font-size: 9px;
+
+        margin-bottom: 10px;
     }
 
-    .location-link {
+    .footer-column p {
+        font-size: 9px;
+
+        line-height: 1.75;
+    }
+
+    .footer-link-detail {
         font-size: 7px;
     }
 
-    .footer > p {
-        width: 100%;
+    .footer-admin {
+        align-items: flex-start;
 
-        text-align: left;
+        margin-bottom: 30px;
 
-        font-size: 9px;
+        padding: 0;
     }
 
     .admin-access {
+        min-height: 36px;
+
+        padding: 0 16px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+
+        justify-content: center;
+
+        text-align: center;
+
+        gap: 7px;
+    }
+
+    .footer-bottom p {
         font-size: 7px;
+    }
+
+    .footer-bottom span {
+        font-size: 9px;
     }
 }
 
 
 /* =====================================================
-   SMALL PHONE
+   SMALL PHONES
    450px and below
 ===================================================== */
 
@@ -1316,6 +1473,12 @@ img {
     }
 
     .back-home {
+        font-size: 6px;
+
+        letter-spacing: 0.8px;
+    }
+
+    .cart-link {
         font-size: 6px;
 
         letter-spacing: 0.8px;
@@ -1361,7 +1524,81 @@ img {
     }
 
 
-    /* PRODUCTS */
+    /* =================================================
+       CATEGORY CARDS
+    ================================================= */
+
+    .categories-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+    }
+
+    .category-card,
+    .category-item,
+    .subcategory-card,
+    .subcategory-item,
+    .category-box,
+    .subcategory-box {
+        border-radius: 14px;
+    }
+
+    .category-card img,
+    .category-item img,
+    .subcategory-card img,
+    .subcategory-item img,
+    .category-box img,
+    .subcategory-box img {
+        border-radius: 13px 13px 0 0;
+    }
+
+
+    /* CATEGORY NAME */
+
+    .category-card h2,
+    .category-card h3,
+    .category-item h2,
+    .category-item h3,
+    .subcategory-card h2,
+    .subcategory-card h3,
+    .subcategory-item h2,
+    .subcategory-item h3,
+    .category-box h2,
+    .category-box h3,
+    .subcategory-box h2,
+    .subcategory-box h3,
+    .category-name,
+    .subcategory-name {
+        margin: 8px 6px 0;
+
+        font-size: 14px;
+
+        line-height: 1.05;
+    }
+
+
+    /* VOIR LES PRODUITS */
+
+    .category-card a,
+    .category-item a,
+    .subcategory-card a,
+    .subcategory-item a,
+    .category-box a,
+    .subcategory-box a,
+    .category-button,
+    .subcategory-button {
+        margin: 3px auto 9px;
+
+        font-size: 6px;
+
+        letter-spacing: 0.9px;
+    }
+
+
+    /* =================================================
+       PRODUCTS
+    ================================================= */
 
     .products-grid {
         grid-template-columns:
@@ -1393,50 +1630,57 @@ img {
     }
 
 
-    /* FOOTER */
+    /* =================================================
+       FOOTER
+    ================================================= */
 
     .footer {
-        padding: 25px 5%;
-
-        gap: 20px;
+        padding: 38px 5% 22px;
     }
 
-    .footer-stores {
-        width: 100%;
-
-        display: flex;
-
-        flex-direction: row;
-
-        gap: 12px;
+    .footer-grid {
+        gap: 30px 18px;
     }
 
-    .store {
-        flex: 1;
-
-        min-width: 0;
+    .footer-brand strong {
+        font-size: 15px;
     }
 
-    .store p {
+    .footer-brand img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .footer-column h3 {
+        font-size: 7px;
+
+        letter-spacing: 1.7px;
+    }
+
+    .footer-column a {
         font-size: 8px;
     }
 
-    .location-link {
-        font-size: 6px;
-
-        letter-spacing: 0.7px;
+    .footer-column p {
+        font-size: 8px;
     }
 
-    .footer > p {
-        font-size: 8px;
+    .footer-link-detail {
+        font-size: 6.5px;
+    }
+
+    .footer-bottom p {
+        font-size: 6.5px;
     }
 }
 
+
 /* =====================================================
-   NOS MARQUES — CONTINUOUS MARQUEE
+   NOS MARQUES
 ===================================================== */
 
 .brands-section {
+    width: 100%;
 
     background: #ffffff;
 
@@ -1447,11 +1691,10 @@ img {
 
 
 /* =====================================================
-   HEADING
+   BRANDS HEADING
 ===================================================== */
 
 .brands-section .section-heading {
-
     max-width: 850px;
 
     margin: 0 auto 55px;
@@ -1461,9 +1704,7 @@ img {
     text-align: center;
 }
 
-
 .brands-section .section-label {
-
     margin-bottom: 18px;
 
     color: #d4af37;
@@ -1477,9 +1718,7 @@ img {
     text-transform: uppercase;
 }
 
-
 .brands-section h2 {
-
     margin-bottom: 18px;
 
     color: #111111;
@@ -1497,9 +1736,7 @@ img {
     line-height: 1.05;
 }
 
-
 .brands-section .section-heading span {
-
     color: #777777;
 
     font-size: 13px;
@@ -1509,11 +1746,10 @@ img {
 
 
 /* =====================================================
-   MARQUEE
+   BRANDS MARQUEE
 ===================================================== */
 
 .brands-marquee {
-
     width: 100%;
 
     overflow: hidden;
@@ -1523,16 +1759,9 @@ img {
     border-bottom: 1px solid #e5e5e5;
 
     padding: 30px 0;
-
 }
 
-
-/* =====================================================
-   MOVING TRACK
-===================================================== */
-
 .brands-track {
-
     width: max-content;
 
     display: flex;
@@ -1545,13 +1774,7 @@ img {
         brandsScroll 25s linear infinite;
 }
 
-
-/* =====================================================
-   BRAND NAME
-===================================================== */
-
 .brands-track a {
-
     flex-shrink: 0;
 
     color: #151515;
@@ -1575,19 +1798,11 @@ img {
         color 0.3s ease;
 }
 
-
 .brands-track a:hover {
-
     color: #d4af37;
 }
 
-
-/* =====================================================
-   GOLD SEPARATOR
-===================================================== */
-
 .brands-track a::after {
-
     content: "•";
 
     margin-left: 70px;
@@ -1599,87 +1814,66 @@ img {
 
 
 /* =====================================================
-   INFINITE ANIMATION
+   BRANDS ANIMATION
 ===================================================== */
 
 @keyframes brandsScroll {
 
     from {
-
-        transform:
-            translateX(0);
-
+        transform: translateX(0);
     }
 
     to {
-
-        transform:
-            translateX(-50%);
-
+        transform: translateX(-50%);
     }
 
 }
 
 
 /* =====================================================
-   MOBILE
+   BRANDS MOBILE
 ===================================================== */
 
 @media (max-width: 768px) {
 
     .brands-section {
-
         padding: 65px 0 55px;
     }
 
-
     .brands-section .section-heading {
-
         margin-bottom: 40px;
 
         padding: 0 5%;
     }
 
-
     .brands-section h2 {
-
         font-size: 38px;
     }
 
-
     .brands-section .section-heading span {
-
         font-size: 10px;
     }
 
-
     .brands-marquee {
-
         padding: 24px 0;
     }
 
-
     .brands-track {
-
         gap: 45px;
 
         animation-duration: 20s;
     }
 
-
     .brands-track a {
-
         font-size: 12px;
 
         letter-spacing: 2px;
     }
 
-
     .brands-track a::after {
-
         margin-left: 45px;
 
         font-size: 9px;
     }
-
 }
+
